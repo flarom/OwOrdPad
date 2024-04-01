@@ -6,17 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Description>OwOrdPad, formally Open wOrdPad, is a free and open-source alternative to Microsoft WordPad.
+    <Description>OwOrdPad is a lightweight, free, and open-source rich text editor designed to serve as a substitute for Microsoft WordPad. It provides essential features for creating and editing text documents in a user-friendly environment.
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program.  If not, see https://www.gnu.org/licenses/.
-</Description>
+Note: OwOrdPad is not affiliated with Microsoft Corporation. Microsoft WordPad is a registered trademark of Microsoft Corporation.</Description>
     <Copyright>Copyright © 2024 OwOrdPad</Copyright>
     <Company>https://github.com/flarom</Company>
     <Version>1.0</Version>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <FileVersion>0.6</FileVersion>
+    <AssemblyVersion>0.6</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
