@@ -58,6 +58,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             rtb = new RichTextBox();
             contextMenuStrip1 = new ContextMenuStrip(components);
+            undoToolStripMenuItem1 = new ToolStripMenuItem();
+            toolStripSeparator11 = new ToolStripSeparator();
             cutToolStripMenuItem1 = new ToolStripMenuItem();
             copyToolStripMenuItem1 = new ToolStripMenuItem();
             pasteToolStripMenuItem1 = new ToolStripMenuItem();
@@ -68,7 +70,7 @@
             toolStripMenuItem24 = new ToolStripMenuItem();
             toolStripSeparator39 = new ToolStripSeparator();
             deleteToolStripMenuItem1 = new ToolStripMenuItem();
-            menuStrip1 = new MenuStrip();
+            menuStrip = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             newToolStripMenuItem = new ToolStripMenuItem();
             newWindowToolStripMenuItem = new ToolStripMenuItem();
@@ -105,6 +107,7 @@
             statusBarToolStripMenuItem = new ToolStripMenuItem();
             toolBarToolStripMenuItem = new ToolStripMenuItem();
             formatBarToolStripMenuItem = new ToolStripMenuItem();
+            toolTipsToolStripMenuItem = new ToolStripMenuItem();
             marginToolStripMenuItem = new ToolStripMenuItem();
             a4ToolStripMenuItem = new ToolStripMenuItem();
             cardPaperToolStripMenuItem = new ToolStripMenuItem();
@@ -159,11 +162,11 @@
             tsFormat = new ToolStrip();
             cbFonts = new ToolStripComboBox();
             cbFontSize = new ToolStripComboBox();
-            toolStripButton1 = new ToolStripButton();
-            toolStripButton2 = new ToolStripButton();
-            toolStripButton3 = new ToolStripButton();
-            toolStripButton4 = new ToolStripButton();
-            toolStripSplitButton1 = new ToolStripSplitButton();
+            btnBold = new ToolStripButton();
+            btnItalic = new ToolStripButton();
+            btnUnderline = new ToolStripButton();
+            btnStrikeout = new ToolStripButton();
+            spltbtnForeColor = new ToolStripSplitButton();
             toolStripMenuItem14 = new ToolStripMenuItem();
             toolStripMenuItem15 = new ToolStripMenuItem();
             toolStripMenuItem16 = new ToolStripMenuItem();
@@ -175,7 +178,7 @@
             toolStripMenuItem22 = new ToolStripMenuItem();
             toolStripSeparator42 = new ToolStripSeparator();
             toolStripMenuItem23 = new ToolStripMenuItem();
-            toolStripSplitButton3 = new ToolStripSplitButton();
+            spltbtnBackColor = new ToolStripSplitButton();
             toolStripMenuItem3 = new ToolStripMenuItem();
             toolStripMenuItem4 = new ToolStripMenuItem();
             toolStripMenuItem5 = new ToolStripMenuItem();
@@ -186,33 +189,33 @@
             toolStripMenuItem12 = new ToolStripMenuItem();
             toolStripSeparator17 = new ToolStripSeparator();
             toolStripMenuItem13 = new ToolStripMenuItem();
-            toolStripButton7 = new ToolStripButton();
-            toolStripButton8 = new ToolStripButton();
-            toolStripButton9 = new ToolStripButton();
-            toolStripButton5 = new ToolStripButton();
-            toolStripSplitButton4 = new ToolStripSplitButton();
+            btnAlignLef = new ToolStripButton();
+            btnAlignCen = new ToolStripButton();
+            btnAlignRig = new ToolStripButton();
+            btnList = new ToolStripButton();
+            spltbtnLineSpace = new ToolStripSplitButton();
             lnSpace1 = new ToolStripMenuItem();
             lnSpace4 = new ToolStripMenuItem();
             lnSpace8 = new ToolStripMenuItem();
             lnSpace16 = new ToolStripMenuItem();
             lnSpaceOther = new ToolStripMenuItem();
-            toolStripButton10 = new ToolStripButton();
-            toolStripButton11 = new ToolStripButton();
-            toolStrip1 = new ToolStrip();
-            toolStripButton13 = new ToolStripButton();
-            toolStripButton14 = new ToolStripButton();
-            toolStripButton15 = new ToolStripButton();
-            toolStripButton12 = new ToolStripButton();
-            toolStripButton16 = new ToolStripButton();
-            toolStripButton17 = new ToolStripButton();
-            toolStripButton18 = new ToolStripButton();
-            toolStripButton19 = new ToolStripButton();
-            toolStripButton20 = new ToolStripButton();
-            toolStripSplitButton2 = new ToolStripSplitButton();
+            btnTabLef = new ToolStripButton();
+            btnTabRig = new ToolStripButton();
+            tsFile = new ToolStrip();
+            btnNew = new ToolStripButton();
+            btnOpen = new ToolStripButton();
+            btnSave = new ToolStripButton();
+            btnPrint = new ToolStripButton();
+            btnCut = new ToolStripButton();
+            btnCopy = new ToolStripButton();
+            btnPaste = new ToolStripButton();
+            btnUndo = new ToolStripButton();
+            btnRedo = new ToolStripButton();
+            spltbtnSearch = new ToolStripSplitButton();
             searchForTextToolStripMenuItem = new ToolStripMenuItem();
             searchForLineToolStripMenuItem = new ToolStripMenuItem();
             colorDialog = new ColorDialog();
-            statusStrip1 = new StatusStrip();
+            statusStrip = new StatusStrip();
             lblCursorPos = new ToolStripStatusLabel();
             lblCharAndWord = new ToolStripStatusLabel();
             lblZoomFactor = new ToolStripStatusLabel();
@@ -235,6 +238,10 @@
             symbolToolStripMenuItem1 = new ToolStripMenuItem();
             webdingsToolStripMenuItem = new ToolStripMenuItem();
             wingdingsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator12 = new ToolStripSeparator();
+            favoriteFontsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator13 = new ToolStripSeparator();
+            manageFontsToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator34 = new ToolStripSeparator();
             toolStripSeparator30 = new ToolStripSeparator();
             toolStripSeparator1 = new ToolStripSeparator();
@@ -267,10 +274,10 @@
             toolStripSeparator28 = new ToolStripSeparator();
             toolStripSeparator38 = new ToolStripSeparator();
             contextMenuStrip1.SuspendLayout();
-            menuStrip1.SuspendLayout();
+            menuStrip.SuspendLayout();
             tsFormat.SuspendLayout();
-            toolStrip1.SuspendLayout();
-            statusStrip1.SuspendLayout();
+            tsFile.SuspendLayout();
+            statusStrip.SuspendLayout();
             contextMenuStrip2.SuspendLayout();
             SuspendLayout();
             // 
@@ -459,10 +466,23 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.BackColor = Color.White;
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { cutToolStripMenuItem1, copyToolStripMenuItem1, pasteToolStripMenuItem1, pasteWithoutFormattingToolStripMenuItem, toolStripSeparator34, selectAllToolStripMenuItem1, toolStripSeparator30, clearFormattingToolStripMenuItem1, toolStripMenuItem10, toolStripMenuItem24, toolStripSeparator39, deleteToolStripMenuItem1 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { undoToolStripMenuItem1, toolStripSeparator11, cutToolStripMenuItem1, copyToolStripMenuItem1, pasteToolStripMenuItem1, pasteWithoutFormattingToolStripMenuItem, toolStripSeparator34, selectAllToolStripMenuItem1, toolStripSeparator30, clearFormattingToolStripMenuItem1, toolStripMenuItem10, toolStripMenuItem24, toolStripSeparator39, deleteToolStripMenuItem1 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(173, 220);
+            contextMenuStrip1.Size = new Size(173, 248);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
+            // 
+            // undoToolStripMenuItem1
+            // 
+            undoToolStripMenuItem1.Image = Properties.Resources.undo;
+            undoToolStripMenuItem1.Name = "undoToolStripMenuItem1";
+            undoToolStripMenuItem1.Size = new Size(172, 22);
+            undoToolStripMenuItem1.Text = "Undo";
+            undoToolStripMenuItem1.Click += undoToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator11
+            // 
+            toolStripSeparator11.Name = "toolStripSeparator11";
+            toolStripSeparator11.Size = new Size(169, 6);
             // 
             // cutToolStripMenuItem1
             // 
@@ -542,16 +562,16 @@
             deleteToolStripMenuItem1.Text = "Delete";
             deleteToolStripMenuItem1.Click += deleteToolStripMenuItem_Click;
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            menuStrip1.BackColor = Color.FromArgb(243, 243, 243);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, viewToolStripMenuItem, insertToolStripMenuItem, formatToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(784, 24);
-            menuStrip1.TabIndex = 1;
-            menuStrip1.Text = "menuStrip1";
-            menuStrip1.KeyDown += rtb_KeyDown;
+            menuStrip.BackColor = Color.FromArgb(243, 243, 243);
+            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, viewToolStripMenuItem, insertToolStripMenuItem, formatToolStripMenuItem });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(784, 24);
+            menuStrip.TabIndex = 1;
+            menuStrip.Text = "menuStrip1";
+            menuStrip.KeyDown += rtb_KeyDown;
             // 
             // fileToolStripMenuItem
             // 
@@ -660,6 +680,7 @@
             // 
             aboutOwOrdPadToolStripMenuItem.Image = Properties.Resources.questionMark;
             aboutOwOrdPadToolStripMenuItem.Name = "aboutOwOrdPadToolStripMenuItem";
+            aboutOwOrdPadToolStripMenuItem.ShortcutKeyDisplayString = "v0.6";
             aboutOwOrdPadToolStripMenuItem.Size = new Size(259, 22);
             aboutOwOrdPadToolStripMenuItem.Text = "About OwOrdPad";
             aboutOwOrdPadToolStripMenuItem.Click += aboutOwOrdPadToolStripMenuItem_Click;
@@ -793,7 +814,7 @@
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { zoomToolStripMenuItem, toolStripSeparator35, wordWrapToolStripMenuItem, selectionMarginToolStripMenuItem, statusBarToolStripMenuItem, toolBarToolStripMenuItem, formatBarToolStripMenuItem, toolStripSeparator21, marginToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { zoomToolStripMenuItem, toolStripSeparator35, wordWrapToolStripMenuItem, selectionMarginToolStripMenuItem, statusBarToolStripMenuItem, toolBarToolStripMenuItem, formatBarToolStripMenuItem, toolTipsToolStripMenuItem, toolStripSeparator21, marginToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             viewToolStripMenuItem.Size = new Size(44, 20);
             viewToolStripMenuItem.Text = "&View";
@@ -844,6 +865,7 @@
             wordWrapToolStripMenuItem.CheckOnClick = true;
             wordWrapToolStripMenuItem.CheckState = CheckState.Checked;
             wordWrapToolStripMenuItem.Name = "wordWrapToolStripMenuItem";
+            wordWrapToolStripMenuItem.ShortcutKeyDisplayString = "";
             wordWrapToolStripMenuItem.Size = new Size(163, 22);
             wordWrapToolStripMenuItem.Text = "Word wrap";
             wordWrapToolStripMenuItem.Click += wordWrapToolStripMenuItem_Click;
@@ -887,6 +909,17 @@
             formatBarToolStripMenuItem.Size = new Size(163, 22);
             formatBarToolStripMenuItem.Text = "Format bar";
             formatBarToolStripMenuItem.Click += formatBarToolStripMenuItem_Click;
+            // 
+            // toolTipsToolStripMenuItem
+            // 
+            toolTipsToolStripMenuItem.Checked = true;
+            toolTipsToolStripMenuItem.CheckOnClick = true;
+            toolTipsToolStripMenuItem.CheckState = CheckState.Checked;
+            toolTipsToolStripMenuItem.Name = "toolTipsToolStripMenuItem";
+            toolTipsToolStripMenuItem.ShortcutKeyDisplayString = "Beta";
+            toolTipsToolStripMenuItem.Size = new Size(163, 22);
+            toolTipsToolStripMenuItem.Text = "Tool tips";
+            toolTipsToolStripMenuItem.Click += toolTipsToolStripMenuItem_Click;
             // 
             // marginToolStripMenuItem
             // 
@@ -944,7 +977,7 @@
             // 
             fromMyComputerToolStripMenuItem.Image = Properties.Resources.folder;
             fromMyComputerToolStripMenuItem.Name = "fromMyComputerToolStripMenuItem";
-            fromMyComputerToolStripMenuItem.Size = new Size(180, 22);
+            fromMyComputerToolStripMenuItem.Size = new Size(177, 22);
             fromMyComputerToolStripMenuItem.Text = "From my computer";
             fromMyComputerToolStripMenuItem.ToolTipText = "Insert an image from my computer";
             fromMyComputerToolStripMenuItem.Click += fromMyComputerToolStripMenuItem_Click;
@@ -953,7 +986,7 @@
             // 
             fromURLToolStripMenuItem.Image = Properties.Resources.link;
             fromURLToolStripMenuItem.Name = "fromURLToolStripMenuItem";
-            fromURLToolStripMenuItem.Size = new Size(180, 22);
+            fromURLToolStripMenuItem.Size = new Size(177, 22);
             fromURLToolStripMenuItem.Text = "From URL";
             fromURLToolStripMenuItem.ToolTipText = "Insert an image from an URL";
             fromURLToolStripMenuItem.Click += fromURLToolStripMenuItem_Click;
@@ -1265,7 +1298,7 @@
             normalTextToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.D0;
             normalTextToolStripMenuItem.Size = new Size(200, 22);
             normalTextToolStripMenuItem.Text = "Normal text";
-            normalTextToolStripMenuItem.Click += normalTextToolStripMenuItem_Click;
+            normalTextToolStripMenuItem.Click += clearFormattingToolStripMenuItem_Click;
             // 
             // toolStripSeparator18
             // 
@@ -1353,7 +1386,7 @@
             tsFormat.BackColor = Color.White;
             tsFormat.CanOverflow = false;
             tsFormat.GripStyle = ToolStripGripStyle.Hidden;
-            tsFormat.Items.AddRange(new ToolStripItem[] { cbFonts, cbFontSize, toolStripSeparator38, toolStripButton1, toolStripButton2, toolStripButton3, toolStripButton4, toolStripSeparator24, toolStripSplitButton1, toolStripSplitButton3, toolStripSeparator23, toolStripButton7, toolStripButton8, toolStripButton9, toolStripSeparator26, toolStripButton5, toolStripSplitButton4, toolStripSeparator22, toolStripButton10, toolStripButton11 });
+            tsFormat.Items.AddRange(new ToolStripItem[] { cbFonts, cbFontSize, toolStripSeparator38, btnBold, btnItalic, btnUnderline, btnStrikeout, toolStripSeparator24, spltbtnForeColor, spltbtnBackColor, toolStripSeparator23, btnAlignLef, btnAlignCen, btnAlignRig, toolStripSeparator26, btnList, spltbtnLineSpace, toolStripSeparator22, btnTabLef, btnTabRig });
             tsFormat.Location = new Point(0, 51);
             tsFormat.Margin = new Padding(0, 0, 0, 1);
             tsFormat.Name = "tsFormat";
@@ -1366,10 +1399,8 @@
             // 
             cbFonts.AutoCompleteMode = AutoCompleteMode.Suggest;
             cbFonts.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            cbFonts.DropDownHeight = 206;
             cbFonts.FlatStyle = FlatStyle.Flat;
             cbFonts.ForeColor = SystemColors.ControlText;
-            cbFonts.IntegralHeight = false;
             cbFonts.Name = "cbFonts";
             cbFonts.Size = new Size(158, 27);
             cbFonts.Sorted = true;
@@ -1389,63 +1420,64 @@
             cbFontSize.Text = "12";
             cbFontSize.ToolTipText = "Font size\r\nChange font size";
             cbFontSize.SelectedIndexChanged += cbFontSize_SelectedIndexChanged;
+            cbFontSize.TextUpdate += cbFontSize_SelectedIndexChanged;
             // 
-            // toolStripButton1
+            // btnBold
             // 
-            toolStripButton1.AutoSize = false;
-            toolStripButton1.AutoToolTip = false;
-            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton1.Image = Properties.Resources.bold;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(24, 24);
-            toolStripButton1.ToolTipText = "Bold (Ctrl+B)\r\nChange to a more intense font";
-            toolStripButton1.Click += boldToolStripMenuItem_Click;
+            btnBold.AutoSize = false;
+            btnBold.AutoToolTip = false;
+            btnBold.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnBold.Image = Properties.Resources.bold;
+            btnBold.Name = "btnBold";
+            btnBold.Size = new Size(24, 24);
+            btnBold.ToolTipText = "Bold (Ctrl+B)\r\nChange to a more intense font";
+            btnBold.Click += boldToolStripMenuItem_Click;
             // 
-            // toolStripButton2
+            // btnItalic
             // 
-            toolStripButton2.AutoSize = false;
-            toolStripButton2.AutoToolTip = false;
-            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton2.Image = Properties.Resources.italic;
-            toolStripButton2.Name = "toolStripButton2";
-            toolStripButton2.Size = new Size(24, 24);
-            toolStripButton2.ToolTipText = "Italic (Ctrl+I)\r\nChange to an italic font";
-            toolStripButton2.Click += italicToolStripMenuItem_Click;
+            btnItalic.AutoSize = false;
+            btnItalic.AutoToolTip = false;
+            btnItalic.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnItalic.Image = Properties.Resources.italic;
+            btnItalic.Name = "btnItalic";
+            btnItalic.Size = new Size(24, 24);
+            btnItalic.ToolTipText = "Italic (Ctrl+I)\r\nChange to an italic font";
+            btnItalic.Click += italicToolStripMenuItem_Click;
             // 
-            // toolStripButton3
+            // btnUnderline
             // 
-            toolStripButton3.AutoSize = false;
-            toolStripButton3.AutoToolTip = false;
-            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton3.Image = Properties.Resources.underLine;
-            toolStripButton3.Name = "toolStripButton3";
-            toolStripButton3.Size = new Size(24, 24);
-            toolStripButton3.ToolTipText = "Underline (Ctrl+U)\r\nDraw a line underneath the text";
-            toolStripButton3.Click += underlineToolStripMenuItem_Click;
+            btnUnderline.AutoSize = false;
+            btnUnderline.AutoToolTip = false;
+            btnUnderline.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnUnderline.Image = Properties.Resources.underLine;
+            btnUnderline.Name = "btnUnderline";
+            btnUnderline.Size = new Size(24, 24);
+            btnUnderline.ToolTipText = "Underline (Ctrl+U)\r\nDraw a line underneath the text";
+            btnUnderline.Click += underlineToolStripMenuItem_Click;
             // 
-            // toolStripButton4
+            // btnStrikeout
             // 
-            toolStripButton4.AutoSize = false;
-            toolStripButton4.AutoToolTip = false;
-            toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton4.Image = Properties.Resources.strikeOut;
-            toolStripButton4.Name = "toolStripButton4";
-            toolStripButton4.Size = new Size(24, 24);
-            toolStripButton4.ToolTipText = "Strikeout\r\nDraw a line through the text";
-            toolStripButton4.Click += strikeoutToolStripMenuItem_Click;
+            btnStrikeout.AutoSize = false;
+            btnStrikeout.AutoToolTip = false;
+            btnStrikeout.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnStrikeout.Image = Properties.Resources.strikeOut;
+            btnStrikeout.Name = "btnStrikeout";
+            btnStrikeout.Size = new Size(24, 24);
+            btnStrikeout.ToolTipText = "Strikeout\r\nDraw a line through the text";
+            btnStrikeout.Click += strikeoutToolStripMenuItem_Click;
             // 
-            // toolStripSplitButton1
+            // spltbtnForeColor
             // 
-            toolStripSplitButton1.AutoSize = false;
-            toolStripSplitButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripSplitButton1.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem14, toolStripMenuItem15, toolStripMenuItem16, toolStripMenuItem17, toolStripMenuItem18, toolStripMenuItem19, toolStripMenuItem20, toolStripMenuItem21, toolStripMenuItem22, toolStripSeparator42, toolStripMenuItem23 });
-            toolStripSplitButton1.Image = Properties.Resources.color;
-            toolStripSplitButton1.Name = "toolStripSplitButton1";
-            toolStripSplitButton1.RightToLeft = RightToLeft.No;
-            toolStripSplitButton1.Size = new Size(35, 24);
-            toolStripSplitButton1.Text = "Text color";
-            toolStripSplitButton1.ToolTipText = "Color (Alt+C)\r\nChange the text color";
-            toolStripSplitButton1.ButtonClick += toolStripSplitButton1_ButtonClick_1;
+            spltbtnForeColor.AutoSize = false;
+            spltbtnForeColor.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            spltbtnForeColor.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem14, toolStripMenuItem15, toolStripMenuItem16, toolStripMenuItem17, toolStripMenuItem18, toolStripMenuItem19, toolStripMenuItem20, toolStripMenuItem21, toolStripMenuItem22, toolStripSeparator42, toolStripMenuItem23 });
+            spltbtnForeColor.Image = Properties.Resources.color;
+            spltbtnForeColor.Name = "spltbtnForeColor";
+            spltbtnForeColor.RightToLeft = RightToLeft.No;
+            spltbtnForeColor.Size = new Size(35, 24);
+            spltbtnForeColor.Text = "Text color";
+            spltbtnForeColor.ToolTipText = "Color (Alt+C)\r\nChange the text color";
+            spltbtnForeColor.ButtonClick += toolStripSplitButton1_ButtonClick_1;
             // 
             // toolStripMenuItem14
             // 
@@ -1548,18 +1580,18 @@
             toolStripMenuItem23.Text = "More colors";
             toolStripMenuItem23.Click += toolStripSplitButton1_ButtonClick;
             // 
-            // toolStripSplitButton3
+            // spltbtnBackColor
             // 
-            toolStripSplitButton3.AutoSize = false;
-            toolStripSplitButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripSplitButton3.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem3, toolStripMenuItem4, toolStripMenuItem5, toolStripMenuItem6, toolStripMenuItem7, toolStripMenuItem8, toolStripMenuItem11, toolStripMenuItem12, toolStripSeparator17, toolStripMenuItem13 });
-            toolStripSplitButton3.Image = Properties.Resources.fill;
-            toolStripSplitButton3.ImageTransparentColor = Color.Magenta;
-            toolStripSplitButton3.Name = "toolStripSplitButton3";
-            toolStripSplitButton3.Size = new Size(35, 24);
-            toolStripSplitButton3.Text = "Text highlight";
-            toolStripSplitButton3.ToolTipText = "Text highlight color (Alt+M)\r\nMake text appear as if it were marked with a highlighter pen";
-            toolStripSplitButton3.ButtonClick += toolStripSplitButton3_ButtonClick;
+            spltbtnBackColor.AutoSize = false;
+            spltbtnBackColor.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            spltbtnBackColor.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem3, toolStripMenuItem4, toolStripMenuItem5, toolStripMenuItem6, toolStripMenuItem7, toolStripMenuItem8, toolStripMenuItem11, toolStripMenuItem12, toolStripSeparator17, toolStripMenuItem13 });
+            spltbtnBackColor.Image = Properties.Resources.fill;
+            spltbtnBackColor.ImageTransparentColor = Color.Magenta;
+            spltbtnBackColor.Name = "spltbtnBackColor";
+            spltbtnBackColor.Size = new Size(35, 24);
+            spltbtnBackColor.Text = "Text highlight";
+            spltbtnBackColor.ToolTipText = "Text highlight color (Alt+M)\r\nMake text appear as if it were marked with a highlighter pen";
+            spltbtnBackColor.ButtonClick += toolStripSplitButton3_ButtonClick;
             // 
             // toolStripMenuItem3
             // 
@@ -1647,66 +1679,66 @@
             toolStripMenuItem13.Text = "More colors";
             toolStripMenuItem13.Click += textHighlightColorToolStripMenuItem_Click;
             // 
-            // toolStripButton7
+            // btnAlignLef
             // 
-            toolStripButton7.AutoSize = false;
-            toolStripButton7.AutoToolTip = false;
-            toolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton7.Image = Properties.Resources.alignLef;
-            toolStripButton7.Name = "toolStripButton7";
-            toolStripButton7.Size = new Size(24, 24);
-            toolStripButton7.Text = "Align to the left";
-            toolStripButton7.ToolTipText = "Left (Ctrl+L)\r\nAlign text to the left";
-            toolStripButton7.Click += leftToolStripMenuItem_Click;
+            btnAlignLef.AutoSize = false;
+            btnAlignLef.AutoToolTip = false;
+            btnAlignLef.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnAlignLef.Image = Properties.Resources.alignLef;
+            btnAlignLef.Name = "btnAlignLef";
+            btnAlignLef.Size = new Size(24, 24);
+            btnAlignLef.Text = "Align to the left";
+            btnAlignLef.ToolTipText = "Left (Ctrl+L)\r\nAlign text to the left";
+            btnAlignLef.Click += leftToolStripMenuItem_Click;
             // 
-            // toolStripButton8
+            // btnAlignCen
             // 
-            toolStripButton8.AutoSize = false;
-            toolStripButton8.AutoToolTip = false;
-            toolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton8.Image = Properties.Resources.alignCen;
-            toolStripButton8.Name = "toolStripButton8";
-            toolStripButton8.Size = new Size(24, 24);
-            toolStripButton8.Text = "Align to the center";
-            toolStripButton8.ToolTipText = "Center (Ctrl+E)\r\nCenter text";
-            toolStripButton8.Click += centerToolStripMenuItem_Click;
+            btnAlignCen.AutoSize = false;
+            btnAlignCen.AutoToolTip = false;
+            btnAlignCen.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnAlignCen.Image = Properties.Resources.alignCen;
+            btnAlignCen.Name = "btnAlignCen";
+            btnAlignCen.Size = new Size(24, 24);
+            btnAlignCen.Text = "Align to the center";
+            btnAlignCen.ToolTipText = "Center (Ctrl+E)\r\nCenter text";
+            btnAlignCen.Click += centerToolStripMenuItem_Click;
             // 
-            // toolStripButton9
+            // btnAlignRig
             // 
-            toolStripButton9.AutoSize = false;
-            toolStripButton9.AutoToolTip = false;
-            toolStripButton9.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton9.Image = Properties.Resources.alignRig;
-            toolStripButton9.Name = "toolStripButton9";
-            toolStripButton9.Size = new Size(24, 24);
-            toolStripButton9.Text = "Align to the right";
-            toolStripButton9.ToolTipText = "Right (Ctrl+R)\r\nAlign text to the right";
-            toolStripButton9.Click += rightToolStripMenuItem_Click;
+            btnAlignRig.AutoSize = false;
+            btnAlignRig.AutoToolTip = false;
+            btnAlignRig.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnAlignRig.Image = Properties.Resources.alignRig;
+            btnAlignRig.Name = "btnAlignRig";
+            btnAlignRig.Size = new Size(24, 24);
+            btnAlignRig.Text = "Align to the right";
+            btnAlignRig.ToolTipText = "Right (Ctrl+R)\r\nAlign text to the right";
+            btnAlignRig.Click += rightToolStripMenuItem_Click;
             // 
-            // toolStripButton5
+            // btnList
             // 
-            toolStripButton5.AutoSize = false;
-            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton5.Image = Properties.Resources.list;
-            toolStripButton5.ImageTransparentColor = Color.Magenta;
-            toolStripButton5.Name = "toolStripButton5";
-            toolStripButton5.Size = new Size(24, 24);
-            toolStripButton5.Text = "toolStripButton5";
-            toolStripButton5.ToolTipText = "List (Ctrl+Alt+L)\r\nStart a bullet list";
-            toolStripButton5.Click += listToolStripMenuItem_Click;
+            btnList.AutoSize = false;
+            btnList.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnList.Image = Properties.Resources.list;
+            btnList.ImageTransparentColor = Color.Magenta;
+            btnList.Name = "btnList";
+            btnList.Size = new Size(24, 24);
+            btnList.Text = "toolStripButton5";
+            btnList.ToolTipText = "List (Ctrl+Alt+L)\r\nStart a bullet list";
+            btnList.Click += listToolStripMenuItem_Click;
             // 
-            // toolStripSplitButton4
+            // spltbtnLineSpace
             // 
-            toolStripSplitButton4.AutoSize = false;
-            toolStripSplitButton4.AutoToolTip = false;
-            toolStripSplitButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripSplitButton4.DropDownItems.AddRange(new ToolStripItem[] { lnSpace1, lnSpace4, lnSpace8, lnSpace16, lnSpaceOther });
-            toolStripSplitButton4.Image = Properties.Resources.lineSpacing;
-            toolStripSplitButton4.ImageTransparentColor = Color.Magenta;
-            toolStripSplitButton4.Name = "toolStripSplitButton4";
-            toolStripSplitButton4.Size = new Size(35, 24);
-            toolStripSplitButton4.Text = "Line spacing";
-            toolStripSplitButton4.ToolTipText = "Line spacing\r\nChange the line spacing of text";
+            spltbtnLineSpace.AutoSize = false;
+            spltbtnLineSpace.AutoToolTip = false;
+            spltbtnLineSpace.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            spltbtnLineSpace.DropDownItems.AddRange(new ToolStripItem[] { lnSpace1, lnSpace4, lnSpace8, lnSpace16, lnSpaceOther });
+            spltbtnLineSpace.Image = Properties.Resources.lineSpacing;
+            spltbtnLineSpace.ImageTransparentColor = Color.Magenta;
+            spltbtnLineSpace.Name = "spltbtnLineSpace";
+            spltbtnLineSpace.Size = new Size(35, 24);
+            spltbtnLineSpace.Text = "Line spacing";
+            spltbtnLineSpace.ToolTipText = "Line spacing\r\nChange the line spacing of text";
             // 
             // lnSpace1
             // 
@@ -1754,163 +1786,163 @@
             lnSpaceOther.Text = "Other size";
             lnSpaceOther.Visible = false;
             // 
-            // toolStripButton10
+            // btnTabLef
             // 
-            toolStripButton10.AutoSize = false;
-            toolStripButton10.AutoToolTip = false;
-            toolStripButton10.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton10.Image = Properties.Resources.tabRig;
-            toolStripButton10.Name = "toolStripButton10";
-            toolStripButton10.Size = new Size(24, 24);
-            toolStripButton10.Text = "Tab left";
-            toolStripButton10.ToolTipText = "Decrease indentation (Ctrl+<)\r\nDecrease paragraph indentation level";
-            toolStripButton10.Click += tabulateLeftToolStripMenuItem_Click;
+            btnTabLef.AutoSize = false;
+            btnTabLef.AutoToolTip = false;
+            btnTabLef.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnTabLef.Image = Properties.Resources.tabRig;
+            btnTabLef.Name = "btnTabLef";
+            btnTabLef.Size = new Size(24, 24);
+            btnTabLef.Text = "Tab left";
+            btnTabLef.ToolTipText = "Decrease indentation (Ctrl+<)\r\nDecrease paragraph indentation level";
+            btnTabLef.Click += tabulateLeftToolStripMenuItem_Click;
             // 
-            // toolStripButton11
+            // btnTabRig
             // 
-            toolStripButton11.AutoSize = false;
-            toolStripButton11.AutoToolTip = false;
-            toolStripButton11.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton11.Image = Properties.Resources.tabLef;
-            toolStripButton11.Name = "toolStripButton11";
-            toolStripButton11.Size = new Size(24, 24);
-            toolStripButton11.Text = "Tab right";
-            toolStripButton11.ToolTipText = "Increase indentation (Ctrl+>)\r\nIncrease paragraph indentation level";
-            toolStripButton11.Click += tabulateRightToolStripMenuItem_Click;
+            btnTabRig.AutoSize = false;
+            btnTabRig.AutoToolTip = false;
+            btnTabRig.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnTabRig.Image = Properties.Resources.tabLef;
+            btnTabRig.Name = "btnTabRig";
+            btnTabRig.Size = new Size(24, 24);
+            btnTabRig.Text = "Tab right";
+            btnTabRig.ToolTipText = "Increase indentation (Ctrl+>)\r\nIncrease paragraph indentation level";
+            btnTabRig.Click += tabulateRightToolStripMenuItem_Click;
             // 
-            // toolStrip1
+            // tsFile
             // 
-            toolStrip1.BackColor = Color.White;
-            toolStrip1.CanOverflow = false;
-            toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton13, toolStripButton14, toolStripButton15, toolStripButton12, toolStripSeparator27, toolStripButton16, toolStripButton17, toolStripButton18, toolStripButton19, toolStripButton20, toolStripSeparator9, toolStripSplitButton2 });
-            toolStrip1.Location = new Point(0, 24);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Padding = new Padding(6, 0, 0, 0);
-            toolStrip1.Size = new Size(784, 27);
-            toolStrip1.TabIndex = 3;
-            toolStrip1.Text = "toolStrip1";
-            toolStrip1.KeyDown += rtb_KeyDown;
+            tsFile.BackColor = Color.White;
+            tsFile.CanOverflow = false;
+            tsFile.GripStyle = ToolStripGripStyle.Hidden;
+            tsFile.Items.AddRange(new ToolStripItem[] { btnNew, btnOpen, btnSave, btnPrint, toolStripSeparator27, btnCut, btnCopy, btnPaste, btnUndo, btnRedo, toolStripSeparator9, spltbtnSearch });
+            tsFile.Location = new Point(0, 24);
+            tsFile.Name = "tsFile";
+            tsFile.Padding = new Padding(6, 0, 0, 0);
+            tsFile.Size = new Size(784, 27);
+            tsFile.TabIndex = 3;
+            tsFile.Text = "toolStrip1";
+            tsFile.KeyDown += rtb_KeyDown;
             // 
-            // toolStripButton13
+            // btnNew
             // 
-            toolStripButton13.AutoSize = false;
-            toolStripButton13.AutoToolTip = false;
-            toolStripButton13.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton13.Image = Properties.Resources.document;
-            toolStripButton13.Name = "toolStripButton13";
-            toolStripButton13.Size = new Size(24, 24);
-            toolStripButton13.Text = "New document";
-            toolStripButton13.ToolTipText = "New (Ctrl+N)\r\nCreate a new document";
-            toolStripButton13.Click += newToolStripMenuItem_Click;
+            btnNew.AutoSize = false;
+            btnNew.AutoToolTip = false;
+            btnNew.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnNew.Image = Properties.Resources.document;
+            btnNew.Name = "btnNew";
+            btnNew.Size = new Size(24, 24);
+            btnNew.Text = "New document";
+            btnNew.ToolTipText = "New (Ctrl+N)\r\nCreate a new document";
+            btnNew.Click += newToolStripMenuItem_Click;
             // 
-            // toolStripButton14
+            // btnOpen
             // 
-            toolStripButton14.AutoSize = false;
-            toolStripButton14.AutoToolTip = false;
-            toolStripButton14.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton14.Image = Properties.Resources.folder;
-            toolStripButton14.Name = "toolStripButton14";
-            toolStripButton14.Size = new Size(24, 24);
-            toolStripButton14.Text = "Open document";
-            toolStripButton14.ToolTipText = "Open (Ctrl+O)\r\nOpen an existing document";
-            toolStripButton14.Click += openToolStripMenuItem_Click;
+            btnOpen.AutoSize = false;
+            btnOpen.AutoToolTip = false;
+            btnOpen.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnOpen.Image = Properties.Resources.folder;
+            btnOpen.Name = "btnOpen";
+            btnOpen.Size = new Size(24, 24);
+            btnOpen.Text = "Open document";
+            btnOpen.ToolTipText = "Open (Ctrl+O)\r\nOpen an existing document";
+            btnOpen.Click += openToolStripMenuItem_Click;
             // 
-            // toolStripButton15
+            // btnSave
             // 
-            toolStripButton15.AutoSize = false;
-            toolStripButton15.AutoToolTip = false;
-            toolStripButton15.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton15.Image = Properties.Resources.save;
-            toolStripButton15.Name = "toolStripButton15";
-            toolStripButton15.Size = new Size(24, 24);
-            toolStripButton15.Text = "Save document";
-            toolStripButton15.ToolTipText = "Save (Ctrl+S)\r\nSave the active document";
-            toolStripButton15.Click += saveToolStripMenuItem_Click;
+            btnSave.AutoSize = false;
+            btnSave.AutoToolTip = false;
+            btnSave.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnSave.Image = Properties.Resources.save;
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(24, 24);
+            btnSave.Text = "Save document";
+            btnSave.ToolTipText = "Save (Ctrl+S)\r\nSave the active document";
+            btnSave.Click += saveToolStripMenuItem_Click;
             // 
-            // toolStripButton12
+            // btnPrint
             // 
-            toolStripButton12.AutoSize = false;
-            toolStripButton12.AutoToolTip = false;
-            toolStripButton12.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton12.Image = Properties.Resources.print;
-            toolStripButton12.Name = "toolStripButton12";
-            toolStripButton12.Size = new Size(24, 24);
-            toolStripButton12.Text = "Print document";
-            toolStripButton12.ToolTipText = "Print (Ctrl+P)\r\nPrint the current document";
-            toolStripButton12.Click += printDocumentToolStripMenuItem_Click;
+            btnPrint.AutoSize = false;
+            btnPrint.AutoToolTip = false;
+            btnPrint.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnPrint.Image = Properties.Resources.print;
+            btnPrint.Name = "btnPrint";
+            btnPrint.Size = new Size(24, 24);
+            btnPrint.Text = "Print document";
+            btnPrint.ToolTipText = "Print (Ctrl+P)\r\nPrint the current document";
+            btnPrint.Click += printDocumentToolStripMenuItem_Click;
             // 
-            // toolStripButton16
+            // btnCut
             // 
-            toolStripButton16.AutoSize = false;
-            toolStripButton16.AutoToolTip = false;
-            toolStripButton16.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton16.Image = Properties.Resources.cut;
-            toolStripButton16.Name = "toolStripButton16";
-            toolStripButton16.Size = new Size(24, 24);
-            toolStripButton16.Text = "Cut";
-            toolStripButton16.ToolTipText = "Cut (Ctrl+X)\r\nCut document selection and place it on the Clipboard";
-            toolStripButton16.Click += cutToolStripMenuItem_Click;
+            btnCut.AutoSize = false;
+            btnCut.AutoToolTip = false;
+            btnCut.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnCut.Image = Properties.Resources.cut;
+            btnCut.Name = "btnCut";
+            btnCut.Size = new Size(24, 24);
+            btnCut.Text = "Cut";
+            btnCut.ToolTipText = "Cut (Ctrl+X)\r\nCut document selection and place it on the Clipboard";
+            btnCut.Click += cutToolStripMenuItem_Click;
             // 
-            // toolStripButton17
+            // btnCopy
             // 
-            toolStripButton17.AutoSize = false;
-            toolStripButton17.AutoToolTip = false;
-            toolStripButton17.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton17.Image = Properties.Resources.copy;
-            toolStripButton17.Name = "toolStripButton17";
-            toolStripButton17.Size = new Size(24, 24);
-            toolStripButton17.Text = "Copy";
-            toolStripButton17.ToolTipText = "Copy (Ctrl+C)\r\nCopy the selection and place it on the Clipboard";
-            toolStripButton17.Click += copyToolStripMenuItem_Click;
+            btnCopy.AutoSize = false;
+            btnCopy.AutoToolTip = false;
+            btnCopy.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnCopy.Image = Properties.Resources.copy;
+            btnCopy.Name = "btnCopy";
+            btnCopy.Size = new Size(24, 24);
+            btnCopy.Text = "Copy";
+            btnCopy.ToolTipText = "Copy (Ctrl+C)\r\nCopy the selection and place it on the Clipboard";
+            btnCopy.Click += copyToolStripMenuItem_Click;
             // 
-            // toolStripButton18
+            // btnPaste
             // 
-            toolStripButton18.AutoSize = false;
-            toolStripButton18.AutoToolTip = false;
-            toolStripButton18.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton18.Image = Properties.Resources.paste;
-            toolStripButton18.Name = "toolStripButton18";
-            toolStripButton18.Size = new Size(24, 24);
-            toolStripButton18.Text = "Paste";
-            toolStripButton18.ToolTipText = "Paste (Ctrl+V)\r\nPaste the contents of the Clipboard";
-            toolStripButton18.Click += pasteToolStripMenuItem_Click;
+            btnPaste.AutoSize = false;
+            btnPaste.AutoToolTip = false;
+            btnPaste.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnPaste.Image = Properties.Resources.paste;
+            btnPaste.Name = "btnPaste";
+            btnPaste.Size = new Size(24, 24);
+            btnPaste.Text = "Paste";
+            btnPaste.ToolTipText = "Paste (Ctrl+V)\r\nPaste the contents of the Clipboard";
+            btnPaste.Click += pasteToolStripMenuItem_Click;
             // 
-            // toolStripButton19
+            // btnUndo
             // 
-            toolStripButton19.AutoSize = false;
-            toolStripButton19.AutoToolTip = false;
-            toolStripButton19.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton19.Image = Properties.Resources.undo;
-            toolStripButton19.Name = "toolStripButton19";
-            toolStripButton19.Size = new Size(24, 24);
-            toolStripButton19.Text = "Undo";
-            toolStripButton19.ToolTipText = "Undo (Ctrl+Z)\r\nRevert last action";
-            toolStripButton19.Click += undoToolStripMenuItem_Click;
+            btnUndo.AutoSize = false;
+            btnUndo.AutoToolTip = false;
+            btnUndo.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnUndo.Image = Properties.Resources.undo;
+            btnUndo.Name = "btnUndo";
+            btnUndo.Size = new Size(24, 24);
+            btnUndo.Text = "Undo";
+            btnUndo.ToolTipText = "Undo (Ctrl+Z)\r\nRevert last action";
+            btnUndo.Click += undoToolStripMenuItem_Click;
             // 
-            // toolStripButton20
+            // btnRedo
             // 
-            toolStripButton20.AutoSize = false;
-            toolStripButton20.AutoToolTip = false;
-            toolStripButton20.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton20.Image = Properties.Resources.redo;
-            toolStripButton20.Name = "toolStripButton20";
-            toolStripButton20.Size = new Size(24, 24);
-            toolStripButton20.Text = "Redo";
-            toolStripButton20.ToolTipText = "Redo (Ctrl+Y)\r\nRevert last undo";
-            toolStripButton20.Click += redoToolStripMenuItem_Click;
+            btnRedo.AutoSize = false;
+            btnRedo.AutoToolTip = false;
+            btnRedo.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnRedo.Image = Properties.Resources.redo;
+            btnRedo.Name = "btnRedo";
+            btnRedo.Size = new Size(24, 24);
+            btnRedo.Text = "Redo";
+            btnRedo.ToolTipText = "Redo (Ctrl+Y)\r\nRevert last undo";
+            btnRedo.Click += redoToolStripMenuItem_Click;
             // 
-            // toolStripSplitButton2
+            // spltbtnSearch
             // 
-            toolStripSplitButton2.AutoSize = false;
-            toolStripSplitButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripSplitButton2.DropDownItems.AddRange(new ToolStripItem[] { searchForTextToolStripMenuItem, searchForLineToolStripMenuItem });
-            toolStripSplitButton2.Image = Properties.Resources.search;
-            toolStripSplitButton2.Name = "toolStripSplitButton2";
-            toolStripSplitButton2.Size = new Size(35, 24);
-            toolStripSplitButton2.Text = "Search";
-            toolStripSplitButton2.ToolTipText = "Search (Alt+S)";
-            toolStripSplitButton2.ButtonClick += findToolStripMenuItem_Click;
+            spltbtnSearch.AutoSize = false;
+            spltbtnSearch.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            spltbtnSearch.DropDownItems.AddRange(new ToolStripItem[] { searchForTextToolStripMenuItem, searchForLineToolStripMenuItem });
+            spltbtnSearch.Image = Properties.Resources.search;
+            spltbtnSearch.Name = "spltbtnSearch";
+            spltbtnSearch.Size = new Size(35, 24);
+            spltbtnSearch.Text = "Search";
+            spltbtnSearch.ToolTipText = "Search (Alt+S)";
+            spltbtnSearch.ButtonClick += findToolStripMenuItem_Click;
             // 
             // searchForTextToolStripMenuItem
             // 
@@ -1935,23 +1967,23 @@
             colorDialog.AnyColor = true;
             colorDialog.FullOpen = true;
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            statusStrip1.BackColor = Color.FromArgb(243, 243, 243);
-            statusStrip1.Items.AddRange(new ToolStripItem[] { lblCursorPos, lblCharAndWord, lblZoomFactor, lblFileSize, lblNotification });
-            statusStrip1.Location = new Point(0, 439);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.ShowItemToolTips = true;
-            statusStrip1.Size = new Size(784, 22);
-            statusStrip1.SizingGrip = false;
-            statusStrip1.TabIndex = 4;
-            statusStrip1.Text = "statusStrip1";
+            statusStrip.BackColor = Color.FromArgb(243, 243, 243);
+            statusStrip.Items.AddRange(new ToolStripItem[] { lblCursorPos, lblCharAndWord, lblZoomFactor, lblFileSize, lblNotification });
+            statusStrip.Location = new Point(0, 439);
+            statusStrip.Name = "statusStrip";
+            statusStrip.ShowItemToolTips = true;
+            statusStrip.Size = new Size(784, 22);
+            statusStrip.SizingGrip = false;
+            statusStrip.TabIndex = 4;
+            statusStrip.Text = "statusStrip1";
             // 
             // lblCursorPos
             // 
             lblCursorPos.ForeColor = Color.Black;
             lblCursorPos.Image = Properties.Resources.location;
-            lblCursorPos.Margin = new Padding(6, 3, 10, 2);
+            lblCursorPos.Margin = new Padding(6, 3, 15, 2);
             lblCursorPos.Name = "lblCursorPos";
             lblCursorPos.Size = new Size(78, 17);
             lblCursorPos.Text = "Ln 1, Col 1";
@@ -1961,7 +1993,7 @@
             // 
             lblCharAndWord.ForeColor = Color.Black;
             lblCharAndWord.Image = Properties.Resources.word;
-            lblCharAndWord.Margin = new Padding(0, 3, 10, 2);
+            lblCharAndWord.Margin = new Padding(0, 3, 15, 2);
             lblCharAndWord.Name = "lblCharAndWord";
             lblCharAndWord.Size = new Size(137, 17);
             lblCharAndWord.Text = "0 Characters, 0 Words";
@@ -1971,7 +2003,7 @@
             // 
             lblZoomFactor.ForeColor = Color.Black;
             lblZoomFactor.Image = Properties.Resources.search;
-            lblZoomFactor.Margin = new Padding(0, 3, 10, 2);
+            lblZoomFactor.Margin = new Padding(0, 3, 15, 2);
             lblZoomFactor.Name = "lblZoomFactor";
             lblZoomFactor.Size = new Size(51, 17);
             lblZoomFactor.Text = "100%";
@@ -1993,9 +2025,10 @@
             lblNotification.ForeColor = Color.Black;
             lblNotification.ImageAlign = ContentAlignment.MiddleRight;
             lblNotification.Name = "lblNotification";
-            lblNotification.Size = new Size(409, 17);
+            lblNotification.Size = new Size(394, 17);
             lblNotification.Spring = true;
-            lblNotification.Text = "notification label";
+            lblNotification.Text = "notification";
+            lblNotification.TextAlign = ContentAlignment.MiddleRight;
             lblNotification.Visible = false;
             // 
             // pageSetupDialog1
@@ -2013,10 +2046,11 @@
             // 
             // contextMenuStrip2
             // 
-            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { formalToolStripMenuItem, arialToolStripMenuItem, calibriToolStripMenuItem, timesNewRomanToolStripMenuItem, toolStripSeparator7, monospacedToolStripMenuItem, cascadiaToolStripMenuItem, consolasToolStripMenuItem, lucidaConsoleToolStripMenuItem, toolStripSeparator37, symbolToolStripMenuItem, marlettToolStripMenuItem, symbolToolStripMenuItem1, webdingsToolStripMenuItem, wingdingsToolStripMenuItem });
+            contextMenuStrip2.Items.AddRange(new ToolStripItem[] { formalToolStripMenuItem, arialToolStripMenuItem, calibriToolStripMenuItem, timesNewRomanToolStripMenuItem, toolStripSeparator7, monospacedToolStripMenuItem, cascadiaToolStripMenuItem, consolasToolStripMenuItem, lucidaConsoleToolStripMenuItem, toolStripSeparator37, symbolToolStripMenuItem, marlettToolStripMenuItem, symbolToolStripMenuItem1, webdingsToolStripMenuItem, wingdingsToolStripMenuItem, toolStripSeparator12, favoriteFontsToolStripMenuItem });
             contextMenuStrip2.Name = "contextMenuStrip2";
             contextMenuStrip2.ShowImageMargin = false;
-            contextMenuStrip2.Size = new Size(162, 302);
+            contextMenuStrip2.Size = new Size(162, 330);
+            contextMenuStrip2.Opening += contextMenuStrip2_Opening;
             // 
             // formalToolStripMenuItem
             // 
@@ -2125,6 +2159,31 @@
             wingdingsToolStripMenuItem.Text = "Wingdings";
             wingdingsToolStripMenuItem.Click += selectFont;
             // 
+            // toolStripSeparator12
+            // 
+            toolStripSeparator12.Name = "toolStripSeparator12";
+            toolStripSeparator12.Size = new Size(158, 6);
+            // 
+            // favoriteFontsToolStripMenuItem
+            // 
+            favoriteFontsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripSeparator13, manageFontsToolStripMenuItem });
+            favoriteFontsToolStripMenuItem.Name = "favoriteFontsToolStripMenuItem";
+            favoriteFontsToolStripMenuItem.Size = new Size(161, 22);
+            favoriteFontsToolStripMenuItem.Text = "Favorite fonts";
+            // 
+            // toolStripSeparator13
+            // 
+            toolStripSeparator13.Name = "toolStripSeparator13";
+            toolStripSeparator13.Size = new Size(187, 6);
+            // 
+            // manageFontsToolStripMenuItem
+            // 
+            manageFontsToolStripMenuItem.Image = Properties.Resources.font;
+            manageFontsToolStripMenuItem.Name = "manageFontsToolStripMenuItem";
+            manageFontsToolStripMenuItem.Size = new Size(190, 22);
+            manageFontsToolStripMenuItem.Text = "Manage favorite fonts";
+            manageFontsToolStripMenuItem.Click += manageFontsToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2132,12 +2191,12 @@
             BackColor = Color.White;
             ClientSize = new Size(784, 461);
             Controls.Add(rtb);
-            Controls.Add(statusStrip1);
+            Controls.Add(statusStrip);
             Controls.Add(tsFormat);
-            Controls.Add(toolStrip1);
-            Controls.Add(menuStrip1);
+            Controls.Add(tsFile);
+            Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = menuStrip;
             Margin = new Padding(4, 3, 4, 3);
             MinimumSize = new Size(250, 250);
             Name = "Form1";
@@ -2147,21 +2206,21 @@
             KeyDown += rtb_KeyDown;
             Resize += Form1_Resize;
             contextMenuStrip1.ResumeLayout(false);
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             tsFormat.ResumeLayout(false);
             tsFormat.PerformLayout();
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
+            tsFile.ResumeLayout(false);
+            tsFile.PerformLayout();
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
             contextMenuStrip2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private MenuStrip menuStrip1;
+        private MenuStrip menuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem viewToolStripMenuItem;
@@ -2219,35 +2278,35 @@
         private ToolStripMenuItem pasteWithoutFormattingToolStripMenuItem1;
         private ToolStrip tsFormat;
         private ToolStripComboBox cbFontSize;
-        private ToolStripButton toolStripButton7;
-        private ToolStripButton toolStripButton8;
-        private ToolStripButton toolStripButton9;
-        private ToolStripButton toolStripButton1;
-        private ToolStripButton toolStripButton2;
-        private ToolStripButton toolStripButton3;
-        private ToolStripButton toolStripButton4;
+        private ToolStripButton btnAlignLef;
+        private ToolStripButton btnAlignCen;
+        private ToolStripButton btnAlignRig;
+        private ToolStripButton btnBold;
+        private ToolStripButton btnItalic;
+        private ToolStripButton btnUnderline;
+        private ToolStripButton btnStrikeout;
         private ToolStripSeparator toolStripSeparator23;
         private ToolStripSeparator toolStripSeparator22;
-        private ToolStripSplitButton toolStripSplitButton1;
+        private ToolStripSplitButton spltbtnForeColor;
         private ToolStripSeparator toolStripSeparator24;
         private ToolStripSeparator toolStripSeparator26;
-        private ToolStripButton toolStripButton10;
-        private ToolStripButton toolStripButton11;
+        private ToolStripButton btnTabLef;
+        private ToolStripButton btnTabRig;
         private ToolStripMenuItem statusBarToolStripMenuItem;
         private ToolStripMenuItem toolBarToolStripMenuItem;
-        private ToolStrip toolStrip1;
-        private ToolStripButton toolStripButton12;
-        private ToolStripButton toolStripButton13;
-        private ToolStripButton toolStripButton14;
-        private ToolStripButton toolStripButton15;
-        private ToolStripButton toolStripButton16;
+        private ToolStrip tsFile;
+        private ToolStripButton btnPrint;
+        private ToolStripButton btnNew;
+        private ToolStripButton btnOpen;
+        private ToolStripButton btnSave;
+        private ToolStripButton btnCut;
         private ToolStripSeparator toolStripSeparator27;
-        private ToolStripButton toolStripButton17;
-        private ToolStripButton toolStripButton18;
-        private ToolStripButton toolStripButton19;
-        private ToolStripButton toolStripButton20;
+        private ToolStripButton btnCopy;
+        private ToolStripButton btnPaste;
+        private ToolStripButton btnUndo;
+        private ToolStripButton btnRedo;
         private ToolStripSeparator toolStripSeparator9;
-        private ToolStripSplitButton toolStripSplitButton2;
+        private ToolStripSplitButton spltbtnSearch;
         private ToolStripMenuItem searchForTextToolStripMenuItem;
         private ToolStripMenuItem searchForLineToolStripMenuItem;
         private ToolStripMenuItem formatBarToolStripMenuItem;
@@ -2260,7 +2319,7 @@
         private ToolStripSeparator toolStripSeparator28;
         private ToolStripMenuItem toggleCaseToolStripMenuItem;
         private ColorDialog colorDialog;
-        private StatusStrip statusStrip1;
+        private StatusStrip statusStrip;
         private ToolStripStatusLabel lblCursorPos;
         private ToolStripStatusLabel lblZoomFactor;
         private ToolStripStatusLabel lblCharAndWord;
@@ -2318,7 +2377,7 @@
         private ToolStripMenuItem symbolToolStripMenuItem1;
         private ToolStripMenuItem webdingsToolStripMenuItem;
         private ToolStripMenuItem wingdingsToolStripMenuItem;
-        private ToolStripSplitButton toolStripSplitButton4;
+        private ToolStripSplitButton spltbtnLineSpace;
         private ToolStripMenuItem lnSpace1;
         private ToolStripMenuItem lnSpace4;
         private ToolStripMenuItem lnSpace8;
@@ -2327,12 +2386,12 @@
         private ToolStripMenuItem viewInFileExplorerToolStripMenuItem;
         private ToolStripMenuItem selectWordToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator40;
-        private ToolStripButton toolStripButton5;
+        private ToolStripButton btnList;
         private ToolStripStatusLabel lblNotification;
         private ToolStripSeparator toolStripSeparator10;
         private ToolStripMenuItem lineSpacingToolStripMenuItem;
         private ToolStripMenuItem cloneDocumentToolStripMenuItem;
-        private ToolStripSplitButton toolStripSplitButton3;
+        private ToolStripSplitButton spltbtnBackColor;
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem toolStripMenuItem4;
         private ToolStripMenuItem toolStripMenuItem5;
@@ -2370,5 +2429,12 @@
         private ToolStripMenuItem toolStripMenuItem24;
         private ToolStripSeparator toolStripSeparator39;
         private ToolStripStatusLabel lblFileSize;
+        private ToolStripMenuItem toolTipsToolStripMenuItem;
+        private ToolStripMenuItem undoToolStripMenuItem1;
+        private ToolStripSeparator toolStripSeparator11;
+        private ToolStripSeparator toolStripSeparator12;
+        private ToolStripMenuItem favoriteFontsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator13;
+        private ToolStripMenuItem manageFontsToolStripMenuItem;
     }
 }

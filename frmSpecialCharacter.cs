@@ -40,8 +40,9 @@
             AddUnicodeCategory("Block Elements", Enumerable.Range(0x2580, 0x259F - 0x2580 + 1).Select(c => (char)c));
             AddUnicodeCategory("Geometric Shapes", Enumerable.Range(0x25A0, 0x25FF - 0x25A0 + 1).Select(c => (char)c));
             AddUnicodeCategory("Miscellaneous Symbols", Enumerable.Range(0x2600, 0x26FF - 0x2600 + 1).Select(c => (char)c));
-            //AddUnicodeCategory("Private use Area", Enumerable.Range(0xE000, 0xF8FF - 0xE000 + 1).Select(c => (char)c)); // disabled by default, laggy
             AddUnicodeCategory("Presentation Forms", Enumerable.Range(0xFB00, 0xFB4F - 0xFB00 + 1).Select(c => (char)c));
+            //AddUnicodeCategory("Emojis", Enumerable.Range(0x1F300, 0x1F9FF - 0x1F300 + 1).Select(c => (char)c)); // disabled by default, there's no emojis TwT
+            //AddUnicodeCategory("Private use Area", Enumerable.Range(0xE000, 0xF8FF - 0xE000 + 1).Select(c => (char)c)); // disabled by default, laggy
             //AddUnicodeCategory("Specials", Enumerable.Range(0xFE00, 0xFE0F - 0xFE00 + 1).Select(c => (char)c)); // disabled by default, empty 
         }
         private void AddUnicodeCategory(string categoryName, IEnumerable<char> characters) {

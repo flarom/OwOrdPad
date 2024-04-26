@@ -25,10 +25,10 @@
             get { return blank; }
         }
         public override Color ButtonPressedGradientBegin {
-            get { return blank; }
+            get { return outline; }
         }
         public override Color ButtonPressedGradientEnd {
-            get { return blank; }
+            get { return outline; }
         }
         // item hover
         public override Color MenuItemSelectedGradientBegin {
@@ -45,10 +45,10 @@
         }
         // item checked
         public override Color ButtonCheckedGradientBegin {
-            get { return blank; }
+            get { return highlight; }
         }
         public override Color ButtonCheckedGradientEnd {
-            get { return blank; }
+            get { return highlight; }
         }
         public override Color CheckBackground {
             get { return highlight; }

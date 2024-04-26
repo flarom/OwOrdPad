@@ -7,6 +7,9 @@
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmFavoriteFonts.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmSpecialCharacter.cs">
       <SubType>Form</SubType>
     </Compile>

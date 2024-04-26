@@ -2,14 +2,11 @@
 using Microsoft.Win32;
 using OwOrdPad.Properties;
 using System.Diagnostics;
-using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Globalization;
 using System.Media;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace OwOrdPad {
     public partial class Form1 : Form {
@@ -37,8 +34,8 @@ namespace OwOrdPad {
             // load custom visuals
             rtb.SelectionCharOffset = 1;
 
-            menuStrip1.Renderer = new MenuRenderer();
-            toolStrip1.Renderer = new MenuRenderer();
+            menuStrip.Renderer = new MenuRenderer();
+            tsFile.Renderer = new MenuRenderer();
             tsFormat.Renderer = new MenuRenderer();
             contextMenuStrip1.Renderer = new MenuRenderer();
             contextMenuStrip2.Renderer = new MenuRenderer();
@@ -61,7 +58,34 @@ namespace OwOrdPad {
         }
         #region settings
         // contains events related to writing and reading configuration files 
+        private void contextMenuStrip2_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
+            LoadFavoriteFonts();
+        }
+        private void manageFontsToolStripMenuItem_Click(object sender, EventArgs e) {
+            frmFavoriteFonts frm = new();
+            frm.ShowDialog(this);
 
+            //Process.Start("notepad", defaultDirectory + "\\settings\\favoriteFonts");
+        }
+        private void LoadFavoriteFonts() {
+            favoriteFontsToolStripMenuItem.DropDownItems.Clear();
+
+            string[] fonts = File.ReadAllLines(defaultDirectory + "\\settings\\favoriteFonts");
+
+            foreach (string fontName in fonts) {
+                ToolStripMenuItem fontItem = new ToolStripMenuItem() {
+                    Text = fontName,
+                    Tag = fontName,
+                    Font = new Font(fontName, 10),
+                };
+                fontItem.Click += selectFont;
+
+                favoriteFontsToolStripMenuItem.DropDownItems.Add(fontItem);
+            }
+
+            favoriteFontsToolStripMenuItem.DropDownItems.Add(toolStripSeparator13);
+            favoriteFontsToolStripMenuItem.DropDownItems.Add(manageFontsToolStripMenuItem);
+        }
         private void LoadSettings() {
             try {
                 string showFormatBar = File.ReadAllText(defaultDirectory + "\\settings\\showFormatBar");
@@ -72,8 +96,8 @@ namespace OwOrdPad {
                 string wasClosedByUser = File.ReadAllText(defaultDirectory + "\\settings\\wasClosedByUser");
 
                 tsFormat.Visible = bool.Parse(showFormatBar);
-                statusStrip1.Visible = bool.Parse(showStatusBar);
-                toolStrip1.Visible = bool.Parse(showToolBar);
+                statusStrip.Visible = bool.Parse(showStatusBar);
+                tsFile.Visible = bool.Parse(showToolBar);
                 rtb.WordWrap = bool.Parse(wordWrap);
                 rtb.ShowSelectionMargin = bool.Parse(selectionMargin);
 
@@ -358,12 +382,12 @@ namespace OwOrdPad {
             Settings.SaveSetting("selectionMargin", selectionMarginToolStripMenuItem.Checked.ToString());
         }
         private void statusBarToolStripMenuItem_Click(object sender, EventArgs e) {
-            statusStrip1.Visible = statusBarToolStripMenuItem.Checked;
+            statusStrip.Visible = statusBarToolStripMenuItem.Checked;
             Settings.SaveSetting("showStatusBar", statusBarToolStripMenuItem.Checked.ToString());
         }
 
         private void toolBarToolStripMenuItem_Click(object sender, EventArgs e) {
-            toolStrip1.Visible = toolBarToolStripMenuItem.Checked;
+            tsFile.Visible = toolBarToolStripMenuItem.Checked;
             Settings.SaveSetting("showToolBar", toolBarToolStripMenuItem.Checked.ToString());
         }
 
@@ -413,10 +437,10 @@ namespace OwOrdPad {
             cbFonts.Text = "Calibri";
             cbFontSize.Text = "12";
 
-            toolStripButton1.Checked = rtb.SelectionFont.Bold;
-            toolStripButton2.Checked = rtb.SelectionFont.Italic;
-            toolStripButton3.Checked = rtb.SelectionFont.Underline;
-            toolStripButton4.Checked = rtb.SelectionFont.Strikeout;
+            btnBold.Checked = rtb.SelectionFont.Bold;
+            btnItalic.Checked = rtb.SelectionFont.Italic;
+            btnUnderline.Checked = rtb.SelectionFont.Underline;
+            btnStrikeout.Checked = rtb.SelectionFont.Strikeout;
         }
         private void boldToolStripMenuItem_Click(object sender, EventArgs e) {
             ToggleStyle(FontStyle.Bold);
@@ -443,10 +467,10 @@ namespace OwOrdPad {
                     rtb.SelectionFont = new Font(rtb.SelectionFont, rtb.SelectionFont.Style | style);
                 }
 
-                toolStripButton1.Checked = rtb.SelectionFont.Bold;
-                toolStripButton2.Checked = rtb.SelectionFont.Italic;
-                toolStripButton3.Checked = rtb.SelectionFont.Underline;
-                toolStripButton4.Checked = rtb.SelectionFont.Strikeout;
+                btnBold.Checked = rtb.SelectionFont.Bold;
+                btnItalic.Checked = rtb.SelectionFont.Italic;
+                btnUnderline.Checked = rtb.SelectionFont.Underline;
+                btnStrikeout.Checked = rtb.SelectionFont.Strikeout;
             }
             catch {
                 SystemSounds.Exclamation.Play();
@@ -467,13 +491,13 @@ namespace OwOrdPad {
                 cbFonts.Text = rtb.SelectionFont.Name.ToString();
 
                 // effects indicators
-                toolStripButton1.Checked = rtb.SelectionFont.Bold;
-                toolStripButton2.Checked = rtb.SelectionFont.Italic;
-                toolStripButton3.Checked = rtb.SelectionFont.Underline;
-                toolStripButton4.Checked = rtb.SelectionFont.Strikeout;
+                btnBold.Checked = rtb.SelectionFont.Bold;
+                btnItalic.Checked = rtb.SelectionFont.Italic;
+                btnUnderline.Checked = rtb.SelectionFont.Underline;
+                btnStrikeout.Checked = rtb.SelectionFont.Strikeout;
 
                 // line spacing indicators
-                foreach (ToolStripMenuItem menuItem in toolStripSplitButton4.DropDownItems) {
+                foreach (ToolStripMenuItem menuItem in spltbtnLineSpace.DropDownItems) {
                     menuItem.Checked = false;
                 }
                 lnSpaceOther.Visible = false;
@@ -511,13 +535,18 @@ namespace OwOrdPad {
         private void cbFontSize_SelectedIndexChanged(object sender, EventArgs e) {
             try {
                 float size = float.Parse(cbFontSize.Text);
-                rtb.SelectionFont = new Font(rtb.SelectionFont.Name, size);
-                rtb.Focus();
+                if (size > 0 && size <= 99) {
+                    rtb.SelectionFont = new Font(rtb.SelectionFont.Name, size);
+                }
+                else {
+                    sendNotification("Invalid font size", "warning");
+                }
             }
             catch { }
         }
         int caseCycle = 0;
         private void toggleCaseToolStripMenuItem_Click(object sender, EventArgs e) {
+            // switch case
             if (rtb.SelectionLength > 0) {
                 int selectionStart = rtb.SelectionStart;
                 string selectedText = rtb.SelectedText;
@@ -526,16 +555,16 @@ namespace OwOrdPad {
 
                 switch (caseCycle) {
                     case 0:
-                        rtb.SelectedText = selectedText.ToLower();
+                        rtb.SelectedText = selectedText.ToLower(); // all lower case
                         break;
                     case 1:
-                        rtb.SelectedText = char.ToUpper(selectedText[0]) + selectedText.Substring(1).ToLower();
+                        rtb.SelectedText = char.ToUpper(selectedText[0]) + selectedText.Substring(1).ToLower(); // Only first character upper case
                         break;
                     case 2:
-                        rtb.SelectedText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rtb.SelectedText.ToLower());
+                        rtb.SelectedText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rtb.SelectedText.ToLower()); // Title Case
                         break;
                     case 3:
-                        rtb.SelectedText = selectedText.ToUpper();
+                        rtb.SelectedText = selectedText.ToUpper(); // ALL CAPS
                         break;
                     default:
                         break;
@@ -567,9 +596,9 @@ namespace OwOrdPad {
             switch (e.KeyCode) {
                 case Keys.Enter:
                     if (hasPreset) { // clear presets on next line
+                        hasPreset = false;
                         rtb.SelectionFont = new Font(cbFonts.Text, 12f, FontStyle.Regular);
                         rtb.SelectionColor = rtb.ForeColor;
-                        hasPreset = false;
                     }
                     break;
 
@@ -594,8 +623,8 @@ namespace OwOrdPad {
                     break;
 
                 case Keys.S when e.Modifiers == Keys.Alt:
-                    toolStripSplitButton2.ShowDropDown();
-                    toolStripSplitButton2.DropDownItems[0].Select();
+                    spltbtnSearch.ShowDropDown();
+                    spltbtnSearch.DropDownItems[0].Select();
                     e.SuppressKeyPress = true;
                     break;
 
@@ -623,6 +652,7 @@ namespace OwOrdPad {
                 case Keys.I when e.Modifiers == Keys.Alt: // open insert menu
                     insertToolStripMenuItem.ShowDropDown();
                     insertToolStripMenuItem.DropDownItems[0].Select();
+                    e.SuppressKeyPress = true;
                     break;
 
                 case Keys.O when e.Modifiers == Keys.Alt: // open format menu
@@ -631,13 +661,13 @@ namespace OwOrdPad {
                     break;
 
                 case Keys.C when e.Modifiers == Keys.Alt: // open color selector
-                    toolStripSplitButton1.ShowDropDown();
-                    toolStripSplitButton1.DropDownItems[0].Select();
+                    spltbtnForeColor.ShowDropDown();
+                    spltbtnForeColor.DropDownItems[0].Select();
                     break;
 
                 case Keys.M when e.Modifiers == Keys.Alt: // open color marker selector
-                    toolStripSplitButton3.ShowDropDown();
-                    toolStripSplitButton3.DropDownItems[0].Select();
+                    spltbtnBackColor.ShowDropDown();
+                    spltbtnBackColor.DropDownItems[0].Select();
                     e.SuppressKeyPress = true;
                     break;
 
@@ -658,14 +688,16 @@ namespace OwOrdPad {
         }
 
         private void titleToolStripMenuItem_Click(object sender, EventArgs e) {
-            rtb.SelectionFont = new Font(cbFonts.Text, 30f, FontStyle.Regular);
+            rtb.SelectionFont = new Font(cbFonts.Text, 24f, FontStyle.Regular);
             rtb.SelectionColor = Color.Black;
+            rtb.SelectionAlignment = HorizontalAlignment.Center;
             hasPreset = true;
         }
 
         private void captionToolStripMenuItem_Click(object sender, EventArgs e) {
             rtb.SelectionFont = new Font(cbFonts.Text, 18f, FontStyle.Regular);
             rtb.SelectionColor = Color.FromArgb(102, 102, 102);
+            rtb.SelectionAlignment = HorizontalAlignment.Center;
             hasPreset = true;
         }
 
@@ -686,40 +718,34 @@ namespace OwOrdPad {
             rtb.SelectionColor = Color.FromArgb(37, 163, 147);
             hasPreset = true;
         }
-
-        private void normalTextToolStripMenuItem_Click(object sender, EventArgs e) {
-            rtb.SelectionFont = new Font(cbFonts.Text, 12f, FontStyle.Regular);
-            rtb.SelectionColor = Color.Black;
-            hasPreset = true;
-        }
         #endregion
         #region misc
         // miscellaneous items related to UI interactions
         private void rtb_LinkClicked(object sender, LinkClickedEventArgs e) {
-            if (MessageBox.Show("Open \"" + e.LinkText + "\"?", "Open link", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+            if (MessageBox.Show("Open " + e.LinkText + " on a new window?", "Open link", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
                 Process.Start(new ProcessStartInfo(e.LinkText) { UseShellExecute = true });
             }
         }
         private void Form1_Resize(object sender, EventArgs e) {
             if (this.Size.Width < 327) {
-                menuStrip1.Hide();
-                toolStrip1.Hide();
+                menuStrip.Hide();
+                tsFile.Hide();
                 tsFormat.Hide();
-                statusStrip1.Hide();
+                statusStrip.Hide();
                 TopMost = true;
                 MinimizeBox = false;
                 MaximizeBox = false;
             }
             else {
-                menuStrip1.Show();
+                menuStrip.Show();
                 if (toolBarToolStripMenuItem.Checked) {
-                    toolStrip1.Show();
+                    tsFile.Show();
                 }
                 if (formatBarToolStripMenuItem.Checked) {
                     tsFormat.Show();
                 }
                 if (statusBarToolStripMenuItem.Checked) {
-                    statusStrip1.Show();
+                    statusStrip.Show();
                 }
                 TopMost = false;
                 MinimizeBox = true;
@@ -772,7 +798,7 @@ namespace OwOrdPad {
         #endregion
         #region printing
         private void printDocumentToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("this feature is not finished\n\rsave the document as an rtf file and print it from the file explorer", "error");
+            sendNotification("Printing failed", "error");
         }
         #endregion
         #region insert
@@ -897,6 +923,7 @@ namespace OwOrdPad {
                     lblNotification.Image = null;
                     break;
             }
+            lblNotification.ToolTipText = message;
             lblNotification.Text = message;
             lblNotification.Visible = true;
 
@@ -939,12 +966,19 @@ namespace OwOrdPad {
 
         private void selectFont(object sender, EventArgs e) {
             ToolStripMenuItem itm = sender as ToolStripMenuItem;
-            rtb.SelectionFont = new Font(itm.Tag.ToString(), rtb.SelectionFont.Size);
-            cbFonts.Text = itm.Tag.ToString();
+            string fontName = itm.Tag.ToString();
+
+            if (FontFamily.Families.Any(f => f.Name == fontName)) {
+                rtb.SelectionFont = new Font(fontName, rtb.SelectionFont.Size);
+                cbFonts.Text = fontName;
+            }
+            else {
+                sendNotification("The font '" + fontName + "' doesn't exists", "warning");
+            }
         }
 
         private void selectLineSpacing(object sender, EventArgs e) {
-            foreach (ToolStripMenuItem menuItem in toolStripSplitButton4.DropDownItems) {
+            foreach (ToolStripMenuItem menuItem in spltbtnLineSpace.DropDownItems) {
                 menuItem.Checked = false; // uncheck all menu items
             }
             ToolStripMenuItem itm = sender as ToolStripMenuItem;
@@ -954,14 +988,7 @@ namespace OwOrdPad {
 
         private void viewInFileExplorerToolStripMenuItem_Click(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(filePath)) {
-                string directoryPath = Path.GetDirectoryName(filePath);
-                if (!string.IsNullOrEmpty(directoryPath)) {
-                    ProcessStartInfo explorer = new ProcessStartInfo {
-                        FileName = "Explorer",
-                        Arguments = $"/select,\"{filePath}\""
-                    };
-                    Process.Start(explorer);
-                }
+                Process.Start("explorer.exe", "/select,\"" + filePath + "\"");
             }
             else {
                 sendNotification("This document doesn't have a file", "warning");
@@ -978,7 +1005,7 @@ namespace OwOrdPad {
 
                 while (File.Exists(newFilePath)) {
                     copyIndex++;
-                    newFilePath = Path.Combine(directory, $"{fileNameWithoutExtension} [{copyIndex}]{fileExtension}");
+                    newFilePath = Path.Combine(directory, $"{fileNameWithoutExtension} ({copyIndex}){fileExtension}");
                 }
 
                 try {
@@ -1072,7 +1099,7 @@ namespace OwOrdPad {
         }
 
         private void lineSpacingToolStripMenuItem_Click(object sender, EventArgs e) {
-            toolStripSplitButton4.ShowDropDown();
+            spltbtnLineSpace.ShowDropDown();
         }
 
         #region history
@@ -1224,6 +1251,19 @@ namespace OwOrdPad {
             }
         }
 
-        
+        private void toolTipsToolStripMenuItem_Click(object sender, EventArgs e) {
+            // WIP
+            menuStrip.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            tsFile.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            tsFormat.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            statusStrip.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            fileToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            editToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            viewToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            insertToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            formatToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+        }
+
+       
     }
 }
