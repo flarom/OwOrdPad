@@ -102,6 +102,8 @@
             toolStripMenuItem2 = new ToolStripMenuItem();
             toolStripSeparator20 = new ToolStripSeparator();
             toolStripMenuItem9 = new ToolStripMenuItem();
+            appearanceToolStripMenuItem = new ToolStripMenuItem();
+            defaultFontToolStripMenuItem = new ToolStripMenuItem();
             wordWrapToolStripMenuItem = new ToolStripMenuItem();
             selectionMarginToolStripMenuItem = new ToolStripMenuItem();
             statusBarToolStripMenuItem = new ToolStripMenuItem();
@@ -201,7 +203,7 @@
             lnSpaceOther = new ToolStripMenuItem();
             btnTabLef = new ToolStripButton();
             btnTabRig = new ToolStripButton();
-            tsFile = new ToolStrip();
+            tsTool = new ToolStrip();
             btnNew = new ToolStripButton();
             btnOpen = new ToolStripButton();
             btnSave = new ToolStripButton();
@@ -276,7 +278,7 @@
             contextMenuStrip1.SuspendLayout();
             menuStrip.SuspendLayout();
             tsFormat.SuspendLayout();
-            tsFile.SuspendLayout();
+            tsTool.SuspendLayout();
             statusStrip.SuspendLayout();
             contextMenuStrip2.SuspendLayout();
             SuspendLayout();
@@ -814,7 +816,7 @@
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { zoomToolStripMenuItem, toolStripSeparator35, wordWrapToolStripMenuItem, selectionMarginToolStripMenuItem, statusBarToolStripMenuItem, toolBarToolStripMenuItem, formatBarToolStripMenuItem, toolTipsToolStripMenuItem, toolStripSeparator21, marginToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { zoomToolStripMenuItem, appearanceToolStripMenuItem, toolStripSeparator35, wordWrapToolStripMenuItem, selectionMarginToolStripMenuItem, statusBarToolStripMenuItem, toolBarToolStripMenuItem, formatBarToolStripMenuItem, toolTipsToolStripMenuItem, toolStripSeparator21, marginToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             viewToolStripMenuItem.Size = new Size(44, 20);
             viewToolStripMenuItem.Text = "&View";
@@ -858,6 +860,23 @@
             toolStripMenuItem9.Text = "Restore zoom";
             toolStripMenuItem9.ToolTipText = "Zoom the document to 100% of its normal size";
             toolStripMenuItem9.Click += restoreZoomToolStripMenuItem_Click;
+            // 
+            // appearanceToolStripMenuItem
+            // 
+            appearanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { defaultFontToolStripMenuItem });
+            appearanceToolStripMenuItem.Image = Properties.Resources.color;
+            appearanceToolStripMenuItem.Name = "appearanceToolStripMenuItem";
+            appearanceToolStripMenuItem.Size = new Size(163, 22);
+            appearanceToolStripMenuItem.Text = "Appearance";
+            // 
+            // defaultFontToolStripMenuItem
+            // 
+            defaultFontToolStripMenuItem.Name = "defaultFontToolStripMenuItem";
+            defaultFontToolStripMenuItem.ShortcutKeyDisplayString = "Calibri";
+            defaultFontToolStripMenuItem.Size = new Size(178, 22);
+            defaultFontToolStripMenuItem.Text = "Default font";
+            defaultFontToolStripMenuItem.ToolTipText = "The font chosen by default by the editor";
+            defaultFontToolStripMenuItem.Click += defaultFontToolStripMenuItem_Click;
             // 
             // wordWrapToolStripMenuItem
             // 
@@ -1810,19 +1829,19 @@
             btnTabRig.ToolTipText = "Increase indentation (Ctrl+>)\r\nIncrease paragraph indentation level";
             btnTabRig.Click += tabulateRightToolStripMenuItem_Click;
             // 
-            // tsFile
+            // tsTool
             // 
-            tsFile.BackColor = Color.White;
-            tsFile.CanOverflow = false;
-            tsFile.GripStyle = ToolStripGripStyle.Hidden;
-            tsFile.Items.AddRange(new ToolStripItem[] { btnNew, btnOpen, btnSave, btnPrint, toolStripSeparator27, btnCut, btnCopy, btnPaste, btnUndo, btnRedo, toolStripSeparator9, spltbtnSearch });
-            tsFile.Location = new Point(0, 24);
-            tsFile.Name = "tsFile";
-            tsFile.Padding = new Padding(6, 0, 0, 0);
-            tsFile.Size = new Size(784, 27);
-            tsFile.TabIndex = 3;
-            tsFile.Text = "toolStrip1";
-            tsFile.KeyDown += rtb_KeyDown;
+            tsTool.BackColor = Color.White;
+            tsTool.CanOverflow = false;
+            tsTool.GripStyle = ToolStripGripStyle.Hidden;
+            tsTool.Items.AddRange(new ToolStripItem[] { btnNew, btnOpen, btnSave, btnPrint, toolStripSeparator27, btnCut, btnCopy, btnPaste, btnUndo, btnRedo, toolStripSeparator9, spltbtnSearch });
+            tsTool.Location = new Point(0, 24);
+            tsTool.Name = "tsTool";
+            tsTool.Padding = new Padding(6, 0, 0, 0);
+            tsTool.Size = new Size(784, 27);
+            tsTool.TabIndex = 3;
+            tsTool.Text = "toolStrip1";
+            tsTool.KeyDown += rtb_KeyDown;
             // 
             // btnNew
             // 
@@ -2193,7 +2212,7 @@
             Controls.Add(rtb);
             Controls.Add(statusStrip);
             Controls.Add(tsFormat);
-            Controls.Add(tsFile);
+            Controls.Add(tsTool);
             Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
@@ -2210,8 +2229,8 @@
             menuStrip.PerformLayout();
             tsFormat.ResumeLayout(false);
             tsFormat.PerformLayout();
-            tsFile.ResumeLayout(false);
-            tsFile.PerformLayout();
+            tsTool.ResumeLayout(false);
+            tsTool.PerformLayout();
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
             contextMenuStrip2.ResumeLayout(false);
@@ -2294,7 +2313,7 @@
         private ToolStripButton btnTabRig;
         private ToolStripMenuItem statusBarToolStripMenuItem;
         private ToolStripMenuItem toolBarToolStripMenuItem;
-        private ToolStrip tsFile;
+        private ToolStrip tsTool;
         private ToolStripButton btnPrint;
         private ToolStripButton btnNew;
         private ToolStripButton btnOpen;
@@ -2436,5 +2455,7 @@
         private ToolStripMenuItem favoriteFontsToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator13;
         private ToolStripMenuItem manageFontsToolStripMenuItem;
+        private ToolStripMenuItem appearanceToolStripMenuItem;
+        private ToolStripMenuItem defaultFontToolStripMenuItem;
     }
 }

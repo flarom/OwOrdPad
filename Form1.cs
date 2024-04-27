@@ -35,7 +35,7 @@ namespace OwOrdPad {
             rtb.SelectionCharOffset = 1;
 
             menuStrip.Renderer = new MenuRenderer();
-            tsFile.Renderer = new MenuRenderer();
+            tsTool.Renderer = new MenuRenderer();
             tsFormat.Renderer = new MenuRenderer();
             contextMenuStrip1.Renderer = new MenuRenderer();
             contextMenuStrip2.Renderer = new MenuRenderer();
@@ -88,33 +88,29 @@ namespace OwOrdPad {
         }
         private void LoadSettings() {
             try {
-                string showFormatBar = File.ReadAllText(defaultDirectory + "\\settings\\showFormatBar");
-                string showStatusBar = File.ReadAllText(defaultDirectory + "\\settings\\showStatusBar");
-                string showToolBar = File.ReadAllText(defaultDirectory + "\\settings\\showToolBar");
-                string wordWrap = File.ReadAllText(defaultDirectory + "\\settings\\wordWrap");
-                string selectionMargin = File.ReadAllText(defaultDirectory + "\\settings\\selectionMargin");
-                string wasClosedByUser = File.ReadAllText(defaultDirectory + "\\settings\\wasClosedByUser");
+                tsFormat.Visible = bool.Parse(Settings.GetSetting("showFormatBar"));
+                statusStrip.Visible = bool.Parse(Settings.GetSetting("showStatusBar"));
+                tsTool.Visible = bool.Parse(Settings.GetSetting("showToolBar"));
+                rtb.WordWrap = bool.Parse(Settings.GetSetting("wordWrap"));
+                rtb.ShowSelectionMargin = bool.Parse(Settings.GetSetting("selectionMargin"));
+                rtb.Font = new Font(Settings.GetSetting("defaultFont"), 12);
 
-                tsFormat.Visible = bool.Parse(showFormatBar);
-                statusStrip.Visible = bool.Parse(showStatusBar);
-                tsFile.Visible = bool.Parse(showToolBar);
-                rtb.WordWrap = bool.Parse(wordWrap);
-                rtb.ShowSelectionMargin = bool.Parse(selectionMargin);
-
-                if (bool.Parse(wasClosedByUser) == false) {
+                if (bool.Parse(Settings.GetSetting("wasClosedByUser")) == false) {
                     sendNotification("Use Ctrl+Shift+T to restore autosave", "warning");
                 }
                 Settings.SaveSetting("wasClosedByUser", "False");
 
                 //indicators
-                formatBarToolStripMenuItem.Checked = bool.Parse(showFormatBar);
-                statusBarToolStripMenuItem.Checked = bool.Parse(showStatusBar);
-                toolBarToolStripMenuItem.Checked = bool.Parse(showToolBar);
-                wordWrapToolStripMenuItem.Checked = bool.Parse(wordWrap);
-                selectionMarginToolStripMenuItem.Checked = bool.Parse(selectionMargin);
+                formatBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showFormatBar"));
+                statusBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showStatusBar"));
+                toolBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showToolBar"));
+                wordWrapToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("wordWrap"));
+                selectionMarginToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("selectionMargin"));
+                defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
             }
-            catch (Exception ex) {
-                MessageBox.Show("Failed to load settings: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch {
+                //MessageBox.Show("Failed to load settings: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sendNotification("An error occurred while loading settings", "error");
             }
         }
         #endregion
@@ -387,7 +383,7 @@ namespace OwOrdPad {
         }
 
         private void toolBarToolStripMenuItem_Click(object sender, EventArgs e) {
-            tsFile.Visible = toolBarToolStripMenuItem.Checked;
+            tsTool.Visible = toolBarToolStripMenuItem.Checked;
             Settings.SaveSetting("showToolBar", toolBarToolStripMenuItem.Checked.ToString());
         }
 
@@ -729,7 +725,7 @@ namespace OwOrdPad {
         private void Form1_Resize(object sender, EventArgs e) {
             if (this.Size.Width < 327) {
                 menuStrip.Hide();
-                tsFile.Hide();
+                tsTool.Hide();
                 tsFormat.Hide();
                 statusStrip.Hide();
                 TopMost = true;
@@ -739,7 +735,7 @@ namespace OwOrdPad {
             else {
                 menuStrip.Show();
                 if (toolBarToolStripMenuItem.Checked) {
-                    tsFile.Show();
+                    tsTool.Show();
                 }
                 if (formatBarToolStripMenuItem.Checked) {
                     tsFormat.Show();
@@ -1254,7 +1250,7 @@ namespace OwOrdPad {
         private void toolTipsToolStripMenuItem_Click(object sender, EventArgs e) {
             // WIP
             menuStrip.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            tsFile.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            tsTool.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
             tsFormat.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
             statusStrip.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
             fileToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
@@ -1264,6 +1260,15 @@ namespace OwOrdPad {
             formatToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
         }
 
-       
+        private void defaultFontToolStripMenuItem_Click(object sender, EventArgs e) {
+            string fontName;
+            FontDialog fd = new();
+            fd.Font = new Font(Settings.GetSetting("defaultFont"), 12);
+            if (fd.ShowDialog() == DialogResult.OK) { 
+                fontName = fd.Font.Name;
+                Settings.SaveSetting("defaultFont", fontName);
+            }
+                defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
+        }
     }
 }
