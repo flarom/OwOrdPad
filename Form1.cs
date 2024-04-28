@@ -1019,25 +1019,31 @@ namespace OwOrdPad {
             }
         }
 
-        Color lastFore = Color.Black;
-        Color lastBack = Color.White;
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e) {
             try {
-                colorDialog.Color = rtb.SelectionColor;
-                colorDialog.ShowDialog(this);
-
-                rtb.SelectionColor = colorDialog.Color;
-                lastFore = colorDialog.Color;
+                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Text color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionColor));
+                rtb.SelectionColor = getColor(color, rtb.SelectionColor);
             }
             catch { }
         }
         private void textHighlightColorToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
-                colorDialog.Color = rtb.SelectionBackColor;
-                colorDialog.ShowDialog(this);
-
-                rtb.SelectionBackColor = colorDialog.Color;
-                lastBack = colorDialog.Color;
+                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Highlight color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionBackColor));
+                rtb.SelectionBackColor = getColor(color, rtb.SelectionBackColor);
+            }
+            catch { }
+        }
+        private void toolStripSplitButton1_ButtonClick_1(object sender, EventArgs e) {
+            try {
+                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Text color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionColor));
+                rtb.SelectionColor = getColor(color, rtb.SelectionColor);
+            }
+            catch { }
+        }
+        private void toolStripSplitButton3_ButtonClick(object sender, EventArgs e) {
+            try {
+                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Highlight color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionBackColor));
+                rtb.SelectionBackColor = getColor(color, rtb.SelectionBackColor);
             }
             catch { }
         }
@@ -1050,7 +1056,6 @@ namespace OwOrdPad {
             int b = int.Parse(rgbValues[2]);
 
             rtb.SelectionColor = Color.FromArgb(r, g, b);
-            lastFore = Color.FromArgb(r, g, b);
         }
 
         private void selectBackColor(object sender, EventArgs e) {
@@ -1062,14 +1067,35 @@ namespace OwOrdPad {
             int b = int.Parse(rgbValues[2]);
 
             rtb.SelectionBackColor = Color.FromArgb(r, g, b);
-            lastBack = Color.FromArgb(r, g, b);
         }
-
-        private void toolStripSplitButton1_ButtonClick_1(object sender, EventArgs e) {
-            rtb.SelectionColor = lastFore;
-        }
-        private void toolStripSplitButton3_ButtonClick(object sender, EventArgs e) {
-            rtb.SelectionBackColor = lastBack;
+        private Color getColor(string input, Color blankColor) {
+            try {
+                if (input.StartsWith('#') && input.Length == 7) {
+                    // HEX
+                    return ColorTranslator.FromHtml(input);
+                }
+                else if (input.Contains(';')) {
+                    // RGB
+                    string[] rgbValues = input.Split(';');
+                    if (rgbValues.Length == 3) {
+                        int r = int.Parse(rgbValues[0]);
+                        int g = int.Parse(rgbValues[1]);
+                        int b = int.Parse(rgbValues[2]);
+                        if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
+                            return Color.FromArgb(r, g, b);
+                        }
+                    }
+                }
+                else {
+                    // Known Color
+                    Color color = Color.FromName(input);
+                    if (color.IsKnownColor) {
+                        return color;
+                    }
+                }
+            }
+            catch { }
+            return blankColor;
         }
         private void selectWordToolStripMenuItem_Click(object sender, EventArgs e) {
             int start = rtb.SelectionStart;
@@ -1264,11 +1290,11 @@ namespace OwOrdPad {
             string fontName;
             FontDialog fd = new();
             fd.Font = new Font(Settings.GetSetting("defaultFont"), 12);
-            if (fd.ShowDialog() == DialogResult.OK) { 
+            if (fd.ShowDialog() == DialogResult.OK) {
                 fontName = fd.Font.Name;
                 Settings.SaveSetting("defaultFont", fontName);
             }
-                defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
+            defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
         }
     }
 }
