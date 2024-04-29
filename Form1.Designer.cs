@@ -130,6 +130,9 @@
             rTFDocumentToolStripMenuItem = new ToolStripMenuItem();
             formatToolStripMenuItem = new ToolStripMenuItem();
             fontToolStripMenuItem = new ToolStripMenuItem();
+            fontSizeToolStripMenuItem = new ToolStripMenuItem();
+            increaseToolStripMenuItem = new ToolStripMenuItem();
+            decreaseToolStripMenuItem = new ToolStripMenuItem();
             textColorToolStripMenuItem1 = new ToolStripMenuItem();
             highlightColorToolStripMenuItem = new ToolStripMenuItem();
             allignToolStripMenuItem = new ToolStripMenuItem();
@@ -216,15 +219,12 @@
             spltbtnSearch = new ToolStripSplitButton();
             searchForTextToolStripMenuItem = new ToolStripMenuItem();
             searchForLineToolStripMenuItem = new ToolStripMenuItem();
-            colorDialog = new ColorDialog();
             statusStrip = new StatusStrip();
             lblCursorPos = new ToolStripStatusLabel();
             lblCharAndWord = new ToolStripStatusLabel();
             lblZoomFactor = new ToolStripStatusLabel();
             lblFileSize = new ToolStripStatusLabel();
             lblNotification = new ToolStripStatusLabel();
-            pageSetupDialog1 = new PageSetupDialog();
-            printDocument1 = new System.Drawing.Printing.PrintDocument();
             tmrAutoSave = new System.Windows.Forms.Timer(components);
             contextMenuStrip2 = new ContextMenuStrip(components);
             formalToolStripMenuItem = new ToolStripMenuItem();
@@ -1106,7 +1106,7 @@
             // 
             // formatToolStripMenuItem
             // 
-            formatToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fontToolStripMenuItem, textColorToolStripMenuItem1, highlightColorToolStripMenuItem, toolStripSeparator14, allignToolStripMenuItem, effectsToolStripMenuItem, styleToolStripMenuItem, toolStripSeparator8, copyFormattingToolStripMenuItem, pasteFormattingToolStripMenuItem, clearFormattingToolStripMenuItem });
+            formatToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fontToolStripMenuItem, fontSizeToolStripMenuItem, textColorToolStripMenuItem1, highlightColorToolStripMenuItem, toolStripSeparator14, allignToolStripMenuItem, effectsToolStripMenuItem, styleToolStripMenuItem, toolStripSeparator8, copyFormattingToolStripMenuItem, pasteFormattingToolStripMenuItem, clearFormattingToolStripMenuItem });
             formatToolStripMenuItem.Name = "formatToolStripMenuItem";
             formatToolStripMenuItem.Size = new Size(57, 20);
             formatToolStripMenuItem.Text = "F&ormat";
@@ -1117,9 +1117,37 @@
             fontToolStripMenuItem.Name = "fontToolStripMenuItem";
             fontToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F;
             fontToolStripMenuItem.Size = new Size(227, 22);
-            fontToolStripMenuItem.Text = "Text font";
+            fontToolStripMenuItem.Text = "Font family";
             fontToolStripMenuItem.ToolTipText = "Change font family";
             fontToolStripMenuItem.Click += fontToolStripMenuItem_Click;
+            // 
+            // fontSizeToolStripMenuItem
+            // 
+            fontSizeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { increaseToolStripMenuItem, decreaseToolStripMenuItem });
+            fontSizeToolStripMenuItem.Image = Properties.Resources.textSize;
+            fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
+            fontSizeToolStripMenuItem.Size = new Size(227, 22);
+            fontSizeToolStripMenuItem.Text = "Font size";
+            // 
+            // increaseToolStripMenuItem
+            // 
+            increaseToolStripMenuItem.Image = Properties.Resources.up;
+            increaseToolStripMenuItem.Name = "increaseToolStripMenuItem";
+            increaseToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+.";
+            increaseToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.OemPeriod;
+            increaseToolStripMenuItem.Size = new Size(190, 22);
+            increaseToolStripMenuItem.Text = "Increase";
+            increaseToolStripMenuItem.Click += increaseToolStripMenuItem_Click;
+            // 
+            // decreaseToolStripMenuItem
+            // 
+            decreaseToolStripMenuItem.Image = Properties.Resources.down;
+            decreaseToolStripMenuItem.Name = "decreaseToolStripMenuItem";
+            decreaseToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+,";
+            decreaseToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Oemcomma;
+            decreaseToolStripMenuItem.Size = new Size(190, 22);
+            decreaseToolStripMenuItem.Text = "Decrease";
+            decreaseToolStripMenuItem.Click += decreaseToolStripMenuItem_Click;
             // 
             // textColorToolStripMenuItem1
             // 
@@ -1981,11 +2009,6 @@
             searchForLineToolStripMenuItem.ToolTipText = "Find line in the document";
             searchForLineToolStripMenuItem.Click += goToToolStripMenuItem_Click;
             // 
-            // colorDialog
-            // 
-            colorDialog.AnyColor = true;
-            colorDialog.FullOpen = true;
-            // 
             // statusStrip
             // 
             statusStrip.BackColor = Color.FromArgb(243, 243, 243);
@@ -2049,14 +2072,6 @@
             lblNotification.Text = "notification";
             lblNotification.TextAlign = ContentAlignment.MiddleRight;
             lblNotification.Visible = false;
-            // 
-            // pageSetupDialog1
-            // 
-            pageSetupDialog1.Document = printDocument1;
-            // 
-            // printDocument1
-            // 
-            printDocument1.OriginAtMargins = true;
             // 
             // tmrAutoSave
             // 
@@ -2337,7 +2352,6 @@
         private ToolStripMenuItem cardPaperToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator28;
         private ToolStripMenuItem toggleCaseToolStripMenuItem;
-        private ColorDialog colorDialog;
         private StatusStrip statusStrip;
         private ToolStripStatusLabel lblCursorPos;
         private ToolStripStatusLabel lblZoomFactor;
@@ -2373,8 +2387,6 @@
         private ToolStripMenuItem selectionMarginToolStripMenuItem;
         private ToolStripMenuItem spreadsheetToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator34;
-        private PageSetupDialog pageSetupDialog1;
-        private System.Drawing.Printing.PrintDocument printDocument1;
         private ToolStripMenuItem newWindowToolStripMenuItem;
         private ToolStripMenuItem selectLineToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator35;
@@ -2457,5 +2469,8 @@
         private ToolStripMenuItem manageFontsToolStripMenuItem;
         private ToolStripMenuItem appearanceToolStripMenuItem;
         private ToolStripMenuItem defaultFontToolStripMenuItem;
+        private ToolStripMenuItem fontSizeToolStripMenuItem;
+        private ToolStripMenuItem increaseToolStripMenuItem;
+        private ToolStripMenuItem decreaseToolStripMenuItem;
     }
 }

@@ -176,7 +176,7 @@
             MinimizeBox = false;
             Name = "frmFavoriteFonts";
             ShowIcon = false;
-            StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Favorite fonts - OwOrdPad";
             KeyDown += frmFavoriteFonts_KeyDown;
             panel1.ResumeLayout(false);

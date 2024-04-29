@@ -105,7 +105,7 @@
             Name = "frmSpecialCharacter";
             ShowIcon = false;
             SizeGripStyle = SizeGripStyle.Show;
-            StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Special Characters - OwOrdPad";
             TopMost = true;
             Load += frmSpecialCharacter_Load;

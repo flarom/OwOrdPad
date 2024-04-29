@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using OwOrdPad.Properties;
 using System.Diagnostics;
 using System.Drawing.Text;
@@ -15,6 +14,7 @@ namespace OwOrdPad {
         string defaultDirectory = Path.GetDirectoryName(Application.ExecutablePath); // \OwOrdPad\bin\Debug\net8.0-windows\
         public string filePath; // full file path to the opened/saved file
         public bool isDocumentModified = false; // checks if the document was modified by the user
+        frmInputBox inputbox = new frmInputBox();
 
         public Form1() {
             // load program and settings
@@ -273,8 +273,7 @@ namespace OwOrdPad {
                 searchFor = Clipboard.GetText();
             }
 
-            string searchString = Interaction.InputBox("Search for a word.", "Find - OwOrdPad",
-                searchFor);
+            string searchString = inputbox.GetInput("Search for a word, character or symbol:", "Find - OwOrdPad", [""], Resources.search, searchFor);
 
             if (!string.IsNullOrEmpty(searchString)) {
                 int startIndex = rtb.SelectionStart + rtb.SelectionLength;
@@ -293,8 +292,7 @@ namespace OwOrdPad {
         }
 
         private void goToToolStripMenuItem_Click(object sender, EventArgs e) {
-            string inputLineNumber = Interaction.InputBox("Search for a line number (1 - " + rtb.Lines.Count() + ").", "Go to - OwOrdPad",
-                (rtb.GetLineFromCharIndex(rtb.SelectionStart) + 1).ToString());
+            string inputLineNumber = inputbox.GetInput("Search for a line number (1 - " + rtb.Lines.Count() + "):", "Go to - OwOrdPad", [""], Resources.search, (rtb.GetLineFromCharIndex(rtb.SelectionStart) + 1).ToString());
 
             if (int.TryParse(inputLineNumber, out int lineNumber) && lineNumber > 0) {
                 SearchByLine(lineNumber);
@@ -394,13 +392,18 @@ namespace OwOrdPad {
         #endregion
         #region formatting
         private void fontToolStripMenuItem_Click(object sender, EventArgs e) {
-            FontDialog fd = new() {
-                Font = rtb.SelectionFont,
-                MaxSize = 92,
-                MinSize = 8,
-            };
-            fd.ShowDialog(this);
-            rtb.SelectionFont = fd.Font;
+            InstalledFontCollection installedFonts = new InstalledFontCollection();
+            FontFamily[] fontFamilies = installedFonts.Families;
+            string[] fontNames = new string[fontFamilies.Length];
+
+            for (int i = 0; i < fontFamilies.Length; i++) {
+                fontNames[i] = fontFamilies[i].Name;
+            }
+
+            string font = inputbox.GetInput("Insert a font name: ", "Text font - OwOrdPad", fontNames, Resources.ok);
+            if (font != null) {
+                rtb.SelectionFont = new Font(font, rtb.SelectionFont.Size);
+            }
         }
 
         private void leftToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -845,8 +848,7 @@ namespace OwOrdPad {
             }
         }
         private void fromURLToolStripMenuItem_Click(object sender, EventArgs e) {
-            string imageUrl = Interaction.InputBox("Insert an image URL", "Open URL - OwOrdPad",
-                Clipboard.GetText());
+            string imageUrl = inputbox.GetInput("Insert an image URL: ", "Open URL - OwOrdPad", [""], Resources.search, Clipboard.GetText());
 
             if (!string.IsNullOrEmpty(imageUrl)) {
                 try {
@@ -873,11 +875,9 @@ namespace OwOrdPad {
             spec.Show();
         }
         private void linkToolStripMenuItem_Click(object sender, EventArgs e) {
-            string name = Interaction.InputBox("Type the website name", "Insert link - OwOrdPad",
-                Clipboard.GetText());
+            string name = inputbox.GetInput("Insert the website name", "Insert link - OwOrdPad", [""], Resources.ok, Clipboard.GetText());
             if (name != "") {
-                string link = Interaction.InputBox("Type " + name + "'s URL", "Insert Link - OwOrdPad",
-                    rtb.SelectedText);
+                string link = inputbox.GetInput("Insert " + name + "'s URL", "Insert link - OwOrdPad", [""], Resources.ok, Clipboard.GetText());
 
                 string linkDir = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath) + "\\presets", "link.owo");
 
@@ -1019,30 +1019,31 @@ namespace OwOrdPad {
             }
         }
 
+        string[] knownColors = Enum.GetNames(typeof(KnownColor));
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e) {
             try {
-                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Text color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionColor));
+                string color = inputbox.GetInput("Insert a color #HEX, R;G;B or Name value: ", "Text color - OwOrdPad", knownColors, Resources.color, ColorTranslator.ToHtml(rtb.SelectionColor));
                 rtb.SelectionColor = getColor(color, rtb.SelectionColor);
             }
             catch { }
         }
         private void textHighlightColorToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
-                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Highlight color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionBackColor));
+                string color = inputbox.GetInput("Insert a color #HEX, R;G;B or Name value: ", "Highlight color - OwOrdPad", knownColors, Resources.color, ColorTranslator.ToHtml(rtb.SelectionBackColor));
                 rtb.SelectionBackColor = getColor(color, rtb.SelectionBackColor);
             }
             catch { }
         }
         private void toolStripSplitButton1_ButtonClick_1(object sender, EventArgs e) {
             try {
-                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Text color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionColor));
+                string color = inputbox.GetInput("Insert a color #HEX, R;G;B or Name value: ", "Text color - OwOrdPad", knownColors, Resources.color, ColorTranslator.ToHtml(rtb.SelectionColor));
                 rtb.SelectionColor = getColor(color, rtb.SelectionColor);
             }
             catch { }
         }
         private void toolStripSplitButton3_ButtonClick(object sender, EventArgs e) {
             try {
-                string color = Interaction.InputBox("Insert a color #HEX, R;G;B or Name: ", "Highlight color - OwOrdPad", ColorTranslator.ToHtml(rtb.SelectionBackColor));
+                string color = inputbox.GetInput("Insert a color #HEX, R;G;B or Name value: ", "Highlight color - OwOrdPad", knownColors, Resources.color, ColorTranslator.ToHtml(rtb.SelectionBackColor));
                 rtb.SelectionBackColor = getColor(color, rtb.SelectionBackColor);
             }
             catch { }
@@ -1199,7 +1200,7 @@ namespace OwOrdPad {
 
         private void indentationSizeToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
-                int[] i = [int.Parse(Interaction.InputBox("Insert an indentation size number (1 - 8)", "Tab spacing - OwOrdPad", "4")) * 10];
+                int[] i = [int.Parse(inputbox.GetInput("Insert an indentation size number (1 - 8):", "Tab spacing - OwOrdPad", [""], Resources.tabSpace, "4")) * 10];
                 if (i[0] <= 80) {
                     rtb.SelectionTabs = i;
                 }
@@ -1215,11 +1216,23 @@ namespace OwOrdPad {
         private void snippetToolStripMenuItem_Click(object sender, EventArgs e) {
             int select = rtb.SelectionStart;
             string snipPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\Snippets\\";
-            string snipFile = Interaction.InputBox("Insert the snippet collection name", "Snippets - OwOrdPad");
-            string fullPath = Path.Combine(snipPath, snipFile);
+
+            string[] snippets = Directory.GetFiles(snipPath);
+
+            string[] snippetNames = new string[snippets.Length];
+            for (int i = 0; i < snippets.Length; i++) {
+                snippetNames[i] = Path.GetFileName(snippets[i]);
+            }
+
+            string snipFile = inputbox.GetInput("Insert a snippet collection name:", "Snippets - OwOrdPad", snippetNames, Resources.folder);
+            string fullPath;
+            if (snipFile != null) {
+                fullPath = Path.Combine(snipPath, snipFile);
+            }
+            else { return; }
 
             if (File.Exists(fullPath)) {
-                string snipKey = Interaction.InputBox("Insert the snippet key", "Snippets - OwOrdPad");
+                string snipKey = inputbox.GetInput("Insert a snippet key:", "Snippets - OwOrdPad", [""], Resources.snippet);
                 string[] lines = File.ReadAllLines(fullPath);
 
                 foreach (string line in lines) {
@@ -1295,6 +1308,23 @@ namespace OwOrdPad {
                 Settings.SaveSetting("defaultFont", fontName);
             }
             defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
+        }
+
+        private void increaseToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (rtb.SelectionFont.Size < 72) {
+                rtb.SelectionFont = new Font(rtb.SelectionFont.Name, rtb.SelectionFont.Size + 1);
+            } else {
+                sendNotification("Font can't be larger", "warning");
+            }
+        }
+
+        private void decreaseToolStripMenuItem_Click(object sender, EventArgs e) {
+            
+            if (rtb.SelectionFont.Size > 8) {
+                rtb.SelectionFont = new Font(rtb.SelectionFont.Name, rtb.SelectionFont.Size - 1);
+            } else {
+                sendNotification("Font can't be smaller", "warning");
+            }
         }
     }
 }

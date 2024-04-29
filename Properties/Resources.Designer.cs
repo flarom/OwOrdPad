@@ -393,6 +393,16 @@ namespace OwOrdPad.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ok {
+            get {
+                object obj = ResourceManager.GetObject("ok", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap openFolder {
             get {
                 object obj = ResourceManager.GetObject("openFolder", resourceCulture);
@@ -656,6 +666,16 @@ namespace OwOrdPad.Properties {
         internal static System.Drawing.Bitmap tabSpace {
             get {
                 object obj = ResourceManager.GetObject("tabSpace", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap textSize {
+            get {
+                object obj = ResourceManager.GetObject("textSize", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
