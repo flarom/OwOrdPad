@@ -1,4 +1,4 @@
-![alt text](https://github.com/flarom/OwOrdPad/blob/main/Resources/logo.png?raw=true)
+<img src="https://github.com/flarom/OwOrdPad/blob/main/Resources/logo.png?raw=true" alt="Logo" width="500">
 ---
 OwOrdPad is a lightweight, free, and open-source rich text editor designed to serve as a substitute for Microsoft WordPad. It provides essential features for creating and editing text documents in a user-friendly environment.
 
