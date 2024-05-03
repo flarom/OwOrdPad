@@ -1,14 +1,12 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace OwOrdPad {
     partial class AboutBox1 : Form {
         public AboutBox1() {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;
         }
 
@@ -73,5 +71,17 @@ namespace OwOrdPad {
             }
         }
         #endregion
+
+        private void btnCopy_Click(object sender, EventArgs e) {
+            Clipboard.SetText(textBoxDescription.Text);
+        }
+
+        private void btnGitHub_Click(object sender, EventArgs e) {
+            Process.Start("explorer", "https://github.com/flarom/OwOrdPad");
+        }
+
+        private void btnOK_Click(object sender, EventArgs e) {
+            this.Close();
+        }
     }
 }

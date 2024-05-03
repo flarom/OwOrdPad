@@ -534,7 +534,7 @@ namespace OwOrdPad {
         private void cbFontSize_SelectedIndexChanged(object sender, EventArgs e) {
             try {
                 float size = float.Parse(cbFontSize.Text);
-                if (size > 0 && size <= 99) {
+                if (size > 0 && size <= 96) {
                     rtb.SelectionFont = new Font(rtb.SelectionFont.Name, size);
                 }
                 else {
@@ -606,71 +606,79 @@ namespace OwOrdPad {
                     break;
 
                 case Keys.A when e.Modifiers == Keys.Alt: // open align menu
+                    e.SuppressKeyPress = true;
                     allignToolStripMenuItem.ShowDropDown();
                     allignToolStripMenuItem.DropDownItems[0].Select();
                     break;
 
                 case Keys.T when e.Modifiers == Keys.Alt: // open effects menu
+                    e.SuppressKeyPress = true;
                     effectsToolStripMenuItem.ShowDropDown();
                     effectsToolStripMenuItem.DropDownItems[0].Select();
-                    e.SuppressKeyPress = true;
                     break;
 
-                case Keys.Y when e.Modifiers == Keys.Alt:
+                case Keys.Y when e.Modifiers == Keys.Alt: // open text style menu
+                    e.SuppressKeyPress = true;
                     styleToolStripMenuItem.ShowDropDown();
                     styleToolStripMenuItem.DropDownItems[0].Select();
                     break;
 
-                case Keys.S when e.Modifiers == Keys.Alt:
+                case Keys.S when e.Modifiers == Keys.Alt: // open search menu
+                    e.SuppressKeyPress = true;
                     spltbtnSearch.ShowDropDown();
                     spltbtnSearch.DropDownItems[0].Select();
-                    e.SuppressKeyPress = true;
                     break;
 
                 case Keys.H when e.Modifiers == Keys.Alt: // open history menu
+                    e.SuppressKeyPress = true;
                     documentHistoryToolStripMenuItem.ShowDropDown();
                     documentHistoryToolStripMenuItem.DropDownItems[0].Select();
-                    e.SuppressKeyPress = true;
                     break;
 
                 case Keys.F when e.Modifiers == Keys.Alt: // open file menu
+                    e.SuppressKeyPress = true;
                     fileToolStripMenuItem.ShowDropDown();
                     fileToolStripMenuItem.DropDownItems[0].Select();
                     break;
 
                 case Keys.E when e.Modifiers == Keys.Alt: // open edit menu
+                    e.SuppressKeyPress = true;
                     editToolStripMenuItem.ShowDropDown();
                     editToolStripMenuItem.DropDownItems[0].Select();
                     break;
 
                 case Keys.V when e.Modifiers == Keys.Alt: // open view menu
+                    e.SuppressKeyPress = true;
                     viewToolStripMenuItem.ShowDropDown();
                     viewToolStripMenuItem.DropDownItems[0].Select();
                     break;
 
                 case Keys.I when e.Modifiers == Keys.Alt: // open insert menu
+                    e.SuppressKeyPress = true;
                     insertToolStripMenuItem.ShowDropDown();
                     insertToolStripMenuItem.DropDownItems[0].Select();
-                    e.SuppressKeyPress = true;
                     break;
 
                 case Keys.O when e.Modifiers == Keys.Alt: // open format menu
+                    e.SuppressKeyPress = true;
                     formatToolStripMenuItem.ShowDropDown();
                     formatToolStripMenuItem.DropDownItems[0].Select();
                     break;
 
                 case Keys.C when e.Modifiers == Keys.Alt: // open color selector
+                    e.SuppressKeyPress = true;
                     spltbtnForeColor.ShowDropDown();
                     spltbtnForeColor.DropDownItems[0].Select();
                     break;
 
                 case Keys.M when e.Modifiers == Keys.Alt: // open color marker selector
+                    e.SuppressKeyPress = true;
                     spltbtnBackColor.ShowDropDown();
                     spltbtnBackColor.DropDownItems[0].Select();
-                    e.SuppressKeyPress = true;
                     break;
 
-                case Keys.Z when e.Modifiers == Keys.Alt:
+                case Keys.Z when e.Modifiers == Keys.Alt: // open zoom menu
+                    e.SuppressKeyPress = true;
                     zoomToolStripMenuItem.ShowDropDown();
                     zoomToolStripMenuItem.DropDownItems[0].Select();
                     break;
@@ -1311,11 +1319,12 @@ namespace OwOrdPad {
         }
 
         private void increaseToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (rtb.SelectionFont.Size < 72) {
+            if (rtb.SelectionFont.Size < 96) {
                 rtb.SelectionFont = new Font(rtb.SelectionFont.Name, rtb.SelectionFont.Size + 1);
             } else {
-                sendNotification("Font can't be larger", "warning");
+                sendNotification("Font cannot be greater than 96", "warning");
             }
+            cbFontSize.Text = rtb.SelectionFont.Size.ToString();
         }
 
         private void decreaseToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1323,8 +1332,9 @@ namespace OwOrdPad {
             if (rtb.SelectionFont.Size > 8) {
                 rtb.SelectionFont = new Font(rtb.SelectionFont.Name, rtb.SelectionFont.Size - 1);
             } else {
-                sendNotification("Font can't be smaller", "warning");
+                sendNotification("Font cannot be smaller than 8", "warning");
             }
+            cbFontSize.Text = rtb.SelectionFont.Size.ToString();
         }
     }
 }

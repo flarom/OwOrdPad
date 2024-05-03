@@ -339,12 +339,12 @@
             // toolStripSeparator35
             // 
             toolStripSeparator35.Name = "toolStripSeparator35";
-            toolStripSeparator35.Size = new Size(160, 6);
+            toolStripSeparator35.Size = new Size(177, 6);
             // 
             // toolStripSeparator21
             // 
             toolStripSeparator21.Name = "toolStripSeparator21";
-            toolStripSeparator21.Size = new Size(160, 6);
+            toolStripSeparator21.Size = new Size(177, 6);
             // 
             // toolStripSeparator32
             // 
@@ -826,7 +826,7 @@
             zoomToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2, toolStripSeparator20, toolStripMenuItem9 });
             zoomToolStripMenuItem.Image = Properties.Resources.search;
             zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            zoomToolStripMenuItem.Size = new Size(163, 22);
+            zoomToolStripMenuItem.Size = new Size(180, 22);
             zoomToolStripMenuItem.Text = "&Zoom";
             // 
             // toolStripMenuItem1
@@ -866,7 +866,7 @@
             appearanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { defaultFontToolStripMenuItem });
             appearanceToolStripMenuItem.Image = Properties.Resources.color;
             appearanceToolStripMenuItem.Name = "appearanceToolStripMenuItem";
-            appearanceToolStripMenuItem.Size = new Size(163, 22);
+            appearanceToolStripMenuItem.Size = new Size(180, 22);
             appearanceToolStripMenuItem.Text = "Appearance";
             // 
             // defaultFontToolStripMenuItem
@@ -885,7 +885,7 @@
             wordWrapToolStripMenuItem.CheckState = CheckState.Checked;
             wordWrapToolStripMenuItem.Name = "wordWrapToolStripMenuItem";
             wordWrapToolStripMenuItem.ShortcutKeyDisplayString = "";
-            wordWrapToolStripMenuItem.Size = new Size(163, 22);
+            wordWrapToolStripMenuItem.Size = new Size(180, 22);
             wordWrapToolStripMenuItem.Text = "Word wrap";
             wordWrapToolStripMenuItem.Click += wordWrapToolStripMenuItem_Click;
             // 
@@ -895,7 +895,7 @@
             selectionMarginToolStripMenuItem.CheckOnClick = true;
             selectionMarginToolStripMenuItem.CheckState = CheckState.Checked;
             selectionMarginToolStripMenuItem.Name = "selectionMarginToolStripMenuItem";
-            selectionMarginToolStripMenuItem.Size = new Size(163, 22);
+            selectionMarginToolStripMenuItem.Size = new Size(180, 22);
             selectionMarginToolStripMenuItem.Text = "Selection margin";
             selectionMarginToolStripMenuItem.Click += selectionMarginToolStripMenuItem_Click;
             // 
@@ -905,7 +905,7 @@
             statusBarToolStripMenuItem.CheckOnClick = true;
             statusBarToolStripMenuItem.CheckState = CheckState.Checked;
             statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
-            statusBarToolStripMenuItem.Size = new Size(163, 22);
+            statusBarToolStripMenuItem.Size = new Size(180, 22);
             statusBarToolStripMenuItem.Text = "Status bar";
             statusBarToolStripMenuItem.Click += statusBarToolStripMenuItem_Click;
             // 
@@ -915,7 +915,7 @@
             toolBarToolStripMenuItem.CheckOnClick = true;
             toolBarToolStripMenuItem.CheckState = CheckState.Checked;
             toolBarToolStripMenuItem.Name = "toolBarToolStripMenuItem";
-            toolBarToolStripMenuItem.Size = new Size(163, 22);
+            toolBarToolStripMenuItem.Size = new Size(180, 22);
             toolBarToolStripMenuItem.Text = "Tool bar";
             toolBarToolStripMenuItem.Click += toolBarToolStripMenuItem_Click;
             // 
@@ -925,7 +925,7 @@
             formatBarToolStripMenuItem.CheckOnClick = true;
             formatBarToolStripMenuItem.CheckState = CheckState.Checked;
             formatBarToolStripMenuItem.Name = "formatBarToolStripMenuItem";
-            formatBarToolStripMenuItem.Size = new Size(163, 22);
+            formatBarToolStripMenuItem.Size = new Size(180, 22);
             formatBarToolStripMenuItem.Text = "Format bar";
             formatBarToolStripMenuItem.Click += formatBarToolStripMenuItem_Click;
             // 
@@ -936,7 +936,7 @@
             toolTipsToolStripMenuItem.CheckState = CheckState.Checked;
             toolTipsToolStripMenuItem.Name = "toolTipsToolStripMenuItem";
             toolTipsToolStripMenuItem.ShortcutKeyDisplayString = "Beta";
-            toolTipsToolStripMenuItem.Size = new Size(163, 22);
+            toolTipsToolStripMenuItem.Size = new Size(180, 22);
             toolTipsToolStripMenuItem.Text = "Tool tips";
             toolTipsToolStripMenuItem.Click += toolTipsToolStripMenuItem_Click;
             // 
@@ -945,7 +945,7 @@
             marginToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { a4ToolStripMenuItem, cardPaperToolStripMenuItem, noneToolStripMenuItem });
             marginToolStripMenuItem.Image = Properties.Resources.ruler;
             marginToolStripMenuItem.Name = "marginToolStripMenuItem";
-            marginToolStripMenuItem.Size = new Size(163, 22);
+            marginToolStripMenuItem.Size = new Size(180, 22);
             marginToolStripMenuItem.Text = "Paper margin";
             // 
             // a4ToolStripMenuItem
@@ -1439,7 +1439,7 @@
             tsFormat.Name = "tsFormat";
             tsFormat.Padding = new Padding(6, 0, 0, 0);
             tsFormat.Size = new Size(784, 27);
-            tsFormat.TabIndex = 2;
+            tsFormat.TabIndex = 3;
             tsFormat.KeyDown += rtb_KeyDown;
             // 
             // cbFonts
@@ -1461,7 +1461,7 @@
             cbFontSize.AutoSize = false;
             cbFontSize.FlatStyle = FlatStyle.Flat;
             cbFontSize.ForeColor = SystemColors.ControlText;
-            cbFontSize.Items.AddRange(new object[] { "92", "72", "60", "48", "36", "30", "24", "18", "14", "12", "11", "10", "9", "8" });
+            cbFontSize.Items.AddRange(new object[] { "96", "72", "60", "48", "36", "30", "24", "18", "14", "12", "11", "10", "9", "8" });
             cbFontSize.Name = "cbFontSize";
             cbFontSize.Size = new Size(40, 23);
             cbFontSize.Text = "12";
@@ -1867,7 +1867,7 @@
             tsTool.Name = "tsTool";
             tsTool.Padding = new Padding(6, 0, 0, 0);
             tsTool.Size = new Size(784, 27);
-            tsTool.TabIndex = 3;
+            tsTool.TabIndex = 2;
             tsTool.Text = "toolStrip1";
             tsTool.KeyDown += rtb_KeyDown;
             // 
