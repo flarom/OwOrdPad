@@ -2,7 +2,7 @@
 
 ---
 
-OwOrdPad is a lightweight, free, and open-source rich text editor designed to serve as a substitute for Microsoft WordPad. It provides essential features for creating and editing text documents in a user-friendly environment.
+OwOrdPad, formally Open WordPad, is a lightweight, free, and open-source rich text editor designed to serve as a substitute for Microsoft WordPad. It provides essential features for creating and editing text documents in a user-friendly environment.
 
 ## Features
 
