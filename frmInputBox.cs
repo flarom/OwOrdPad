@@ -25,7 +25,7 @@ namespace OwOrdPad {
                 txtInput.Text = _defaultResponse;
                 txtInput.SelectAll();
             }
-            txtInput.Focus();
+            txtInput.Select();
         }
 
         public string GetInput(string message, string title, string[] items, Image okIcon = null, string defaultResponse = "") {

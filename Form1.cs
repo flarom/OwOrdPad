@@ -3,8 +3,12 @@ using OwOrdPad.Properties;
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.Globalization;
+using System.IO;
 using System.Media;
 using System.Net;
+using System.Security.AccessControl;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OwOrdPad {
@@ -388,6 +392,9 @@ namespace OwOrdPad {
         private void formatBarToolStripMenuItem_Click(object sender, EventArgs e) {
             tsFormat.Visible = formatBarToolStripMenuItem.Checked;
             Settings.SaveSetting("showFormatBar", formatBarToolStripMenuItem.Checked.ToString());
+        }
+        private void homeScreenToolStripMenuItem_Click(object sender, EventArgs e) {
+            Settings.SaveSetting("showHomeScreen", homeScreenToolStripMenuItem.Checked.ToString());
         }
         #endregion
         #region formatting
@@ -838,7 +845,45 @@ namespace OwOrdPad {
             insertObject("drawing.owo");
         }
         private void spreadsheetToolStripMenuItem_Click(object sender, EventArgs e) {
-            insertObject("spreadsheet.owo");
+            int numRows = 0;
+            int numCols = 0;
+            try {
+                numRows = int.Parse(inputbox.GetInput("Insert the lines number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
+                numCols = int.Parse(inputbox.GetInput("Insert the columns number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
+            } catch { sendNotification("Invalid size", "error"); return; }
+
+            string rtfHeader = @"{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046";
+            string fontTable = @"{\fonttbl{\f0\fswiss\fprq2\fcharset0 " +rtb.SelectionFont.Name+";}}";
+            string colorTable = @"{\colortbl ;\red0\green0\blue0;\red0\green0\blue0;}";
+            string generator = @"{\*\generator Riched20 10.0.22621}";
+            string viewKind = @"\viewkind4\uc1";
+
+            StringBuilder tableBuilder = new StringBuilder();
+
+            int cellWidth = 1000;  // Largura de cada célula
+            int rowHeight = 300;   // Altura de cada linha
+
+            for (int i = 0; i < numRows; i++) {
+                tableBuilder.Append(@"\trowd\trgaph108");
+
+                for (int j = 0; j < numCols; j++) {
+                    int cellPosition = (j + 1) * cellWidth;
+                    tableBuilder.Append($@"\clvertalc\cellx{cellPosition}");
+                }
+
+                tableBuilder.Append(@"\pard\intbl");
+
+                for (int j = 0; j < numCols; j++) {
+                    tableBuilder.Append(@"\cell");
+                }
+
+                tableBuilder.Append(@"\row");
+            }
+
+            string rtfFooter = @"}";
+
+            string rtfContent = rtfHeader + fontTable + colorTable + generator + viewKind + tableBuilder.ToString() + rtfFooter;
+            rtb.SelectedRtf = rtfContent;
         }
         private void fromMyComputerToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -1223,8 +1268,7 @@ namespace OwOrdPad {
 
         private void snippetToolStripMenuItem_Click(object sender, EventArgs e) {
             int select = rtb.SelectionStart;
-            string snipPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\Snippets\\";
-
+            string snipPath = defaultDirectory + "\\Snippets\\";
             string[] snippets = Directory.GetFiles(snipPath);
 
             string[] snippetNames = new string[snippets.Length];
@@ -1240,8 +1284,16 @@ namespace OwOrdPad {
             else { return; }
 
             if (File.Exists(fullPath)) {
-                string snipKey = inputbox.GetInput("Insert a snippet key:", "Snippets - OwOrdPad", [""], Resources.snippet);
                 string[] lines = File.ReadAllLines(fullPath);
+                List<string> snippetKeys = new List<string>();
+
+                foreach (string line in lines) {
+                    string[] parts = line.Split('\t');
+                    snippetKeys.Add(parts[0]);
+                }
+                string[] snippetKeysArray = snippetKeys.ToArray();
+
+                string snipKey = inputbox.GetInput("Insert a snippet key:", "Snippets - OwOrdPad", snippetKeysArray, Resources.snippet);
 
                 foreach (string line in lines) {
                     string[] parts = line.Split('\t');
@@ -1255,6 +1307,7 @@ namespace OwOrdPad {
                     }
                 }
             }
+
             else {
                 sendNotification("Collection not found", "error");
             }
@@ -1321,20 +1374,48 @@ namespace OwOrdPad {
         private void increaseToolStripMenuItem_Click(object sender, EventArgs e) {
             if (rtb.SelectionFont.Size < 96) {
                 rtb.SelectionFont = new Font(rtb.SelectionFont.Name, rtb.SelectionFont.Size + 1);
-            } else {
+            }
+            else {
                 sendNotification("Font cannot be greater than 96", "warning");
             }
             cbFontSize.Text = rtb.SelectionFont.Size.ToString();
         }
 
         private void decreaseToolStripMenuItem_Click(object sender, EventArgs e) {
-            
+
             if (rtb.SelectionFont.Size > 8) {
                 rtb.SelectionFont = new Font(rtb.SelectionFont.Name, rtb.SelectionFont.Size - 1);
-            } else {
+            }
+            else {
                 sendNotification("Font cannot be smaller than 8", "warning");
             }
             cbFontSize.Text = rtb.SelectionFont.Size.ToString();
+        }
+        private void ShowHome(object sender, EventArgs e) {
+            if (Settings.GetSetting("showHomeScreen") == "True") {
+                frmStartScreen home = new();
+                string path = home.getDocument();
+                if (File.Exists(path)) {
+                    try {
+                        this.Text = Path.GetFileName(path) + " - OwOrdPad";
+                        this.Icon = Icon.ExtractAssociatedIcon(path);
+                        filePath = path;
+
+                        try {
+                            rtb.LoadFile(path);
+                        }
+                        catch {
+                            rtb.Text = File.ReadAllText(path);
+                            rtb.Font = new Font("Consolas", rtb.Font.Size);
+                        }
+                        updateHistory(path);
+                        updateHistoryMenu();
+                        saveHistory();
+                        isDocumentModified = false;
+                    }
+                    catch { }
+                }
+            } else { homeScreenToolStripMenuItem.Checked = false; }
         }
     }
 }

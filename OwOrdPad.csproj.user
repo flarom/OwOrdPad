@@ -16,5 +16,8 @@
     <Compile Update="frmSpecialCharacter.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frmStartScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>
