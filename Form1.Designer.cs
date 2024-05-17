@@ -1073,7 +1073,7 @@
             drawingToolStripMenuItem.Name = "drawingToolStripMenuItem";
             drawingToolStripMenuItem.Size = new Size(223, 22);
             drawingToolStripMenuItem.Text = "Drawing";
-            drawingToolStripMenuItem.ToolTipText = "Insert a drawing from Microsoft Paint";
+            drawingToolStripMenuItem.ToolTipText = "Insert a bitmap image from Microsoft Paint";
             drawingToolStripMenuItem.Click += drawingToolStripMenuItem_Click;
             // 
             // specialCharacterToolStripMenuItem

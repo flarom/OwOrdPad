@@ -845,35 +845,43 @@ namespace OwOrdPad {
             insertObject("drawing.owo");
         }
         private void spreadsheetToolStripMenuItem_Click(object sender, EventArgs e) {
-            int numRows = 0;
-            int numCols = 0;
+            int lines = 0;
+            int columns = 0;
+
             try {
-                numRows = int.Parse(inputbox.GetInput("Insert the lines number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
-                numCols = int.Parse(inputbox.GetInput("Insert the columns number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
-            } catch { sendNotification("Invalid size", "error"); return; }
+                lines = int.Parse(inputbox.GetInput("Insert the lines number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
+                columns = int.Parse(inputbox.GetInput("Insert the columns number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
+            } 
+            catch { 
+                sendNotification("Invalid size", "error"); 
+                return; 
+            }
+
+            if(lines <= 0 || columns <= 0 || lines > 100 || columns > 100) {
+                sendNotification("Invalid size", "warning");
+                return;
+            }
 
             string rtfHeader = @"{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046";
-            string fontTable = @"{\fonttbl{\f0\fswiss\fprq2\fcharset0 " +rtb.SelectionFont.Name+";}}";
-            string colorTable = @"{\colortbl ;\red0\green0\blue0;\red0\green0\blue0;}";
+            string fontTable = @"{\fonttbl{\f0\fswiss\fprq2\fcharset0 " + rtb.SelectionFont.Name + ";}}";
             string generator = @"{\*\generator Riched20 10.0.22621}";
             string viewKind = @"\viewkind4\uc1";
 
             StringBuilder tableBuilder = new StringBuilder();
 
-            int cellWidth = 1000;  // Largura de cada célula
-            int rowHeight = 300;   // Altura de cada linha
+            int cellWidth = 1000;
 
-            for (int i = 0; i < numRows; i++) {
+            for (int i = 0; i < lines; i++) {
                 tableBuilder.Append(@"\trowd\trgaph108");
 
-                for (int j = 0; j < numCols; j++) {
+                for (int j = 0; j < columns; j++) {
                     int cellPosition = (j + 1) * cellWidth;
                     tableBuilder.Append($@"\clvertalc\cellx{cellPosition}");
                 }
 
                 tableBuilder.Append(@"\pard\intbl");
 
-                for (int j = 0; j < numCols; j++) {
+                for (int j = 0; j < columns; j++) {
                     tableBuilder.Append(@"\cell");
                 }
 
@@ -882,7 +890,7 @@ namespace OwOrdPad {
 
             string rtfFooter = @"}";
 
-            string rtfContent = rtfHeader + fontTable + colorTable + generator + viewKind + tableBuilder.ToString() + rtfFooter;
+            string rtfContent = rtfHeader + fontTable + generator + viewKind + tableBuilder.ToString() + rtfFooter;
             rtb.SelectedRtf = rtfContent;
         }
         private void fromMyComputerToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1361,11 +1369,16 @@ namespace OwOrdPad {
         }
 
         private void defaultFontToolStripMenuItem_Click(object sender, EventArgs e) {
-            string fontName;
-            FontDialog fd = new();
-            fd.Font = new Font(Settings.GetSetting("defaultFont"), 12);
-            if (fd.ShowDialog() == DialogResult.OK) {
-                fontName = fd.Font.Name;
+            InstalledFontCollection installedFonts = new InstalledFontCollection();
+            FontFamily[] fontFamilies = installedFonts.Families;
+            string[] fontNames = new string[fontFamilies.Length];
+
+            for (int i = 0; i < fontFamilies.Length; i++) {
+                fontNames[i] = fontFamilies[i].Name;
+            }
+            string fontName = inputbox.GetInput("Select the default OwOrdPad font:", "Default font - OwOrdPad", fontNames, Resources.ok, Settings.GetSetting("defaultFont"));
+
+            if (fontName != string.Empty) {
                 Settings.SaveSetting("defaultFont", fontName);
             }
             defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
