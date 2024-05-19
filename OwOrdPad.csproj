@@ -21,8 +21,8 @@ Note: OwOrdPad is not affiliated with Microsoft Corporation. Microsoft WordPad i
     <Company>https://github.com/flarom/OwOrdPad</Company>
     <Version>1.0</Version>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <FileVersion>0.6.3</FileVersion>
-    <AssemblyVersion>0.6.3</AssemblyVersion>
+    <FileVersion>0.6.4</FileVersion>
+    <AssemblyVersion>0.6.4</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

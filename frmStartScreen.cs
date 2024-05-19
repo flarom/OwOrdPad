@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using OwOrdPad.Properties;
+using System.Diagnostics;
 
 namespace OwOrdPad {
     public partial class frmStartScreen : Form {
@@ -16,18 +17,19 @@ namespace OwOrdPad {
             string[] documents = File.ReadAllLines(defaultDirectory + "\\Settings\\history");
 
             foreach (string document in documents) {
-                Bitmap icon = Icon.ExtractAssociatedIcon(document).ToBitmap();
-                if (!imageList1.Images.ContainsKey(document)) {
-                    imageList1.Images.Add(document, icon);
+                if (File.Exists(document)) {
+                    Bitmap icon = Icon.ExtractAssociatedIcon(document).ToBitmap();
+                    if (!imageList1.Images.ContainsKey(document)) {
+                        imageList1.Images.Add(document, icon);
+                    }
+
+                    ListViewItem item = new ListViewItem() {
+                        Text = Path.GetFileName(document),
+                        ImageKey = document,
+                        Tag = document,
+                    };
+                    listView1.Items.Add(item);
                 }
-
-                ListViewItem item = new ListViewItem() {
-                    Text = Path.GetFileName(document),
-                    ImageKey = document,
-                    Tag = document,
-                };
-
-                listView1.Items.Add(item);
             }
         }
         private void listView1_ItemActivate(object sender, EventArgs e) {

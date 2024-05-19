@@ -1,15 +1,14 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Win32;
 using OwOrdPad.Properties;
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.Globalization;
-using System.IO;
 using System.Media;
 using System.Net;
-using System.Security.AccessControl;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.VisualBasic.FileIO;
 
 namespace OwOrdPad {
     public partial class Form1 : Form {
@@ -43,9 +42,32 @@ namespace OwOrdPad {
             tsFormat.Renderer = new MenuRenderer();
             contextMenuStrip1.Renderer = new MenuRenderer();
             contextMenuStrip2.Renderer = new MenuRenderer();
+            contextMenuStrip3.Renderer = new MenuRenderer();
         }
         private class MenuRenderer : ToolStripProfessionalRenderer {
             public MenuRenderer() : base(new CustomColors()) { }
+        }
+        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            FolderBrowserDialog fbd = new();
+            if (fbd.ShowDialog() == DialogResult.OK) {
+                LoadDirectory(fbd.SelectedPath.ToString());
+                updateHistory(fbd.SelectedPath.ToString());
+                saveHistory();
+                updateHistoryMenu();
+            }
+        }
+        public void LoadDirectory(string path) {
+            treeFiles.Nodes.Clear();
+            var rootDirectoryInfo = new DirectoryInfo(path);
+            treeFiles.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
+        }
+        private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo) {
+            var directoryNode = new TreeNode(directoryInfo.Name, 0, 0) { Tag = directoryInfo.FullName };
+            foreach (var directory in directoryInfo.GetDirectories())
+                directoryNode.Nodes.Add(CreateDirectoryNode(directory));
+            foreach (var file in directoryInfo.GetFiles())
+                directoryNode.Nodes.Add(new TreeNode(file.Name, 1, 1) { Tag = file.FullName });
+            return directoryNode;
         }
         public void register() {
             // add owordpad to App Paths registry, so it can be launched from the Win+R run command.
@@ -95,6 +117,8 @@ namespace OwOrdPad {
                 tsFormat.Visible = bool.Parse(Settings.GetSetting("showFormatBar"));
                 statusStrip.Visible = bool.Parse(Settings.GetSetting("showStatusBar"));
                 tsTool.Visible = bool.Parse(Settings.GetSetting("showToolBar"));
+                treeFiles.Visible = bool.Parse(Settings.GetSetting("showExplorer"));
+                splitter1.Visible = bool.Parse(Settings.GetSetting("showExplorer"));
                 rtb.WordWrap = bool.Parse(Settings.GetSetting("wordWrap"));
                 rtb.ShowSelectionMargin = bool.Parse(Settings.GetSetting("selectionMargin"));
                 rtb.Font = new Font(Settings.GetSetting("defaultFont"), 12);
@@ -108,6 +132,7 @@ namespace OwOrdPad {
                 formatBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showFormatBar"));
                 statusBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showStatusBar"));
                 toolBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showToolBar"));
+                explorerToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showExplorer"));
                 wordWrapToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("wordWrap"));
                 selectionMarginToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("selectionMargin"));
                 defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
@@ -148,6 +173,7 @@ namespace OwOrdPad {
                     rtb.Text = File.ReadAllText(ofd.FileName);
                     rtb.Font = new Font("Consolas", rtb.Font.Size);
                 }
+                treeFiles.Nodes.Clear();
             }
         }
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -203,9 +229,6 @@ namespace OwOrdPad {
             }
             catch { sendNotification("Failed to save file", "error"); }
         }
-        private void rtb_ModifiedChanged(object sender, EventArgs e) {
-            isDocumentModified = true;
-        }
         private void rtb_TextChanged(object sender, EventArgs e) {
             // word count
             lblCharAndWord.Text = rtb.Text.Length + " Characters, " +
@@ -235,6 +258,7 @@ namespace OwOrdPad {
             // auto save
             autoSaveCooldown = 0;
             tmrAutoSave.Start();
+            isDocumentModified = true;
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e) {
             if (isDocumentModified) {
@@ -395,6 +419,16 @@ namespace OwOrdPad {
         }
         private void homeScreenToolStripMenuItem_Click(object sender, EventArgs e) {
             Settings.SaveSetting("showHomeScreen", homeScreenToolStripMenuItem.Checked.ToString());
+        }
+        private void explorerToolStripMenuItem_Click(object sender, EventArgs e) {
+            treeFiles.Visible = explorerToolStripMenuItem.Checked;
+            splitter1.Visible = explorerToolStripMenuItem.Checked;
+
+            if (explorerToolStripMenuItem.Checked) {
+                treeFiles.Select();
+            }
+
+            Settings.SaveSetting("showExplorer", explorerToolStripMenuItem.Checked.ToString());
         }
         #endregion
         #region formatting
@@ -737,7 +771,12 @@ namespace OwOrdPad {
         // miscellaneous items related to UI interactions
         private void rtb_LinkClicked(object sender, LinkClickedEventArgs e) {
             if (MessageBox.Show("Open " + e.LinkText + " on a new window?", "Open link", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-                Process.Start(new ProcessStartInfo(e.LinkText) { UseShellExecute = true });
+                try {
+                    Process.Start(new ProcessStartInfo(e.LinkText) { UseShellExecute = true });
+                }
+                catch {
+                    sendNotification("Failed to open link", "error");
+                }
             }
         }
         private void Form1_Resize(object sender, EventArgs e) {
@@ -746,6 +785,8 @@ namespace OwOrdPad {
                 tsTool.Hide();
                 tsFormat.Hide();
                 statusStrip.Hide();
+                treeFiles.Hide();
+                splitter1.Hide();
                 TopMost = true;
                 MinimizeBox = false;
                 MaximizeBox = false;
@@ -760,6 +801,10 @@ namespace OwOrdPad {
                 }
                 if (statusBarToolStripMenuItem.Checked) {
                     statusStrip.Show();
+                }
+                if (explorerToolStripMenuItem.Checked) {
+                    treeFiles.Show();
+                    splitter1.Show();
                 }
                 TopMost = false;
                 MinimizeBox = true;
@@ -845,54 +890,51 @@ namespace OwOrdPad {
             insertObject("drawing.owo");
         }
         private void spreadsheetToolStripMenuItem_Click(object sender, EventArgs e) {
-            int lines = 0;
-            int columns = 0;
+            int columns = 0; // number of horizontal columns
+            int lines = 0; // number of vertical lines
 
             try {
-                lines = int.Parse(inputbox.GetInput("Insert the lines number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
-                columns = int.Parse(inputbox.GetInput("Insert the columns number:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
-            } 
-            catch { 
-                sendNotification("Invalid size", "error"); 
-                return; 
+                // tries to set the number of columns and lines from user input
+                columns = int.Parse(inputbox.GetInput("Insert the number of columns:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
+                lines = int.Parse(inputbox.GetInput("Insert the number of lines:", "Spreadsheet size - OwOrdPad", [], Resources.spreadsheet));
+            }
+            catch {
+                sendNotification("Invalid size", "error");
+                return;
             }
 
-            if(lines <= 0 || columns <= 0 || lines > 100 || columns > 100) {
+            if (lines <= 0 || columns <= 0 || lines > 100 || columns > 100) {
+                // checks if the number of lines or columns is invalid (less than or equal to 0, or greater than 100)
                 sendNotification("Invalid size", "warning");
                 return;
             }
 
-            string rtfHeader = @"{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046";
-            string fontTable = @"{\fonttbl{\f0\fswiss\fprq2\fcharset0 " + rtb.SelectionFont.Name + ";}}";
-            string generator = @"{\*\generator Riched20 10.0.22621}";
-            string viewKind = @"\viewkind4\uc1";
-
+            string rtfHeader = @"{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046"; // start of the RTF format file
             StringBuilder tableBuilder = new StringBuilder();
 
-            int cellWidth = 1000;
+            int cellWidth = 10000 / columns; // horizontal size of each cell
 
             for (int i = 0; i < lines; i++) {
-                tableBuilder.Append(@"\trowd\trgaph108");
+                tableBuilder.Append(@"\trowd\trgaph108"); // starts a new table row
 
                 for (int j = 0; j < columns; j++) {
-                    int cellPosition = (j + 1) * cellWidth;
-                    tableBuilder.Append($@"\clvertalc\cellx{cellPosition}");
+                    int cellPosition = (j + 1) * cellWidth; // position of the cell in the current row
+                    tableBuilder.Append($@"\clvertalc\cellx{cellPosition}"); // adds cell definition
                 }
 
-                tableBuilder.Append(@"\pard\intbl");
+                tableBuilder.Append(@"\pard\intbl"); // starts a paragraph within the table
 
                 for (int j = 0; j < columns; j++) {
-                    tableBuilder.Append(@"\cell");
+                    tableBuilder.Append(@"\cell"); // adds an empty cell
                 }
 
-                tableBuilder.Append(@"\row");
+                tableBuilder.Append(@"\row"); // ends the table row
             }
+            string rtfFooter = @"}"; // end of the RTF format file
 
-            string rtfFooter = @"}";
-
-            string rtfContent = rtfHeader + fontTable + generator + viewKind + tableBuilder.ToString() + rtfFooter;
-            rtb.SelectedRtf = rtfContent;
+            rtb.SelectedRtf = rtfHeader + tableBuilder.ToString() + rtfFooter;
         }
+
         private void fromMyComputerToolStripMenuItem_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*";
@@ -1211,19 +1253,29 @@ namespace OwOrdPad {
         private void updateHistoryMenu() {
             documentHistoryToolStripMenuItem.DropDownItems.Clear();
 
-            try {
-                foreach (var filePath in history) {
+            foreach (var filePath in history) {
+                try {
                     ToolStripMenuItem recentFileItem = new(Path.GetFileName(filePath)) {
                         Tag = filePath,
                         ToolTipText = filePath,
                         ShortcutKeyDisplayString = File.GetLastWriteTime(filePath).ToString("dd/MM/yyyy HH:mm"),
-                        Image = Icon.ExtractAssociatedIcon(filePath).ToBitmap()
+
                     };
+                    if (File.Exists(filePath)) {
+                        recentFileItem.Image = Icon.ExtractAssociatedIcon(filePath).ToBitmap();
+                    }
+                    else if (Directory.Exists(filePath)) {
+                        recentFileItem.Image = Resources.folder;
+                    }
+                    else {
+                        recentFileItem.Image = Resources.questionMark;
+                    }
+
                     recentFileItem.Click += historyItemClick;
                     documentHistoryToolStripMenuItem.DropDownItems.Add(recentFileItem);
                 }
+                catch { }
             }
-            catch { }
         }
         private void historyItemClick(object sender, EventArgs e) {
             if (isDocumentModified && MessageBox.Show("Are you sure you want to open a document?\nYou will lose any unsaved changes on your current file.",
@@ -1235,10 +1287,6 @@ namespace OwOrdPad {
             string path = menuItem.Tag.ToString();
 
             try {
-                this.Text = Path.GetFileName(path) + " - OwOrdPad";
-                this.Icon = Icon.ExtractAssociatedIcon(path);
-                filePath = path;
-
                 try {
                     rtb.LoadFile(path);
                 }
@@ -1246,14 +1294,22 @@ namespace OwOrdPad {
                     rtb.Text = File.ReadAllText(path);
                     rtb.Font = new Font("Consolas", rtb.Font.Size);
                 }
+
+                this.Text = Path.GetFileName(path) + " - OwOrdPad";
+                this.Icon = Icon.ExtractAssociatedIcon(path);
+                filePath = path;
+
                 isDocumentModified = false;
             }
             catch {
-                if (MessageBox.Show("This document doesn't exists\nDo you want to remove this item from the list?", "Document not found",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes) {
-                    history.Remove(path);
-                    saveHistory();
-                    updateHistoryMenu();
+                try { LoadDirectory(path); }
+                catch {
+                    if (MessageBox.Show("This document doesn't exists\nDo you want to remove this item from the list?", "Document not found",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+                        history.Remove(path);
+                        saveHistory();
+                        updateHistoryMenu();
+                    }
                 }
             }
         }
@@ -1428,7 +1484,177 @@ namespace OwOrdPad {
                     }
                     catch { }
                 }
-            } else { homeScreenToolStripMenuItem.Checked = false; }
+            }
+            else { homeScreenToolStripMenuItem.Checked = false; }
+        }
+
+        private void renameToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (treeFiles.SelectedNode != null) {
+                treeFiles.SelectedNode.BeginEdit();
+            }
+            else { sendNotification("Nothing to rename", "warning"); }
+        }
+
+        private void treeFiles_AfterLabelEdit(object sender, NodeLabelEditEventArgs e) {
+            if (e.Node.Tag is string oldFilePath && !string.IsNullOrEmpty(e.Label)) {
+                string newFilePath = Path.Combine(Path.GetDirectoryName(oldFilePath), e.Label);
+
+                try {
+                    if (File.Exists(oldFilePath)) {
+                        File.Move(oldFilePath, newFilePath);
+                        e.Node.Tag = newFilePath;
+                        if (filePath == oldFilePath) {
+                            filePath = newFilePath;
+                            this.Text = Path.GetFileName(newFilePath) + " - OwOrdPad";
+                        }
+                    }
+                    else if (Directory.Exists(oldFilePath)) {
+                        Directory.Move(oldFilePath, newFilePath);
+                        e.Node.Tag = newFilePath;
+                    }
+                }
+                catch {
+                    sendNotification("Invalid file name", "error");
+                    e.CancelEdit = true;
+                }
+            }
+            else {
+                e.CancelEdit = true;
+            }
+        }
+
+        private void newFileToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (treeFiles.SelectedNode != null) {
+                string directoryPath = treeFiles.SelectedNode.Tag as string;
+                if (directoryPath != null && Directory.Exists(directoryPath)) {
+                    string newFileName = "New document";
+                    string newFilePath = Path.Combine(directoryPath, newFileName);
+                    int counter = 1;
+
+                    while (File.Exists(newFilePath)) {
+                        newFileName = $"New document{counter}";
+                        newFilePath = Path.Combine(directoryPath, newFileName);
+                        counter++;
+                    }
+
+                    File.Create(newFilePath).Close();
+
+                    var newNode = new TreeNode(newFileName, 1, 1) { Tag = newFilePath };
+                    treeFiles.SelectedNode.Nodes.Add(newNode);
+                    treeFiles.SelectedNode.Expand();
+                    treeFiles.SelectedNode = newNode;
+                    newNode.BeginEdit();
+                }
+                else { sendNotification("Can not create a file here", "warning"); }
+            }
+            else { sendNotification("No folder selected", "warning"); }
+        }
+        private void newFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (treeFiles.SelectedNode != null) {
+                string directoryPath = treeFiles.SelectedNode.Tag as string;
+                if (directoryPath != null && Directory.Exists(directoryPath)) {
+                    string newFolderName = "New folder";
+                    string newFolderPath = Path.Combine(directoryPath, newFolderName);
+                    int counter = 1;
+
+                    while (Directory.Exists(newFolderPath)) {
+                        newFolderName = $"New folder{counter}";
+                        newFolderPath = Path.Combine(directoryPath, newFolderName);
+                        counter++;
+                    }
+
+                    Directory.CreateDirectory(newFolderPath);
+
+                    var newNode = new TreeNode(newFolderName, 0, 0) { Tag = newFolderPath };
+                    treeFiles.SelectedNode.Nodes.Add(newNode);
+                    treeFiles.SelectedNode.Expand();
+                    treeFiles.SelectedNode = newNode;
+                    newNode.BeginEdit();
+                }
+                else { sendNotification("Can not create a folder here", "warning"); }
+            }
+            else { sendNotification("No folder selected", "warning"); }
+        }
+
+        private void deleteToolStripMenuItem2_Click(object sender, EventArgs e) {
+            if (treeFiles.SelectedNode != null) {
+                string path = treeFiles.SelectedNode.Tag as string;
+                if (!string.IsNullOrEmpty(path)) {
+                    if (MessageBox.Show("Are you sure you want to move this file into the recycle bin?", "Delete file", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
+                        return;
+                    }
+                    try {
+                        if (File.Exists(path)) {
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        }
+                        else if (Directory.Exists(path)) {
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        }
+                        treeFiles.SelectedNode.Remove();
+                    }
+                    catch {
+                        sendNotification("Can not delete this file", "error");
+                    }
+                }
+                else { sendNotification("Can not delete this file", "error"); }
+            }
+            else { sendNotification("Nothing to delete", "warning"); }
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (treeFiles.SelectedNode != null) {
+                string currentPath = treeFiles.SelectedNode.Tag as string;
+                if (Directory.Exists(currentPath)) {
+                    LoadDirectory(currentPath);
+                }
+                else {
+                    string parentPath = Path.GetDirectoryName(currentPath);
+                    if (Directory.Exists(parentPath)) {
+                        LoadDirectory(parentPath);
+                    }
+                }
+            }
+        }
+
+        string selectedFile = "";
+        private void treeFiles_AfterSelect(object sender, TreeViewEventArgs e) {
+            selectedFile = e.Node.Tag as string;
+        }
+        private void LoadSelectedFile() {
+            if (isDocumentModified == true) {
+                if (MessageBox.Show("Are you sure you want to open a document?\nYou will lose any unsaved changes on your current file.", "Open document", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
+                    return;
+                }
+            }
+
+            if (selectedFile != null && File.Exists(selectedFile)) {
+                try {
+                    rtb.LoadFile(selectedFile);
+                }
+                catch {
+                    rtb.Text = File.ReadAllText(selectedFile);
+                    rtb.Font = new Font("Consolas", rtb.Font.Size);
+                }
+                filePath = selectedFile;
+                this.Text = Path.GetFileName(selectedFile) + " - OwOrdPad";
+                this.Icon = Icon.ExtractAssociatedIcon(selectedFile);
+                isDocumentModified = false;
+            }
+        }
+        private void treeFiles_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e) {
+            LoadSelectedFile();
+        }
+
+        private void treeFiles_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                if (treeFiles.SelectedNode.IsExpanded) {
+                    treeFiles.SelectedNode.Collapse();
+                }
+                else { 
+                    treeFiles.SelectedNode.Expand(); 
+                }
+                LoadSelectedFile();
+            }
         }
     }
 }

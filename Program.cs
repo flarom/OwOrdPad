@@ -1,23 +1,30 @@
+using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace OwOrdPad {
     internal static class Program {
         [STAThread]
         static void Main(string[] args) {
             ApplicationConfiguration.Initialize();
-
             Form1 owordpad = new();
 
             if (args.Length > 0) {
-                try {
-                    owordpad.rtb.LoadFile(args[0]);
+                string path = args[0];
+                if (Directory.Exists(path)) {
+                    owordpad.LoadDirectory(path);
                 }
-                catch {
-                    owordpad.rtb.Text = File.ReadAllText(args[0]);
+                else if (File.Exists(path)) {
+                    try {
+                        owordpad.rtb.LoadFile(path);
+                    }
+                    catch {
+                        owordpad.rtb.Text = File.ReadAllText(path);
+                    }
+                    owordpad.filePath = path;
+                    owordpad.Text = Path.GetFileName(path) + " - OwOrdPad";
+                    owordpad.Icon = Icon.ExtractAssociatedIcon(path);
                 }
-                owordpad.filePath = args[0];
-                owordpad.Text = Path.GetFileName(args[0]) + " - OwOrdPad";
-                owordpad.Icon = Icon.ExtractAssociatedIcon(args[0]);
             }
 
             owordpad.register();
