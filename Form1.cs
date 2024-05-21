@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using OwOrdPad.Properties;
 using System.Diagnostics;
@@ -8,7 +8,6 @@ using System.Media;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.VisualBasic.FileIO;
 
 namespace OwOrdPad {
     public partial class Form1 : Form {
@@ -60,13 +59,19 @@ namespace OwOrdPad {
             treeFiles.Nodes.Clear();
             var rootDirectoryInfo = new DirectoryInfo(path);
             treeFiles.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
+            treeFiles.Nodes[0].Expand();
         }
         private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo) {
             var directoryNode = new TreeNode(directoryInfo.Name, 0, 0) { Tag = directoryInfo.FullName };
-            foreach (var directory in directoryInfo.GetDirectories())
+
+            foreach (var directory in directoryInfo.GetDirectories()) {
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory));
-            foreach (var file in directoryInfo.GetFiles())
+            }
+
+            foreach (var file in directoryInfo.GetFiles()) {
                 directoryNode.Nodes.Add(new TreeNode(file.Name, 1, 1) { Tag = file.FullName });
+            }
+
             return directoryNode;
         }
         public void register() {
@@ -160,7 +165,6 @@ namespace OwOrdPad {
                 this.Text = ofd.SafeFileName + " - OwOrdPad";
                 this.Icon = Icon.ExtractAssociatedIcon(ofd.FileName);
                 filePath = ofd.FileName;
-                isDocumentModified = false;
 
                 updateHistory(ofd.FileName);
                 saveHistory();
@@ -173,6 +177,8 @@ namespace OwOrdPad {
                     rtb.Text = File.ReadAllText(ofd.FileName);
                     rtb.Font = new Font("Consolas", rtb.Font.Size);
                 }
+                isDocumentModified = false;
+                lblSaveState.Text = "Saved";
                 treeFiles.Nodes.Clear();
             }
         }
@@ -182,11 +188,9 @@ namespace OwOrdPad {
                     case ".rtf":
                     case ".owo":
                         SaveFile(filePath, true);
-                        isDocumentModified = false;
                         break;
                     default:
                         SaveFile(filePath, false);
-                        isDocumentModified = false;
                         break;
                 }
             }
@@ -208,7 +212,6 @@ namespace OwOrdPad {
 
                     SaveFile(filePath, saveAsRTF);
                     this.Text = Path.GetFileName(saveFileDialog.FileName) + " - OwOrdPad";
-                    isDocumentModified = false;
                 }
             }
         }
@@ -221,6 +224,7 @@ namespace OwOrdPad {
                     File.WriteAllText(path, rtb.Text); // save as plain text
                 }
                 isDocumentModified = false;
+                lblSaveState.Text = "Saved";
                 this.Icon = Icon.ExtractAssociatedIcon(path);
                 updateHistory(path);
                 saveHistory();
@@ -258,7 +262,14 @@ namespace OwOrdPad {
             // auto save
             autoSaveCooldown = 0;
             tmrAutoSave.Start();
-            isDocumentModified = true;
+            if (rtb.Text != string.Empty) {
+                isDocumentModified = true;
+                lblSaveState.Text = "Not saved";
+            }
+            else {
+                isDocumentModified = false;
+                lblSaveState.Text = "-";
+            }
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e) {
             if (isDocumentModified) {
@@ -267,6 +278,7 @@ namespace OwOrdPad {
                 }
             }
             isDocumentModified = false;
+            lblSaveState.Text = "Saved";
             filePath = string.Empty;
             Icon = Resources.favicon;
             Text = "New document - OwOrdPad";
@@ -1052,6 +1064,7 @@ namespace OwOrdPad {
             try {
                 rtb.LoadFile(defaultDirectory + "\\Autosave\\save.rtf");
                 isDocumentModified = false;
+                lblSaveState.Text = "Saved";
             }
             catch {
                 sendNotification("Failed to load autosave file", "error");
@@ -1300,6 +1313,7 @@ namespace OwOrdPad {
                 filePath = path;
 
                 isDocumentModified = false;
+                lblSaveState.Text = "Saved";
             }
             catch {
                 try { LoadDirectory(path); }
@@ -1481,6 +1495,7 @@ namespace OwOrdPad {
                         updateHistoryMenu();
                         saveHistory();
                         isDocumentModified = false;
+                        lblSaveState.Text = "Saved";
                     }
                     catch { }
                 }
@@ -1599,19 +1614,19 @@ namespace OwOrdPad {
                 else { sendNotification("Can not delete this file", "error"); }
             }
             else { sendNotification("Nothing to delete", "warning"); }
+
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
             if (treeFiles.SelectedNode != null) {
-                string currentPath = treeFiles.SelectedNode.Tag as string;
-                if (Directory.Exists(currentPath)) {
-                    LoadDirectory(currentPath);
+                string rootPath = treeFiles.Nodes[0].Tag as string;
+                if (Directory.Exists(rootPath)) {
+                    LoadDirectory(rootPath);
+                    treeFiles.Nodes[0].Expand();
                 }
                 else {
-                    string parentPath = Path.GetDirectoryName(currentPath);
-                    if (Directory.Exists(parentPath)) {
-                        LoadDirectory(parentPath);
-                    }
+                    treeFiles.Nodes.Clear();
+                    sendNotification("Failed to relocate directory", "error");
                 }
             }
         }
@@ -1621,13 +1636,12 @@ namespace OwOrdPad {
             selectedFile = e.Node.Tag as string;
         }
         private void LoadSelectedFile() {
-            if (isDocumentModified == true) {
-                if (MessageBox.Show("Are you sure you want to open a document?\nYou will lose any unsaved changes on your current file.", "Open document", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
-                    return;
-                }
-            }
-
             if (selectedFile != null && File.Exists(selectedFile)) {
+                if (isDocumentModified == true) {
+                    if (MessageBox.Show("Are you sure you want to open this document?\nYou will lose any unsaved changes on your current file.", "Open document", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes) {
+                        return;
+                    }
+                }
                 try {
                     rtb.LoadFile(selectedFile);
                 }
@@ -1639,6 +1653,7 @@ namespace OwOrdPad {
                 this.Text = Path.GetFileName(selectedFile) + " - OwOrdPad";
                 this.Icon = Icon.ExtractAssociatedIcon(selectedFile);
                 isDocumentModified = false;
+                lblSaveState.Text = "Saved";
             }
         }
         private void treeFiles_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e) {
@@ -1650,11 +1665,87 @@ namespace OwOrdPad {
                 if (treeFiles.SelectedNode.IsExpanded) {
                     treeFiles.SelectedNode.Collapse();
                 }
-                else { 
-                    treeFiles.SelectedNode.Expand(); 
+                else {
+                    treeFiles.SelectedNode.Expand();
                 }
                 LoadSelectedFile();
             }
+            if(e.KeyCode == Keys.Escape) {
+                rtb.Select();
+            }
         }
+
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) {
+            treeFiles.ExpandAll();
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e) {
+            treeFiles.CollapseAll();
+        }
+        #region order lines
+        private void moveUpToolStripMenuItem_Click(object sender, EventArgs e) {
+            int currentLineIndex = rtb.GetLineFromCharIndex(rtb.SelectionStart); // line with the carret in
+
+            if (currentLineIndex == 0) {
+                // returns if the carret is at the first line, can't go upper
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            int upperLineIndex = currentLineIndex - 1; // first line above the carret
+
+            int currentLineStart = rtb.GetFirstCharIndexFromLine(currentLineIndex); // position of the first character of the line in the doc
+            int upperLineStart = rtb.GetFirstCharIndexFromLine(upperLineIndex);     // position of the upper line
+
+            rtb.Select(currentLineStart, rtb.Lines[currentLineIndex].Length);
+            string currentLineRtf = rtb.SelectedRtf; // rtf format info of the current line
+
+            rtb.Select(upperLineStart, rtb.Lines[upperLineIndex].Length);
+            string upperLineRtf = rtb.SelectedRtf; // rtf format info of the upper line
+
+            // switches the two lines
+            rtb.Select(upperLineStart, rtb.Lines[upperLineIndex].Length);
+            rtb.SelectedRtf = currentLineRtf;
+            currentLineStart = rtb.GetFirstCharIndexFromLine(currentLineIndex - 1);
+            rtb.Select(currentLineStart + rtb.Lines[upperLineIndex].Length + 1, rtb.Lines[currentLineIndex].Length);
+            rtb.SelectedRtf = upperLineRtf;
+
+            // move selection to the new position
+            rtb.Select(currentLineStart + rtb.Lines[upperLineIndex].Length, 0);
+        }
+
+        private void moveDownToolStripMenuItem_Click(object sender, EventArgs e) {
+            int currentLineIndex = rtb.GetLineFromCharIndex(rtb.SelectionStart); // line with the carret in number
+
+            if (currentLineIndex >= rtb.Lines.Length - 1) {
+                // returns if the carret is at the last line, can't go lower
+                SystemSounds.Exclamation.Play();
+                return;
+            }
+
+            int lowerLineIndex = currentLineIndex + 1; // first line bellow the carret number
+
+            int currentLineStart = rtb.GetFirstCharIndexFromLine(currentLineIndex); // position of the first character of the line in the doc
+            int currentLineLength = rtb.Lines[currentLineIndex].Length;             // lenght of the line with the carret on
+            int lowerLineStart = rtb.GetFirstCharIndexFromLine(lowerLineIndex);     // position of the first characer of the next line in the doc
+            int lowerLineLength = rtb.Lines[lowerLineIndex].Length;                 // lenght of the next line
+
+            rtb.Select(currentLineStart, currentLineLength);
+            string currentLineRtf = rtb.SelectedRtf;    // rtf format info of the current line
+
+            rtb.Select(lowerLineStart, lowerLineLength);
+            string lowerLineRtf = rtb.SelectedRtf;      // rtf format info of the next line
+
+            // switches the two lines
+            rtb.Select(lowerLineStart, lowerLineLength);
+            rtb.SelectedRtf = currentLineRtf;
+            int newCurrentLineStart = rtb.GetFirstCharIndexFromLine(currentLineIndex);
+            rtb.Select(newCurrentLineStart, currentLineLength);
+            rtb.SelectedRtf = lowerLineRtf;
+
+            // move selection to the new position
+            rtb.Select(newCurrentLineStart + lowerLineLength + 1, 0);
+        }
+        #endregion order lines
     }
 }
