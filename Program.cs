@@ -15,15 +15,7 @@ namespace OwOrdPad {
                     owordpad.LoadDirectory(path);
                 }
                 else if (File.Exists(path)) {
-                    try {
-                        owordpad.rtb.LoadFile(path);
-                    }
-                    catch {
-                        owordpad.rtb.Text = File.ReadAllText(path);
-                    }
-                    owordpad.filePath = path;
-                    owordpad.Text = Path.GetFileName(path) + " - OwOrdPad";
-                    owordpad.Icon = Icon.ExtractAssociatedIcon(path);
+                    owordpad.OpenFile(path);
                 }
             }
 

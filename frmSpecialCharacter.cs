@@ -1,10 +1,8 @@
 ﻿namespace OwOrdPad {
     public partial class frmSpecialCharacter : Form {
-        private Form1 parentForm;
         private Dictionary<string, List<char>> unicodeCategories;
-        public frmSpecialCharacter(Form1 form1) {
+        public frmSpecialCharacter() {
             InitializeComponent();
-            parentForm = form1;
             InitializeUnicodeCategories();
 
             charListView.ItemActivate += charListView_ItemActivate;
@@ -13,6 +11,14 @@
         }
         private class MenuRenderer : ToolStripProfessionalRenderer {
             public MenuRenderer() : base(new CustomColors()) { }
+        }
+        public string getChars() {
+            return ShowDialog() == DialogResult.OK ? txtOutput.Text : null;
+        }
+
+        private void btnOK_Click(object sender, EventArgs e) {
+            DialogResult = DialogResult.OK;
+            Close();
         }
         public void InitializeUnicodeCategories() {
             // dictionary of all unicode characters, categorized
@@ -63,7 +69,7 @@
 
         private void charListView_ItemActivate(object sender, EventArgs e) {
             string selectedCharacter = charListView.SelectedItems[0].Text;
-            parentForm.rtb.SelectedText = selectedCharacter;
+            txtOutput.SelectedText = selectedCharacter;
         }
 
         private void frmSpecialCharacter_Load(object sender, EventArgs e) {
@@ -84,9 +90,41 @@
         }
 
         private void frmSpecialCharacter_KeyDown(object sender, KeyEventArgs e) {
-            if(e.KeyCode == Keys.Escape) {
+            if (e.KeyCode == Keys.Escape) {
                 this.Close();
             }
+        }
+
+        private void categoryListBox_DrawItem(object sender, DrawItemEventArgs e) {
+            if (e.Index < 0)
+                return;
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) {
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(49, 215, 193)), e.Bounds);
+
+                Rectangle borderRect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width - 1, e.Bounds.Height - 1);
+                using (Pen borderPen = new Pen(Color.FromArgb(37, 163, 147), 1)) {
+                    e.Graphics.DrawRectangle(borderPen, borderRect);
+                }
+            }
+            else {
+                e.Graphics.FillRectangle(new SolidBrush(e.BackColor), e.Bounds);
+            }
+
+            TextRenderer.DrawText(e.Graphics, categoryListBox.Items[e.Index].ToString(),
+                                    e.Font, new Point(e.Bounds.Left, e.Bounds.Top + 3),
+                                    SystemColors.ControlText, TextFormatFlags.Left);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e) {
+            if (txtOutput.Text.Length == 0) return;
+            txtOutput.Text = txtOutput.Text.Remove(txtOutput.Text.Length - 1);
+        }
+
+        private void btnClear_Click(object sender, EventArgs e) {
+            txtOutput.Text = "";
         }
     }
 }

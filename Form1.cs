@@ -17,6 +17,7 @@ namespace OwOrdPad {
         public string filePath; // full file path to the opened/saved file
         public bool isDocumentModified = false; // checks if the document was modified by the user
         frmInputBox inputbox = new frmInputBox();
+        frmListManager listManager = new frmListManager();
 
         public Form1() {
             // load program and settings
@@ -69,7 +70,58 @@ namespace OwOrdPad {
             }
 
             foreach (var file in directoryInfo.GetFiles()) {
-                directoryNode.Nodes.Add(new TreeNode(file.Name, 1, 1) { Tag = file.FullName });
+                string fileExtension = Path.GetExtension(file.Name);
+                switch (fileExtension) {
+                    // text documents
+                    case ".rtf":        // rich text file
+                    case ".owo":        // owordpad markdown
+                    case ".txt":        // plain text
+                    case ".md":         // markdown documentation
+                    case ".html":       // hypertext markup language
+                    case ".xml":        // extensible markup language
+                    case ".json":       // javascript object notation
+                    case ".log":        // log file
+                    case ".ini":        // windows initialization file
+                    case ".conf":       // unix configuration file
+                    case ".config":     // configuration file
+                    case ".properties": // properties file
+                    case ".php":        // hypertext preprocessor file
+                    case ".java":       // java source code file
+                    case ".py":         // python source code file
+                    case ".rb":         // ruby source code file
+                    case ".js":         // javascript source code file
+                    case ".ts":         // typescript source code file
+                    case ".cpp":        // c++ source code file
+                    case ".c":          // c source code file
+                    case ".cs":         // c# source code file
+                    case ".go":         // go source code file
+                    case ".rs":         // rust source code file
+                    case ".bat":        // dos batch file
+                    case ".sql":        // structured query language data file
+                        directoryNode.Nodes.Add(new TreeNode(file.Name, 3, 3) { Tag = file.FullName });
+                        break;
+                    // image files
+                    case ".bmp":    // bitmap
+                    case ".dib":    // device independent bitmap
+                    case ".rle":    // run length encoded bitmap
+                    case ".jpg":    // jpeg
+                    case ".jpeg":   // jpeg
+                    case ".jpe":    // jpeg
+                    case ".jfif":   // jpeg file interchange format
+                    case ".gif":    // graphical interchange format file
+                    case ".emf":    // enhanced windows metafile
+                    case ".wmf":    // windows metafile
+                    case ".tif":    // tagged image file
+                    case ".tiff":   // tagged image file format
+                    case ".png":    // portable network graphic
+                    case ".ico":    // icon file
+                        directoryNode.Nodes.Add(new TreeNode(file.Name, 2, 2) { Tag = file.FullName });
+                        break;
+                    default:
+                        // unknown
+                        directoryNode.Nodes.Add(new TreeNode(file.Name, 1, 1) { Tag = file.FullName });
+                        break;
+                }
             }
 
             return directoryNode;
@@ -93,10 +145,18 @@ namespace OwOrdPad {
             LoadFavoriteFonts();
         }
         private void manageFontsToolStripMenuItem_Click(object sender, EventArgs e) {
-            frmFavoriteFonts frm = new();
-            frm.ShowDialog(this);
+            try {
+                InstalledFontCollection installedFonts = new InstalledFontCollection();
+                FontFamily[] fontFamilies = installedFonts.Families;
+                string[] fontNames = new string[fontFamilies.Length];
 
-            //Process.Start("notepad", defaultDirectory + "\\settings\\favoriteFonts");
+                for (int i = 0; i < fontFamilies.Length; i++) {
+                    fontNames[i] = fontFamilies[i].Name;
+                }
+                string favFontsPath = defaultDirectory + "\\settings\\favoriteFonts";
+                File.WriteAllLines(favFontsPath, listManager.getList("Favorite fonts - OwOrdPad", File.ReadAllLines(favFontsPath), fontNames));
+            }
+            catch { }
         }
         private void LoadFavoriteFonts() {
             favoriteFontsToolStripMenuItem.DropDownItems.Clear();
@@ -122,11 +182,13 @@ namespace OwOrdPad {
                 tsFormat.Visible = bool.Parse(Settings.GetSetting("showFormatBar"));
                 statusStrip.Visible = bool.Parse(Settings.GetSetting("showStatusBar"));
                 tsTool.Visible = bool.Parse(Settings.GetSetting("showToolBar"));
-                treeFiles.Visible = bool.Parse(Settings.GetSetting("showExplorer"));
+                pnlExplorer.Visible = bool.Parse(Settings.GetSetting("showExplorer"));
                 splitter1.Visible = bool.Parse(Settings.GetSetting("showExplorer"));
                 rtb.WordWrap = bool.Parse(Settings.GetSetting("wordWrap"));
                 rtb.ShowSelectionMargin = bool.Parse(Settings.GetSetting("selectionMargin"));
                 rtb.Font = new Font(Settings.GetSetting("defaultFont"), 12);
+
+                UpdateToolTipsForMenuItems(menuStrip.Items, bool.Parse(Settings.GetSetting("showToolTips")));
 
                 if (bool.Parse(Settings.GetSetting("wasClosedByUser")) == false) {
                     sendNotification("Use Ctrl+Shift+T to restore autosave", "warning");
@@ -140,6 +202,7 @@ namespace OwOrdPad {
                 explorerToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showExplorer"));
                 wordWrapToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("wordWrap"));
                 selectionMarginToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("selectionMargin"));
+                toolTipsToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showToolTips"));
                 defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
             }
             catch {
@@ -157,28 +220,16 @@ namespace OwOrdPad {
             }
 
             OpenFileDialog ofd = new() {
-                Filter = "Rich Text File|*.rtf|OwOdPad Markdown|*.owo|Plain Text File|*.txt|All Files|*.*",
+                Filter = "Rich Text File|*.rtf|OwOdPad Markdown|*.owo|Plain Text File|*.txt|Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*",
                 Title = "Open document"
             };
 
             if (ofd.ShowDialog(this) == DialogResult.OK && ofd.CheckFileExists) {
-                this.Text = ofd.SafeFileName + " - OwOrdPad";
-                this.Icon = Icon.ExtractAssociatedIcon(ofd.FileName);
-                filePath = ofd.FileName;
-
                 updateHistory(ofd.FileName);
                 saveHistory();
                 updateHistoryMenu();
 
-                try {
-                    rtb.LoadFile(ofd.FileName);
-                }
-                catch {
-                    rtb.Text = File.ReadAllText(ofd.FileName);
-                    rtb.Font = new Font("Consolas", rtb.Font.Size);
-                }
-                isDocumentModified = false;
-                lblSaveState.Text = "Saved";
+                OpenFile(ofd.FileName);
                 treeFiles.Nodes.Clear();
             }
         }
@@ -232,6 +283,55 @@ namespace OwOrdPad {
                 sendNotification("File saved as " + Path.GetFileName(path), "succes");
             }
             catch { sendNotification("Failed to save file", "error"); }
+        }
+        public void OpenFile(string path) {
+            string pathExtension = Path.GetExtension(path);
+
+            switch (pathExtension) {
+                // Rich Text
+                case ".rtf":
+                case ".owo":
+                    try { rtb.LoadFile(path); }
+                    catch { rtb.Text = File.ReadAllText(path); }
+                    filePath = path;
+                    break;
+
+                // Image OLE Object
+                case ".bmp":
+                case ".dib":
+                case ".rle":
+                case ".jpg":
+                case ".jpeg":
+                case ".jpe":
+                case ".jfif":
+                case ".gif":
+                case ".emf":
+                case ".wmf":
+                case ".tif":
+                case ".tiff":
+                case ".png":
+                case ".ico":
+                    rtb.Clear();
+                    //rtb.ClearUndo();
+
+                    Clipboard.SetImage(Bitmap.FromFile(path));
+                    rtb.Paste();
+                    filePath = "";
+                    break;
+
+                // Plain Text
+                default:
+                    rtb.Text = File.ReadAllText(path);
+                    rtb.Font = new Font("Consolas", rtb.Font.Size);
+                    filePath = path;
+                    break;
+            }
+
+            this.Text = Path.GetFileName(path) + " - OwOrdPad";
+            this.Icon = Icon.ExtractAssociatedIcon(path);
+
+            lblSaveState.Text = "Saved";
+            isDocumentModified = false;
         }
         private void rtb_TextChanged(object sender, EventArgs e) {
             // word count
@@ -329,6 +429,52 @@ namespace OwOrdPad {
                     sendNotification("No results", "warning");
                 }
             }
+        }
+        private void searchForDocumentToolStripMenuItem_Click(object sender, EventArgs e) {
+            List<string> allFiles = getAllNodes(treeFiles.Nodes);
+            string searchText = inputbox.GetInput("Search for a document name:", "Explorer - OwOrdPad", allFiles.ToArray(), Resources.search);
+
+            if (!string.IsNullOrWhiteSpace(searchText)) {
+                TreeNode foundNode = searchNode(treeFiles.Nodes, searchText);
+
+                if (foundNode != null) {
+                    treeFiles.SelectedNode = foundNode;
+                    treeFiles.SelectedNode.Expand();
+                    treeFiles.SelectedNode.EnsureVisible();
+                    LoadSelectedFile();
+                }
+            }
+        }
+        private TreeNode searchNode(TreeNodeCollection nodes, string searchText) {
+            foreach (TreeNode node in nodes) {
+                if (node.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0) {
+                    return node;
+                }
+                if (node.Tag.ToString().IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0) {
+                    return node;
+                }
+
+                TreeNode foundNode = searchNode(node.Nodes, searchText);
+                if (foundNode != null) {
+                    return foundNode;
+                }
+            }
+            return null;
+        }
+        private List<string> getAllNodes(TreeNodeCollection nodes, string parentPath = "") {
+            List<string> pathsAndNames = new List<string>();
+
+            foreach (TreeNode node in nodes) {
+                string currentPath = string.IsNullOrEmpty(parentPath) ? node.Text : $"{parentPath}\\{node.Text}";
+                pathsAndNames.Add(currentPath);
+                pathsAndNames.Add(node.Text);
+
+                if (node.Nodes.Count > 0) {
+                    pathsAndNames.AddRange(getAllNodes(node.Nodes, currentPath));
+                }
+            }
+
+            return pathsAndNames;
         }
 
         private void goToToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -433,7 +579,7 @@ namespace OwOrdPad {
             Settings.SaveSetting("showHomeScreen", homeScreenToolStripMenuItem.Checked.ToString());
         }
         private void explorerToolStripMenuItem_Click(object sender, EventArgs e) {
-            treeFiles.Visible = explorerToolStripMenuItem.Checked;
+            pnlExplorer.Visible = explorerToolStripMenuItem.Checked;
             splitter1.Visible = explorerToolStripMenuItem.Checked;
 
             if (explorerToolStripMenuItem.Checked) {
@@ -986,8 +1132,8 @@ namespace OwOrdPad {
             rtb.SelectedText = DateTime.Now.ToString("HH:mm dd/MM/yyyy") + " ";
         }
         private void specialCharacterToolStripMenuItem_Click(object sender, EventArgs e) {
-            frmSpecialCharacter spec = new(this);
-            spec.Show();
+            frmSpecialCharacter sc = new();
+            rtb.SelectedText = sc.getChars();
         }
         private void linkToolStripMenuItem_Click(object sender, EventArgs e) {
             string name = inputbox.GetInput("Insert the website name", "Insert link - OwOrdPad", [""], Resources.ok, Clipboard.GetText());
@@ -1062,9 +1208,8 @@ namespace OwOrdPad {
                 return;
             }
             try {
-                rtb.LoadFile(defaultDirectory + "\\Autosave\\save.rtf");
-                isDocumentModified = false;
-                lblSaveState.Text = "Saved";
+                OpenFile(defaultDirectory + "\\Autosave\\save.rtf");
+                treeFiles.Nodes.Clear();
             }
             catch {
                 sendNotification("Failed to load autosave file", "error");
@@ -1259,8 +1404,8 @@ namespace OwOrdPad {
 
             history.Insert(0, path); // add/re-add the item, to the top of the list
 
-            if (history.Count > 10) {
-                history.RemoveAt(history.Count - 1); // remove an item, in case of it being on the 11° line
+            if (history.Count > 20) {
+                history.RemoveAt(history.Count - 1); // remove an item, in case of it being past the 20 items hard-limit
             }
         }
         private void updateHistoryMenu() {
@@ -1289,6 +1434,21 @@ namespace OwOrdPad {
                 }
                 catch { }
             }
+            documentHistoryToolStripMenuItem.DropDownItems.Add(toolStripSeparator46);
+            documentHistoryToolStripMenuItem.DropDownItems.Add(manageHistoryToolStripMenuItem);
+        }
+        private void manageHistoryToolStripMenuItem_Click(object sender, EventArgs e) {
+            string historyPath = defaultDirectory + "\\Settings\\history";
+            string[] history = File.ReadAllLines(historyPath);
+
+            try {
+                history = listManager.getList("History - OwOrdPad", history, null, frmListManager.addType.FromString, false, true, false);
+            }
+            catch { return; }
+
+            File.WriteAllLines(historyPath, history);
+            loadHistoryList();
+            updateHistoryMenu();
         }
         private void historyItemClick(object sender, EventArgs e) {
             if (isDocumentModified && MessageBox.Show("Are you sure you want to open a document?\nYou will lose any unsaved changes on your current file.",
@@ -1300,20 +1460,8 @@ namespace OwOrdPad {
             string path = menuItem.Tag.ToString();
 
             try {
-                try {
-                    rtb.LoadFile(path);
-                }
-                catch {
-                    rtb.Text = File.ReadAllText(path);
-                    rtb.Font = new Font("Consolas", rtb.Font.Size);
-                }
-
-                this.Text = Path.GetFileName(path) + " - OwOrdPad";
-                this.Icon = Icon.ExtractAssociatedIcon(path);
-                filePath = path;
-
-                isDocumentModified = false;
-                lblSaveState.Text = "Saved";
+                OpenFile(path);
+                treeFiles.Nodes.Clear();
             }
             catch {
                 try { LoadDirectory(path); }
@@ -1426,16 +1574,27 @@ namespace OwOrdPad {
         }
 
         private void toolTipsToolStripMenuItem_Click(object sender, EventArgs e) {
-            // WIP
-            menuStrip.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            tsTool.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            tsFormat.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            statusStrip.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            fileToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            editToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            viewToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            insertToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
-            formatToolStripMenuItem.DropDown.ShowItemToolTips = toolTipsToolStripMenuItem.Checked;
+            bool showToolTips = toolTipsToolStripMenuItem.Checked;
+
+            UpdateToolTipsForMenuItems(menuStrip.Items, showToolTips);
+
+            Settings.SaveSetting("showToolTips", showToolTips.ToString());
+        }
+
+        private void UpdateToolTipsForMenuItems(ToolStripItemCollection items, bool showToolTips) {
+            menuStrip.ShowItemToolTips = showToolTips;
+            tsTool.ShowItemToolTips = showToolTips;
+            tsFormat.ShowItemToolTips = showToolTips;
+            statusStrip.ShowItemToolTips = showToolTips;
+
+            foreach (ToolStripItem item in items) {
+                if (item is ToolStripMenuItem menuItem) {
+                    if (menuItem.HasDropDownItems) {
+                        menuItem.DropDown.ShowItemToolTips = showToolTips;
+                        UpdateToolTipsForMenuItems(menuItem.DropDownItems, showToolTips);
+                    }
+                }
+            }
         }
 
         private void defaultFontToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1480,22 +1639,11 @@ namespace OwOrdPad {
                 string path = home.getDocument();
                 if (File.Exists(path)) {
                     try {
-                        this.Text = Path.GetFileName(path) + " - OwOrdPad";
-                        this.Icon = Icon.ExtractAssociatedIcon(path);
-                        filePath = path;
+                        OpenFile(path);
 
-                        try {
-                            rtb.LoadFile(path);
-                        }
-                        catch {
-                            rtb.Text = File.ReadAllText(path);
-                            rtb.Font = new Font("Consolas", rtb.Font.Size);
-                        }
                         updateHistory(path);
                         updateHistoryMenu();
                         saveHistory();
-                        isDocumentModified = false;
-                        lblSaveState.Text = "Saved";
                     }
                     catch { }
                 }
@@ -1635,6 +1783,10 @@ namespace OwOrdPad {
         private void treeFiles_AfterSelect(object sender, TreeViewEventArgs e) {
             selectedFile = e.Node.Tag as string;
         }
+        private void txtNodePath_TextChanged(object sender, EventArgs e) {
+
+        }
+
         private void LoadSelectedFile() {
             if (selectedFile != null && File.Exists(selectedFile)) {
                 if (isDocumentModified == true) {
@@ -1642,18 +1794,7 @@ namespace OwOrdPad {
                         return;
                     }
                 }
-                try {
-                    rtb.LoadFile(selectedFile);
-                }
-                catch {
-                    rtb.Text = File.ReadAllText(selectedFile);
-                    rtb.Font = new Font("Consolas", rtb.Font.Size);
-                }
-                filePath = selectedFile;
-                this.Text = Path.GetFileName(selectedFile) + " - OwOrdPad";
-                this.Icon = Icon.ExtractAssociatedIcon(selectedFile);
-                isDocumentModified = false;
-                lblSaveState.Text = "Saved";
+                OpenFile(selectedFile);
             }
         }
         private void treeFiles_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e) {
@@ -1670,7 +1811,7 @@ namespace OwOrdPad {
                 }
                 LoadSelectedFile();
             }
-            if(e.KeyCode == Keys.Escape) {
+            if (e.KeyCode == Keys.Escape) {
                 rtb.Select();
             }
         }
@@ -1747,5 +1888,23 @@ namespace OwOrdPad {
             rtb.Select(newCurrentLineStart + lowerLineLength + 1, 0);
         }
         #endregion order lines
+
+        private void treeFiles_DrawNode(object sender, DrawTreeNodeEventArgs e) {
+            if (e.Node.IsSelected && treeFiles.Focused) {
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(49, 215, 193)), e.Bounds);
+
+                Rectangle borderRect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width - 1, e.Bounds.Height - 1);
+                using (Pen borderPen = new Pen(Color.FromArgb(37, 163, 147), 1)) {
+                    e.Graphics.DrawRectangle(borderPen, borderRect);
+                }
+            }
+            else {
+                e.Graphics.FillRectangle(new SolidBrush(e.Node.TreeView.BackColor), e.Bounds);
+            }
+
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? e.Node.TreeView.Font, e.Bounds, Color.Black);
+
+            e.DrawDefault = false;
+        }
     }
 }
