@@ -6,13 +6,14 @@ OwOrdPad, formally Open WordPad, is a lightweight, free, and open-source rich te
 
 ## Features
 
-- **Rich Text Editing**: Format your text with various styles, fonts, colors, and sizes.
-- **Basic Formatting Tools**: Bold, italic, underline, and strikethrough options to enhance your text.
-- **Image Support**: Insert images into your documents to complement your text.
-- **Basic OLE Support**: Insert graphs, mathematical operations or drawings into your document.
-- **Find and Replace**: Easily search for specific words, phrases and lines and replace them as needed.
-- **Snippets**:  Easily create/import snippets.
-- **Auto Save**:  Keep a backup file from the last edited document safe.
+- **Rich Text Editing**:			Format your text with various styles, fonts, colors, and sizes.
+- **Basic Formatting Tools**:	Bold, italic, underline, and strikethrough options to enhance your text.
+- **Multiple File Support**:	Edit multiple documents in the same section with the built-in file explorer.
+- **Image Support**:					Insert images into your documents to complement your text.
+- **Basic OLE Support**:			Insert graphs, spreadsheets, mathematical operations or drawings into your document.
+- **Find and Replace**:				Easily search for specific words, phrases and lines and replace them as needed.
+- **Snippets**:								Easily import snippets.
+- **Auto Save**:							Keep a backup file from the last edited document safe.
 
 ## License
 Copyright © 2024 OwOrdPad
