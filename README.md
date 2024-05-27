@@ -12,7 +12,6 @@ OwOrdPad, formally Open WordPad, is a lightweight, free, and open-source rich te
 - **Image Support**:					Insert images into your documents to complement your text.
 - **Basic OLE Support**:			Insert graphs, spreadsheets, mathematical operations or drawings into your document.
 - **Find and Replace**:				Easily search for specific words, phrases and lines and replace them as needed.
-- **Snippets**:								Easily import snippets.
 - **Auto Save**:							Keep a backup file from the last edited document safe.
 
 ## License
