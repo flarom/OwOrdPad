@@ -40,6 +40,9 @@
         public override Color ButtonSelectedGradientBegin {
             get { return highlight; }
         }
+        public override Color ButtonSelectedGradientMiddle {
+            get { return highlight; }
+        }
         public override Color ButtonSelectedGradientEnd {
             get { return highlight; }
         }
@@ -65,6 +68,16 @@
             get { return blank; }
         }
         public override Color ImageMarginGradientEnd {
+            get { return blank; }
+        }
+        // overflow menu
+        public override Color OverflowButtonGradientBegin {
+            get { return blank; }
+        }
+        public override Color OverflowButtonGradientMiddle {
+            get { return blank; }
+        }
+        public override Color OverflowButtonGradientEnd {
             get { return blank; }
         }
     }

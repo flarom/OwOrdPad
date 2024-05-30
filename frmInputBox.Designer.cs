@@ -27,12 +27,14 @@
             txtInput = new TextBox();
             btnOK = new Button();
             labelMessage = new Label();
+            btnOptions = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(243, 243, 243);
+            panel1.Controls.Add(btnOptions);
             panel1.Controls.Add(txtInput);
             panel1.Controls.Add(btnOK);
             panel1.Dock = DockStyle.Bottom;
@@ -46,12 +48,10 @@
             txtInput.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtInput.BackColor = Color.FromArgb(243, 243, 243);
             txtInput.BorderStyle = BorderStyle.None;
-            txtInput.Font = new Font("Segoe UI", 10F);
-            txtInput.Location = new Point(12, 8);
-            txtInput.Margin = new Padding(0);
+            txtInput.Location = new Point(12, 9);
             txtInput.Name = "txtInput";
-            txtInput.Size = new Size(328, 18);
-            txtInput.TabIndex = 0;
+            txtInput.Size = new Size(290, 16);
+            txtInput.TabIndex = 2;
             txtInput.KeyDown += frmInputBox_KeyDown;
             // 
             // btnOK
@@ -80,6 +80,23 @@
             labelMessage.TabIndex = 3;
             labelMessage.Text = "label1";
             // 
+            // btnOptions
+            // 
+            btnOptions.Dock = DockStyle.Right;
+            btnOptions.FlatAppearance.BorderSize = 0;
+            btnOptions.FlatAppearance.MouseDownBackColor = Color.FromArgb(49, 215, 193);
+            btnOptions.FlatAppearance.MouseOverBackColor = Color.FromArgb(49, 215, 193);
+            btnOptions.FlatStyle = FlatStyle.Flat;
+            btnOptions.Image = Properties.Resources.down;
+            btnOptions.Location = new Point(305, 0);
+            btnOptions.Margin = new Padding(0);
+            btnOptions.Name = "btnOptions";
+            btnOptions.Size = new Size(35, 35);
+            btnOptions.TabIndex = 3;
+            btnOptions.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnOptions.UseVisualStyleBackColor = true;
+            btnOptions.Click += btnOptions_Click;
+            // 
             // frmInputBox
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -96,7 +113,6 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "frmInputBox";
-            KeyDown += frmInputBox_KeyDown;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -105,8 +121,9 @@
         #endregion
 
         private Panel panel1;
-        private TextBox txtInput;
         private Button btnOK;
         private Label labelMessage;
+        private TextBox txtInput;
+        private Button btnOptions;
     }
 }

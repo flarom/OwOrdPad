@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Media;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace OwOrdPad {
     public partial class Form1 : Form {
@@ -57,75 +56,122 @@ namespace OwOrdPad {
             }
         }
         public void LoadDirectory(string path) {
-            treeFiles.Nodes.Clear();
+            treeExplorer.Nodes.Clear();
             var rootDirectoryInfo = new DirectoryInfo(path);
-            treeFiles.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
-            treeFiles.Nodes[0].Expand();
+            treeExplorer.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
+            treeExplorer.Nodes[0].Expand();
         }
-        private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo) {
-            var directoryNode = new TreeNode(directoryInfo.Name, 0, 0) { Tag = directoryInfo.FullName };
 
+        private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo) {
+            int imageIndex = 0; // Default image index
+            
+            string colorFilePath = Path.Combine(directoryInfo.FullName, ".owordpadFolderColor");
+            if (File.Exists(colorFilePath)) {
+                try {
+                    string color = File.ReadAllText(colorFilePath).Trim().ToLower();
+
+                    switch (color) {
+                        case "red":
+                            imageIndex = 4;
+                            break;
+                        case "org":
+                            imageIndex = 5;
+                            break;
+                        case "ylw":
+                            imageIndex = 6;
+                            break;
+                        case "grn":
+                            imageIndex = 7;
+                            break;
+                        case "blu":
+                            imageIndex = 8;
+                            break;
+                        case "prp":
+                            imageIndex = 9;
+                            break;
+                        default:
+                            imageIndex = 0; // Default image for unknown or no color specified
+                            break;
+                    }
+                }
+                catch {
+                    sendNotification("Failed to read folder color config", "error");
+                    imageIndex = 0;
+                }
+            }
+
+            var directoryNode = new TreeNode(directoryInfo.Name, imageIndex, imageIndex) { Tag = directoryInfo.FullName };
+            
             foreach (var directory in directoryInfo.GetDirectories()) {
-                directoryNode.Nodes.Add(CreateDirectoryNode(directory));
+                if ((directory.Attributes & FileAttributes.Hidden) == 0) {
+                    directoryNode.Nodes.Add(CreateDirectoryNode(directory));
+                }
             }
 
             foreach (var file in directoryInfo.GetFiles()) {
-                string fileExtension = Path.GetExtension(file.Name);
-                switch (fileExtension) {
-                    // text documents
-                    case ".rtf":        // rich text file
-                    case ".owo":        // owordpad markdown
-                    case ".txt":        // plain text
-                    case ".md":         // markdown documentation
-                    case ".html":       // hypertext markup language
-                    case ".xml":        // extensible markup language
-                    case ".json":       // javascript object notation
-                    case ".log":        // log file
-                    case ".ini":        // windows initialization file
-                    case ".conf":       // unix configuration file
-                    case ".config":     // configuration file
-                    case ".properties": // properties file
-                    case ".php":        // hypertext preprocessor file
-                    case ".java":       // java source code file
-                    case ".py":         // python source code file
-                    case ".rb":         // ruby source code file
-                    case ".js":         // javascript source code file
-                    case ".ts":         // typescript source code file
-                    case ".cpp":        // c++ source code file
-                    case ".c":          // c source code file
-                    case ".cs":         // c# source code file
-                    case ".go":         // go source code file
-                    case ".rs":         // rust source code file
-                    case ".bat":        // dos batch file
-                    case ".sql":        // structured query language data file
-                        directoryNode.Nodes.Add(new TreeNode(file.Name, 3, 3) { Tag = file.FullName });
-                        break;
-                    // image files
-                    case ".bmp":    // bitmap
-                    case ".dib":    // device independent bitmap
-                    case ".rle":    // run length encoded bitmap
-                    case ".jpg":    // jpeg
-                    case ".jpeg":   // jpeg
-                    case ".jpe":    // jpeg
-                    case ".jfif":   // jpeg file interchange format
-                    case ".gif":    // graphical interchange format file
-                    case ".emf":    // enhanced windows metafile
-                    case ".wmf":    // windows metafile
-                    case ".tif":    // tagged image file
-                    case ".tiff":   // tagged image file format
-                    case ".png":    // portable network graphic
-                    case ".ico":    // icon file
-                        directoryNode.Nodes.Add(new TreeNode(file.Name, 2, 2) { Tag = file.FullName });
-                        break;
-                    default:
-                        // unknown
-                        directoryNode.Nodes.Add(new TreeNode(file.Name, 1, 1) { Tag = file.FullName });
-                        break;
+                if ((file.Attributes & FileAttributes.Hidden) == 0) {
+                    string fileExtension = Path.GetExtension(file.Name).ToLower();
+                    int fileImageIndex;
+
+                    switch (fileExtension) {
+                        // text documents
+                        case ".rtf":
+                        case ".owo":
+                        case ".txt":
+                        case ".md":
+                        case ".html":
+                        case ".xml":
+                        case ".json":
+                        case ".log":
+                        case ".ini":
+                        case ".conf":
+                        case ".config":
+                        case ".properties":
+                        case ".php":
+                        case ".java":
+                        case ".py":
+                        case ".rb":
+                        case ".js":
+                        case ".ts":
+                        case ".cpp":
+                        case ".c":
+                        case ".cs":
+                        case ".go":
+                        case ".rs":
+                        case ".bat":
+                        case ".sql":
+                            fileImageIndex = 3;
+                            break;
+                        // image files
+                        case ".bmp":
+                        case ".dib":
+                        case ".rle":
+                        case ".jpg":
+                        case ".jpeg":
+                        case ".jpe":
+                        case ".jfif":
+                        case ".gif":
+                        case ".emf":
+                        case ".wmf":
+                        case ".tif":
+                        case ".tiff":
+                        case ".png":
+                        case ".ico":
+                            fileImageIndex = 2;
+                            break;
+                        default:
+                            // unknown
+                            fileImageIndex = 1;
+                            break;
+                    }
+
+                    directoryNode.Nodes.Add(new TreeNode(file.Name, fileImageIndex, fileImageIndex) { Tag = file.FullName });
                 }
             }
 
             return directoryNode;
         }
+
         public void register() {
             // add owordpad to App Paths registry, so it can be launched from the Win+R run command.
             string regKey = @"Software\Microsoft\Windows\CurrentVersion\App Paths\owordpad.exe";
@@ -230,7 +276,7 @@ namespace OwOrdPad {
                 updateHistoryMenu();
 
                 OpenFile(ofd.FileName);
-                treeFiles.Nodes.Clear();
+                treeExplorer.Nodes.Clear();
             }
         }
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -431,16 +477,16 @@ namespace OwOrdPad {
             }
         }
         private void searchForDocumentToolStripMenuItem_Click(object sender, EventArgs e) {
-            List<string> allFiles = getAllNodes(treeFiles.Nodes);
+            List<string> allFiles = getAllNodes(treeExplorer.Nodes);
             string searchText = inputbox.GetInput("Search for a document name:", "Explorer - OwOrdPad", allFiles.ToArray(), Resources.search);
 
             if (!string.IsNullOrWhiteSpace(searchText)) {
-                TreeNode foundNode = searchNode(treeFiles.Nodes, searchText);
+                TreeNode foundNode = searchNode(treeExplorer.Nodes, searchText);
 
                 if (foundNode != null) {
-                    treeFiles.SelectedNode = foundNode;
-                    treeFiles.SelectedNode.Expand();
-                    treeFiles.SelectedNode.EnsureVisible();
+                    treeExplorer.SelectedNode = foundNode;
+                    treeExplorer.SelectedNode.Expand();
+                    treeExplorer.SelectedNode.EnsureVisible();
                     LoadSelectedFile();
                 }
             }
@@ -583,7 +629,7 @@ namespace OwOrdPad {
             splitter1.Visible = explorerToolStripMenuItem.Checked;
 
             if (explorerToolStripMenuItem.Checked) {
-                treeFiles.Select();
+                treeExplorer.Select();
             }
 
             Settings.SaveSetting("showExplorer", explorerToolStripMenuItem.Checked.ToString());
@@ -943,7 +989,7 @@ namespace OwOrdPad {
                 tsTool.Hide();
                 tsFormat.Hide();
                 statusStrip.Hide();
-                treeFiles.Hide();
+                pnlExplorer.Hide();
                 splitter1.Hide();
                 TopMost = true;
                 MinimizeBox = false;
@@ -961,12 +1007,16 @@ namespace OwOrdPad {
                     statusStrip.Show();
                 }
                 if (explorerToolStripMenuItem.Checked) {
-                    treeFiles.Show();
+                    pnlExplorer.Show();
                     splitter1.Show();
                 }
                 TopMost = false;
                 MinimizeBox = true;
                 MaximizeBox = true;
+            }
+
+            if (splitter1.SplitPosition >= this.Size.Width) {
+                splitter1.SplitPosition = splitter1.SplitPosition;
             }
         }
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -1209,7 +1259,7 @@ namespace OwOrdPad {
             }
             try {
                 OpenFile(defaultDirectory + "\\Autosave\\save.rtf");
-                treeFiles.Nodes.Clear();
+                treeExplorer.Nodes.Clear();
             }
             catch {
                 sendNotification("Failed to load autosave file", "error");
@@ -1461,7 +1511,7 @@ namespace OwOrdPad {
 
             try {
                 OpenFile(path);
-                treeFiles.Nodes.Clear();
+                treeExplorer.Nodes.Clear();
             }
             catch {
                 try { LoadDirectory(path); }
@@ -1489,53 +1539,6 @@ namespace OwOrdPad {
             }
             catch {
                 sendNotification("Invalid size", "warning");
-            }
-        }
-
-        private void snippetToolStripMenuItem_Click(object sender, EventArgs e) {
-            int select = rtb.SelectionStart;
-            string snipPath = defaultDirectory + "\\Snippets\\";
-            string[] snippets = Directory.GetFiles(snipPath);
-
-            string[] snippetNames = new string[snippets.Length];
-            for (int i = 0; i < snippets.Length; i++) {
-                snippetNames[i] = Path.GetFileName(snippets[i]);
-            }
-
-            string snipFile = inputbox.GetInput("Insert a snippet collection name:", "Snippets - OwOrdPad", snippetNames, Resources.folder);
-            string fullPath;
-            if (snipFile != null) {
-                fullPath = Path.Combine(snipPath, snipFile);
-            }
-            else { return; }
-
-            if (File.Exists(fullPath)) {
-                string[] lines = File.ReadAllLines(fullPath);
-                List<string> snippetKeys = new List<string>();
-
-                foreach (string line in lines) {
-                    string[] parts = line.Split('\t');
-                    snippetKeys.Add(parts[0]);
-                }
-                string[] snippetKeysArray = snippetKeys.ToArray();
-
-                string snipKey = inputbox.GetInput("Insert a snippet key:", "Snippets - OwOrdPad", snippetKeysArray, Resources.snippet);
-
-                foreach (string line in lines) {
-                    string[] parts = line.Split('\t');
-
-                    if (parts[0] == snipKey) {
-                        string snippetContent = Regex.Unescape(parts[1]);
-
-                        rtb.SelectedText = snippetContent;
-                        rtb.Select(int.Parse(parts[2]) + select, int.Parse(parts[3]));
-                        break;
-                    }
-                }
-            }
-
-            else {
-                sendNotification("Collection not found", "error");
             }
         }
 
@@ -1652,8 +1655,8 @@ namespace OwOrdPad {
         }
 
         private void renameToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (treeFiles.SelectedNode != null) {
-                treeFiles.SelectedNode.BeginEdit();
+            if (treeExplorer.SelectedNode != null) {
+                treeExplorer.SelectedNode.BeginEdit();
             }
             else { sendNotification("Nothing to rename", "warning"); }
         }
@@ -1687,8 +1690,8 @@ namespace OwOrdPad {
         }
 
         private void newFileToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (treeFiles.SelectedNode != null) {
-                string directoryPath = treeFiles.SelectedNode.Tag as string;
+            if (treeExplorer.SelectedNode != null) {
+                string directoryPath = treeExplorer.SelectedNode.Tag as string;
                 if (directoryPath != null && Directory.Exists(directoryPath)) {
                     string newFileName = "New document";
                     string newFilePath = Path.Combine(directoryPath, newFileName);
@@ -1703,9 +1706,9 @@ namespace OwOrdPad {
                     File.Create(newFilePath).Close();
 
                     var newNode = new TreeNode(newFileName, 1, 1) { Tag = newFilePath };
-                    treeFiles.SelectedNode.Nodes.Add(newNode);
-                    treeFiles.SelectedNode.Expand();
-                    treeFiles.SelectedNode = newNode;
+                    treeExplorer.SelectedNode.Nodes.Add(newNode);
+                    treeExplorer.SelectedNode.Expand();
+                    treeExplorer.SelectedNode = newNode;
                     newNode.BeginEdit();
                 }
                 else { sendNotification("Can not create a file here", "warning"); }
@@ -1713,8 +1716,8 @@ namespace OwOrdPad {
             else { sendNotification("No folder selected", "warning"); }
         }
         private void newFolderToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (treeFiles.SelectedNode != null) {
-                string directoryPath = treeFiles.SelectedNode.Tag as string;
+            if (treeExplorer.SelectedNode != null) {
+                string directoryPath = treeExplorer.SelectedNode.Tag as string;
                 if (directoryPath != null && Directory.Exists(directoryPath)) {
                     string newFolderName = "New folder";
                     string newFolderPath = Path.Combine(directoryPath, newFolderName);
@@ -1729,19 +1732,63 @@ namespace OwOrdPad {
                     Directory.CreateDirectory(newFolderPath);
 
                     var newNode = new TreeNode(newFolderName, 0, 0) { Tag = newFolderPath };
-                    treeFiles.SelectedNode.Nodes.Add(newNode);
-                    treeFiles.SelectedNode.Expand();
-                    treeFiles.SelectedNode = newNode;
+                    treeExplorer.SelectedNode.Nodes.Add(newNode);
+                    treeExplorer.SelectedNode.Expand();
+                    treeExplorer.SelectedNode = newNode;
                     newNode.BeginEdit();
                 }
                 else { sendNotification("Can not create a folder here", "warning"); }
             }
             else { sendNotification("No folder selected", "warning"); }
         }
+        private void selectFolderColor(object sender, EventArgs e) {
+            ToolStripMenuItem itm = sender as ToolStripMenuItem;
+            string selectedColor = itm.Tag.ToString();
+
+            if (treeExplorer.SelectedNode != null) {
+                string directoryPath = treeExplorer.SelectedNode.Tag as string;
+                if (directoryPath != null && Directory.Exists(directoryPath)) {
+                    string filePath = Path.Combine(directoryPath, ".owordpadFolderColor");
+
+                    try {
+                        if (!File.Exists(filePath)) {
+                            File.WriteAllText(filePath, selectedColor);
+                            File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.Hidden);
+                        }
+                        else {
+                            File.SetAttributes(filePath, FileAttributes.Normal);
+                            File.WriteAllText(filePath, selectedColor);
+                            File.SetAttributes(filePath, File.GetAttributes(filePath) | FileAttributes.Hidden);
+                        }
+                        updateExplorer();
+                    }
+                    catch {
+                        sendNotification("Failed to change folder color", "error");
+                    }
+                }
+            }
+        }
+
+        private void noColorToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (treeExplorer.SelectedNode != null) {
+                string directoryPath = treeExplorer.SelectedNode.Tag as string;
+                if (directoryPath != null && Directory.Exists(directoryPath)) {
+                    string colorFilePath = Path.Combine(directoryPath, ".owordpadFolderColor");
+
+                    try {
+                        if (File.Exists(colorFilePath)) {
+                            File.Delete(colorFilePath);
+                            updateExplorer();
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
 
         private void deleteToolStripMenuItem2_Click(object sender, EventArgs e) {
-            if (treeFiles.SelectedNode != null) {
-                string path = treeFiles.SelectedNode.Tag as string;
+            if (treeExplorer.SelectedNode != null) {
+                string path = treeExplorer.SelectedNode.Tag as string;
                 if (!string.IsNullOrEmpty(path)) {
                     if (MessageBox.Show("Are you sure you want to move this file into the recycle bin?", "Delete file", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
                         return;
@@ -1753,7 +1800,7 @@ namespace OwOrdPad {
                         else if (Directory.Exists(path)) {
                             Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                         }
-                        treeFiles.SelectedNode.Remove();
+                        treeExplorer.SelectedNode.Remove();
                     }
                     catch {
                         sendNotification("Can not delete this file", "error");
@@ -1765,26 +1812,26 @@ namespace OwOrdPad {
 
         }
 
-        private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (treeFiles.SelectedNode != null) {
-                string rootPath = treeFiles.Nodes[0].Tag as string;
+        private void updateExplorer() {
+            if (treeExplorer.SelectedNode != null) {
+                string rootPath = treeExplorer.Nodes[0].Tag as string;
                 if (Directory.Exists(rootPath)) {
                     LoadDirectory(rootPath);
-                    treeFiles.Nodes[0].Expand();
+                    treeExplorer.Nodes[0].Expand();
                 }
                 else {
-                    treeFiles.Nodes.Clear();
+                    treeExplorer.Nodes.Clear();
                     sendNotification("Failed to relocate directory", "error");
                 }
             }
+        }
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
+            updateExplorer();
         }
 
         string selectedFile = "";
         private void treeFiles_AfterSelect(object sender, TreeViewEventArgs e) {
             selectedFile = e.Node.Tag as string;
-        }
-        private void txtNodePath_TextChanged(object sender, EventArgs e) {
-
         }
 
         private void LoadSelectedFile() {
@@ -1803,11 +1850,11 @@ namespace OwOrdPad {
 
         private void treeFiles_KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {
-                if (treeFiles.SelectedNode.IsExpanded) {
-                    treeFiles.SelectedNode.Collapse();
+                if (treeExplorer.SelectedNode.IsExpanded) {
+                    treeExplorer.SelectedNode.Collapse();
                 }
                 else {
-                    treeFiles.SelectedNode.Expand();
+                    treeExplorer.SelectedNode.Expand();
                 }
                 LoadSelectedFile();
             }
@@ -1817,11 +1864,11 @@ namespace OwOrdPad {
         }
 
         private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) {
-            treeFiles.ExpandAll();
+            treeExplorer.ExpandAll();
         }
 
         private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e) {
-            treeFiles.CollapseAll();
+            treeExplorer.CollapseAll();
         }
         #region order lines
         private void moveUpToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1888,9 +1935,8 @@ namespace OwOrdPad {
             rtb.Select(newCurrentLineStart + lowerLineLength + 1, 0);
         }
         #endregion order lines
-
         private void treeFiles_DrawNode(object sender, DrawTreeNodeEventArgs e) {
-            if (e.Node.IsSelected && treeFiles.Focused) {
+            if (e.Node.IsSelected && treeExplorer.Focused) {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(49, 215, 193)), e.Bounds);
 
                 Rectangle borderRect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width - 1, e.Bounds.Height - 1);

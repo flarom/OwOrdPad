@@ -331,4 +331,22 @@
   <data name="documentWritten" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\documentWritten.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="folderBlu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folderBlu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="folderGrn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folderGrn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="folderOrg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folderOrg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="folderPrp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folderPrp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="folderRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folderRed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="folderYlw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folderYlw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

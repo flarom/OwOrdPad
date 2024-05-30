@@ -192,8 +192,6 @@ namespace OwOrdPad {
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(49, 215, 193)), e.Bounds);
 
-                e.Graphics.DrawLine(new Pen(Color.Black, 5), new PointF(0, 5), new PointF(15, 40));
-
                 Rectangle borderRect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width - 1, e.Bounds.Height - 1);
                 using (Pen borderPen = new Pen(Color.FromArgb(37, 163, 147), 1)) {
                     e.Graphics.DrawRectangle(borderPen, borderRect);
