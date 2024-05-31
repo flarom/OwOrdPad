@@ -257,6 +257,10 @@
             contextMenuStrip3 = new ContextMenuStrip(components);
             newFileToolStripMenuItem = new ToolStripMenuItem();
             newFolderToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator48 = new ToolStripSeparator();
+            cutToolStripMenuItem2 = new ToolStripMenuItem();
+            copyToolStripMenuItem2 = new ToolStripMenuItem();
+            pasteToolStripMenuItem2 = new ToolStripMenuItem();
             toolStripSeparator11 = new ToolStripSeparator();
             renameToolStripMenuItem = new ToolStripMenuItem();
             folderColorToolStripMenuItem = new ToolStripMenuItem();
@@ -278,6 +282,7 @@
             imageList1 = new ImageList(components);
             pnlExplorer = new Panel();
             splitter1 = new Splitter();
+            toolStripSeparator49 = new ToolStripSeparator();
             toolStripSeparator34 = new ToolStripSeparator();
             toolStripSeparator30 = new ToolStripSeparator();
             toolStripSeparator1 = new ToolStripSeparator();
@@ -2358,14 +2363,15 @@
             // contextMenuStrip3
             // 
             contextMenuStrip3.BackColor = Color.White;
-            contextMenuStrip3.Items.AddRange(new ToolStripItem[] { newFileToolStripMenuItem, newFolderToolStripMenuItem, toolStripSeparator11, renameToolStripMenuItem, folderColorToolStripMenuItem, deleteToolStripMenuItem2, toolStripSeparator44, searchToolStripMenuItem, refreshToolStripMenuItem, toolStripSeparator43, expandAllToolStripMenuItem, collapseAllToolStripMenuItem });
+            contextMenuStrip3.Items.AddRange(new ToolStripItem[] { cutToolStripMenuItem2, copyToolStripMenuItem2, pasteToolStripMenuItem2, toolStripSeparator48, deleteToolStripMenuItem2, renameToolStripMenuItem, toolStripSeparator11, newFileToolStripMenuItem, newFolderToolStripMenuItem, toolStripSeparator44, expandAllToolStripMenuItem, collapseAllToolStripMenuItem, toolStripSeparator43, searchToolStripMenuItem, refreshToolStripMenuItem, toolStripSeparator49, folderColorToolStripMenuItem });
             contextMenuStrip3.Name = "contextMenuStrip3";
-            contextMenuStrip3.Size = new Size(208, 242);
+            contextMenuStrip3.Size = new Size(208, 298);
             // 
             // newFileToolStripMenuItem
             // 
             newFileToolStripMenuItem.Image = Properties.Resources.document;
             newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
+            newFileToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
             newFileToolStripMenuItem.Size = new Size(207, 22);
             newFileToolStripMenuItem.Text = "New file";
             newFileToolStripMenuItem.Click += newFileToolStripMenuItem_Click;
@@ -2378,6 +2384,38 @@
             newFolderToolStripMenuItem.Size = new Size(207, 22);
             newFolderToolStripMenuItem.Text = "New folder";
             newFolderToolStripMenuItem.Click += newFolderToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator48
+            // 
+            toolStripSeparator48.Name = "toolStripSeparator48";
+            toolStripSeparator48.Size = new Size(204, 6);
+            // 
+            // cutToolStripMenuItem2
+            // 
+            cutToolStripMenuItem2.Image = Properties.Resources.cut;
+            cutToolStripMenuItem2.Name = "cutToolStripMenuItem2";
+            cutToolStripMenuItem2.ShortcutKeys = Keys.Control | Keys.X;
+            cutToolStripMenuItem2.Size = new Size(207, 22);
+            cutToolStripMenuItem2.Text = "Cut";
+            cutToolStripMenuItem2.Click += cutToolStripMenuItem2_Click;
+            // 
+            // copyToolStripMenuItem2
+            // 
+            copyToolStripMenuItem2.Image = Properties.Resources.copy;
+            copyToolStripMenuItem2.Name = "copyToolStripMenuItem2";
+            copyToolStripMenuItem2.ShortcutKeys = Keys.Control | Keys.C;
+            copyToolStripMenuItem2.Size = new Size(207, 22);
+            copyToolStripMenuItem2.Text = "Copy";
+            copyToolStripMenuItem2.Click += copyToolStripMenuItem2_Click;
+            // 
+            // pasteToolStripMenuItem2
+            // 
+            pasteToolStripMenuItem2.Image = Properties.Resources.paste;
+            pasteToolStripMenuItem2.Name = "pasteToolStripMenuItem2";
+            pasteToolStripMenuItem2.ShortcutKeys = Keys.Control | Keys.V;
+            pasteToolStripMenuItem2.Size = new Size(207, 22);
+            pasteToolStripMenuItem2.Text = "Paste";
+            pasteToolStripMenuItem2.Click += pasteToolStripMenuItem2_Click;
             // 
             // toolStripSeparator11
             // 
@@ -2558,6 +2596,11 @@
             splitter1.Size = new Size(3, 371);
             splitter1.TabIndex = 7;
             splitter1.TabStop = false;
+            // 
+            // toolStripSeparator49
+            // 
+            toolStripSeparator49.Name = "toolStripSeparator49";
+            toolStripSeparator49.Size = new Size(204, 6);
             // 
             // Form1
             // 
@@ -2852,5 +2895,10 @@
         private ToolStripMenuItem greenToolStripMenuItem;
         private ToolStripMenuItem blueToolStripMenuItem;
         private ToolStripMenuItem purpleToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator48;
+        private ToolStripMenuItem cutToolStripMenuItem2;
+        private ToolStripMenuItem copyToolStripMenuItem2;
+        private ToolStripMenuItem pasteToolStripMenuItem2;
+        private ToolStripSeparator toolStripSeparator49;
     }
 }

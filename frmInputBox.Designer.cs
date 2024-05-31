@@ -24,10 +24,10 @@
         /// </summary>
         private void InitializeComponent() {
             panel1 = new Panel();
+            btnOptions = new Button();
             txtInput = new TextBox();
             btnOK = new Button();
             labelMessage = new Label();
-            btnOptions = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -42,6 +42,23 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(375, 35);
             panel1.TabIndex = 2;
+            // 
+            // btnOptions
+            // 
+            btnOptions.Dock = DockStyle.Right;
+            btnOptions.FlatAppearance.BorderSize = 0;
+            btnOptions.FlatAppearance.MouseDownBackColor = Color.FromArgb(49, 215, 193);
+            btnOptions.FlatAppearance.MouseOverBackColor = Color.FromArgb(49, 215, 193);
+            btnOptions.FlatStyle = FlatStyle.Flat;
+            btnOptions.Image = Properties.Resources.down;
+            btnOptions.Location = new Point(305, 0);
+            btnOptions.Margin = new Padding(0);
+            btnOptions.Name = "btnOptions";
+            btnOptions.Size = new Size(35, 35);
+            btnOptions.TabIndex = 3;
+            btnOptions.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnOptions.UseVisualStyleBackColor = true;
+            btnOptions.Click += btnOptions_Click;
             // 
             // txtInput
             // 
@@ -80,23 +97,6 @@
             labelMessage.TabIndex = 3;
             labelMessage.Text = "label1";
             // 
-            // btnOptions
-            // 
-            btnOptions.Dock = DockStyle.Right;
-            btnOptions.FlatAppearance.BorderSize = 0;
-            btnOptions.FlatAppearance.MouseDownBackColor = Color.FromArgb(49, 215, 193);
-            btnOptions.FlatAppearance.MouseOverBackColor = Color.FromArgb(49, 215, 193);
-            btnOptions.FlatStyle = FlatStyle.Flat;
-            btnOptions.Image = Properties.Resources.down;
-            btnOptions.Location = new Point(305, 0);
-            btnOptions.Margin = new Padding(0);
-            btnOptions.Name = "btnOptions";
-            btnOptions.Size = new Size(35, 35);
-            btnOptions.TabIndex = 3;
-            btnOptions.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnOptions.UseVisualStyleBackColor = true;
-            btnOptions.Click += btnOptions_Click;
-            // 
             // frmInputBox
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -113,6 +113,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "frmInputBox";
+            KeyDown += frmInputBox_KeyDown;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);

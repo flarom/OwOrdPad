@@ -64,7 +64,7 @@ namespace OwOrdPad {
 
         private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo) {
             int imageIndex = 0; // Default image index
-            
+
             string colorFilePath = Path.Combine(directoryInfo.FullName, ".owordpadFolderColor");
             if (File.Exists(colorFilePath)) {
                 try {
@@ -101,7 +101,7 @@ namespace OwOrdPad {
             }
 
             var directoryNode = new TreeNode(directoryInfo.Name, imageIndex, imageIndex) { Tag = directoryInfo.FullName };
-            
+
             foreach (var directory in directoryInfo.GetDirectories()) {
                 if ((directory.Attributes & FileAttributes.Hidden) == 0) {
                     directoryNode.Nodes.Add(CreateDirectoryNode(directory));
@@ -459,7 +459,7 @@ namespace OwOrdPad {
                 searchFor = Clipboard.GetText();
             }
 
-            string searchString = inputbox.GetInput("Search for a word, character or symbol:", "Find - OwOrdPad", [""], Resources.search, searchFor);
+            string searchString = inputbox.GetInput("Search for a word, character or symbol:", "Find - OwOrdPad", [], Resources.search, searchFor);
 
             if (!string.IsNullOrEmpty(searchString)) {
                 int startIndex = rtb.SelectionStart + rtb.SelectionLength;
@@ -524,7 +524,7 @@ namespace OwOrdPad {
         }
 
         private void goToToolStripMenuItem_Click(object sender, EventArgs e) {
-            string inputLineNumber = inputbox.GetInput("Search for a line number (1 - " + rtb.Lines.Count() + "):", "Go to - OwOrdPad", [""], Resources.search, (rtb.GetLineFromCharIndex(rtb.SelectionStart) + 1).ToString());
+            string inputLineNumber = inputbox.GetInput("Search for a line number (1 - " + rtb.Lines.Count() + "):", "Go to - OwOrdPad", [], Resources.search, (rtb.GetLineFromCharIndex(rtb.SelectionStart) + 1).ToString());
 
             if (int.TryParse(inputLineNumber, out int lineNumber) && lineNumber > 0) {
                 SearchByLine(lineNumber);
@@ -1120,7 +1120,7 @@ namespace OwOrdPad {
             string rtfHeader = @"{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046"; // start of the RTF format file
             StringBuilder tableBuilder = new StringBuilder();
 
-            int cellWidth = 10000 / columns; // horizontal size of each cell
+            int cellWidth = 5000 / columns; // horizontal size of each cell
 
             for (int i = 0; i < lines; i++) {
                 tableBuilder.Append(@"\trowd\trgaph108"); // starts a new table row
@@ -1159,7 +1159,7 @@ namespace OwOrdPad {
             }
         }
         private void fromURLToolStripMenuItem_Click(object sender, EventArgs e) {
-            string imageUrl = inputbox.GetInput("Insert an image URL: ", "Open URL - OwOrdPad", [""], Resources.search, Clipboard.GetText());
+            string imageUrl = inputbox.GetInput("Insert an image URL: ", "Open URL - OwOrdPad", [], Resources.search, Clipboard.GetText());
 
             if (!string.IsNullOrEmpty(imageUrl)) {
                 try {
@@ -1186,9 +1186,9 @@ namespace OwOrdPad {
             rtb.SelectedText = sc.getChars();
         }
         private void linkToolStripMenuItem_Click(object sender, EventArgs e) {
-            string name = inputbox.GetInput("Insert the website name", "Insert link - OwOrdPad", [""], Resources.ok, Clipboard.GetText());
+            string name = inputbox.GetInput("Insert the website name", "Insert link - OwOrdPad", [], Resources.ok, Clipboard.GetText());
             if (name != "") {
-                string link = inputbox.GetInput("Insert " + name + "'s URL", "Insert link - OwOrdPad", [""], Resources.ok, Clipboard.GetText());
+                string link = inputbox.GetInput("Insert " + name + "'s URL", "Insert link - OwOrdPad", [], Resources.ok, Clipboard.GetText());
 
                 string linkDir = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath) + "\\presets", "link.owo");
 
@@ -1529,7 +1529,7 @@ namespace OwOrdPad {
 
         private void indentationSizeToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
-                int[] i = [int.Parse(inputbox.GetInput("Insert an indentation size number (1 - 8):", "Tab spacing - OwOrdPad", [""], Resources.tabSpace, "4")) * 10];
+                int[] i = [int.Parse(inputbox.GetInput("Insert an indentation size number (1 - 8):", "Tab spacing - OwOrdPad", [], Resources.tabSpace, "4")) * 10];
                 if (i[0] <= 80) {
                     rtb.SelectionTabs = i;
                 }
@@ -1741,6 +1741,82 @@ namespace OwOrdPad {
             }
             else { sendNotification("No folder selected", "warning"); }
         }
+
+        private string clipboardPath;
+        private bool cuttingFile;
+        private void cutToolStripMenuItem2_Click(object sender, EventArgs e) {
+            if (treeExplorer.SelectedNode != null) {
+                clipboardPath = treeExplorer.SelectedNode.Tag as string;
+                cuttingFile = true;
+            }
+        }
+
+        private void copyToolStripMenuItem2_Click(object sender, EventArgs e) {
+            if (treeExplorer.SelectedNode != null) {
+                clipboardPath = treeExplorer.SelectedNode.Tag as string;
+                cuttingFile = false;
+            }
+        }
+
+        private void pasteToolStripMenuItem2_Click(object sender, EventArgs e) {
+            if (treeExplorer.SelectedNode != null && clipboardPath != null) {
+                string destinationPath = treeExplorer.SelectedNode.Tag as string;
+                if (Directory.Exists(destinationPath)) {
+                    string fileName = Path.GetFileName(clipboardPath);
+                    string destinationFilePath = Path.Combine(destinationPath, fileName);
+
+                    try {
+                        if (cuttingFile) {
+                            if (File.Exists(clipboardPath)) {
+                                File.Move(clipboardPath, destinationFilePath);
+                            }
+                            else if (Directory.Exists(clipboardPath)) {
+                                Directory.Move(clipboardPath, destinationFilePath);
+                            }
+                            updateExplorer();
+                        }
+                        else {
+                            if (File.Exists(clipboardPath)) {
+                                File.Copy(clipboardPath, destinationFilePath);
+                            }
+                            else if (Directory.Exists(clipboardPath)) {
+                                CopyDirectory(clipboardPath, destinationFilePath);
+                            }
+                            updateExplorer();
+                        }
+                    }
+                    catch (System.IO.IOException) {
+                        sendNotification("Invalid file name", "warning");
+                    }
+                    catch (Exception ex) {
+                        sendNotification($"Failed to paste here {ex.Message}", "warning");
+                    }
+                }
+            }
+        }
+        private TreeNode CreateTreeNode(DirectoryInfo directoryInfo) {
+            var directoryNode = new TreeNode(directoryInfo.Name, 0, 0) { Tag = directoryInfo.FullName };
+            foreach (var directory in directoryInfo.GetDirectories())
+                directoryNode.Nodes.Add(CreateTreeNode(directory));
+            foreach (var file in directoryInfo.GetFiles())
+                directoryNode.Nodes.Add(new TreeNode(file.Name, 1, 1) { Tag = file.FullName });
+            return directoryNode;
+        }
+
+        private void CopyDirectory(string sourceDir, string destDir) {
+            DirectoryInfo dir = new DirectoryInfo(sourceDir);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            Directory.CreateDirectory(destDir);
+            foreach (FileInfo file in dir.GetFiles()) {
+                string tempPath = Path.Combine(destDir, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+            foreach (DirectoryInfo subdir in dirs) {
+                string tempPath = Path.Combine(destDir, subdir.Name);
+                CopyDirectory(subdir.FullName, tempPath);
+            }
+        }
+
         private void selectFolderColor(object sender, EventArgs e) {
             ToolStripMenuItem itm = sender as ToolStripMenuItem;
             string selectedColor = itm.Tag.ToString();
@@ -1850,6 +1926,7 @@ namespace OwOrdPad {
 
         private void treeFiles_KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {
+                e.SuppressKeyPress = true;
                 if (treeExplorer.SelectedNode.IsExpanded) {
                     treeExplorer.SelectedNode.Collapse();
                 }
@@ -1859,6 +1936,7 @@ namespace OwOrdPad {
                 LoadSelectedFile();
             }
             if (e.KeyCode == Keys.Escape) {
+                e.SuppressKeyPress = true;
                 rtb.Select();
             }
         }
