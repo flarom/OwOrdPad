@@ -1,0 +1,14 @@
+document background :	#e0f7fa
+document foreground :	#004d40
+document title      :	#00796b
+selection border    :	#004d40
+selection highlight :	#b2dfdb
+icons               :	#004d40
+header background   :	#b2ebf2
+header foreground   :	#004d40
+menu background     :	#e0f7fa
+menu foreground     :	#004d40
+menu border         :	#004d40
+succes              :	#00796b
+warning             :	#ff8f00
+error               :	#d32f2f

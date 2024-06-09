@@ -11,7 +11,7 @@ namespace OwOrdPad {
             contextMenuStrip1.Renderer = new MenuRenderer();
         }
         private class MenuRenderer : ToolStripProfessionalRenderer {
-            public MenuRenderer() : base(new CustomColors()) { }
+            public MenuRenderer() : base(new CustomColors(new Themes())) { }
         }
         private void LoadRecentDocuments() {
             string[] documents = File.ReadAllLines(defaultDirectory + "\\Settings\\history");

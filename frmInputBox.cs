@@ -1,5 +1,4 @@
 ﻿using OwOrdPad.Properties;
-using System.Threading;
 
 namespace OwOrdPad {
     partial class frmInputBox : Form {
@@ -8,6 +7,7 @@ namespace OwOrdPad {
         private string _message = "";
         private Image _okIcon = Resources.ok;
         private string _defaultResponse = "";
+        public Themes Themes { get; set; }
         ContextMenuStrip contextMenu = new ContextMenuStrip() {
             Renderer = new MenuRenderer(),
             ShowImageMargin = false,
@@ -23,6 +23,18 @@ namespace OwOrdPad {
             Text = _title;
             labelMessage.Text = _message;
             btnOK.Image = _okIcon;
+
+            btnOK.Image = Themes.paintBitmap(btnOK.Image, Themes.icons);
+            btnOK.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
+            btnOK.FlatAppearance.MouseDownBackColor = Themes.selectionHigh;
+            btnOptions.Image = Themes.paintBitmap(btnOptions.Image, Themes.icons);
+            btnOptions.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
+            btnOptions.FlatAppearance.MouseDownBackColor = Themes.selectionHigh;
+            BackColor = Themes.documentBack;
+            ForeColor = Themes.documentFore;
+            panel1.BackColor = Themes.headerBack;
+            txtInput.BackColor = Themes.headerBack;
+            txtInput.ForeColor = Themes.headerFore;
 
             var autoComplete = new AutoCompleteStringCollection();
             autoComplete.AddRange(_items);
@@ -106,7 +118,7 @@ namespace OwOrdPad {
             }
         }
         private class MenuRenderer : ToolStripProfessionalRenderer {
-            public MenuRenderer() : base(new CustomColors()) { }
+            public MenuRenderer() : base(new CustomColors(new Themes())) { }
         }
     }
 }

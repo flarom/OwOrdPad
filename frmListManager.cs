@@ -9,6 +9,7 @@ namespace OwOrdPad {
         private bool _allowRemove;          // determines if the user can use the 'remove' button
         private bool _allowMove;            // determines if the user can use the 'up' and 'down' buttons
         private addType _addType;           // determines the way the 'add' button works
+        public Themes Themes { get; set; }  // theme
         public frmListManager() {
             InitializeComponent();
         }
@@ -26,6 +27,24 @@ namespace OwOrdPad {
             btnRemove.Visible = this._allowRemove;
             btnUp.Visible = this._allowMove;
             btnDown.Visible = this._allowMove;
+
+            BackColor = Themes.documentBack;
+            ForeColor = Themes.documentFore;
+            listItems.BackColor = Themes.documentBack;
+            listItems.ForeColor = Themes.documentFore;
+            panel1.BackColor = Themes.headerBack;
+            btnOK.Image = Themes.paintBitmap(btnOK.Image, Themes.icons);
+            btnOK.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
+            btnAdd.Image = Themes.paintBitmap(btnAdd.Image, Themes.icons);
+            btnAdd.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
+            btnRemove.Image = Themes.paintBitmap(btnRemove.Image, Themes.icons);
+            btnRemove.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
+            btnSlctAll.Image = Themes.paintBitmap(btnSlctAll.Image, Themes.icons);
+            btnSlctAll.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
+            btnUp.Image = Themes.paintBitmap(btnUp.Image, Themes.icons);
+            btnUp.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
+            btnDown.Image = Themes.paintBitmap(btnDown.Image, Themes.icons);
+            btnDown.FlatAppearance.MouseOverBackColor = Themes.selectionHigh;
         }
         public string[] getList(string title, string[] items = null, string[] addAutoComplete = null, addType addType = addType.FromString, bool allowAdd = true, bool allowRemove = true, bool allowMove = true) {
             _title = title;
@@ -52,6 +71,7 @@ namespace OwOrdPad {
                 case (addType.FromString):
                     // add a written string to the list
                     frmInputBox ib = new frmInputBox();
+                    ib.Themes = Themes;
                     newItem = ib.GetInput("Insert a item name: ", "Add item - OwOrdPad", _addAutoComplete, Resources.add);
                     break;
 
@@ -190,10 +210,10 @@ namespace OwOrdPad {
                 return;
 
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(49, 215, 193)), e.Bounds);
+                e.Graphics.FillRectangle(new SolidBrush(Themes.selectionHigh), e.Bounds);
 
                 Rectangle borderRect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width - 1, e.Bounds.Height - 1);
-                using (Pen borderPen = new Pen(Color.FromArgb(37, 163, 147), 1)) {
+                using (Pen borderPen = new Pen(Themes.selectionBorder, 1)) {
                     e.Graphics.DrawRectangle(borderPen, borderRect);
                 }
             }
@@ -203,7 +223,7 @@ namespace OwOrdPad {
 
             TextRenderer.DrawText(e.Graphics, listItems.Items[e.Index].ToString(),
                                     e.Font, new Point(e.Bounds.Left, e.Bounds.Top + 3),
-                                    SystemColors.ControlText, TextFormatFlags.Left);
+                                    Themes.documentFore, TextFormatFlags.Left);
 
             e.DrawFocusRectangle();
         }

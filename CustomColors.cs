@@ -1,12 +1,25 @@
 ﻿namespace OwOrdPad {
     public class CustomColors : ProfessionalColorTable {
+        public CustomColors(Themes theme) {
+            highlight = theme.selectionHigh;
+            outline = theme.selectionBorder;
+            blank = theme.menuBack;
+            border = theme.menuBorder;
+        }
         readonly Color highlight = Color.FromArgb(49, 215, 193);
         readonly Color outline = Color.FromArgb(37, 163, 147);
         readonly Color blank = Color.FromArgb(255, 255, 255);
+        readonly Color border = Color.FromArgb(189, 189, 189);
 
         // item borders
+        public override Color SeparatorDark {
+            get { return border; }
+        }
+        public override Color SeparatorLight {
+            get { return blank; }
+        }
         public override Color MenuBorder {
-            get { return Color.FromArgb(189,189,189); }
+            get { return border; }
         }
         public override Color MenuItemBorder {
             get { return outline; }

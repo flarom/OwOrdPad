@@ -10,7 +10,7 @@
             contextMenuStrip1.Renderer = new MenuRenderer();
         }
         private class MenuRenderer : ToolStripProfessionalRenderer {
-            public MenuRenderer() : base(new CustomColors()) { }
+            public MenuRenderer() : base(new CustomColors(new Themes())) { }
         }
         public string getChars() {
             return ShowDialog() == DialogResult.OK ? txtOutput.Text : null;

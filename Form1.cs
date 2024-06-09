@@ -11,12 +11,14 @@ using System.Text;
 namespace OwOrdPad {
     public partial class Form1 : Form {
         Settings settings = new Settings();
+        static Themes theme = new Themes();
 
         string defaultDirectory = Path.GetDirectoryName(Application.ExecutablePath); // \OwOrdPad\bin\Debug\net8.0-windows\
+        string defaultFont = "Calibri";
         public string filePath; // full file path to the opened/saved file
         public bool isDocumentModified = false; // checks if the document was modified by the user
-        frmInputBox inputbox = new frmInputBox();
-        frmListManager listManager = new frmListManager();
+        frmInputBox inputbox = new();
+        frmListManager listManager = new();
 
         public Form1() {
             // load program and settings
@@ -24,17 +26,100 @@ namespace OwOrdPad {
             LoadSettings();
             loadHistoryList();
             updateHistoryMenu();
+        }
+        private void Form1_Load(object sender, EventArgs e) {
+            // load custom visuals
+            rtb.SelectionCharOffset = 1;
+            loadVisuals();
+
             // load fonts
             InstalledFontCollection installedFontCollection = new();
             FontFamily[] fontFamilies = installedFontCollection.Families;
-
             foreach (FontFamily fontFamily in fontFamilies) {
                 cbFonts.Items.Add(fontFamily.Name);
                 cbFonts.AutoCompleteCustomSource.Add(fontFamily.Name);
             }
+        }
+        private void loadVisuals() {
+            this.BackColor = theme.documentBack;
+            inputbox.Themes = theme;
+            listManager.Themes = theme;
 
-            // load custom visuals
-            rtb.SelectionCharOffset = 1;
+            // document
+            rtb.BackColor = theme.documentBack;
+            rtb.ForeColor = theme.documentFore;
+            rtb.SelectionBackColor = theme.documentBack;
+            rtb.SelectionColor = theme.documentFore;
+            splitter1.BackColor = theme.documentBack;
+            tsTool.BackColor = theme.documentBack;
+            tsTool.ForeColor = theme.documentFore;
+            tsFormat.BackColor = theme.documentBack;
+            tsFormat.ForeColor = theme.documentFore;
+            cbFonts.BackColor = theme.documentBack;
+            cbFonts.ForeColor = theme.documentFore;
+            cbFontSize.BackColor = theme.documentBack;
+            cbFontSize.ForeColor = theme.documentFore;
+
+            // header
+            treeExplorer.BackColor = theme.headerBack;
+            treeExplorer.ForeColor = theme.headerFore;
+            menuStrip.BackColor = theme.headerBack;
+            menuStrip.ForeColor = theme.headerFore;
+            statusStrip.BackColor = theme.headerBack;
+            statusStrip.ForeColor = theme.headerFore;
+
+            // menus
+            foreach (ToolStripItem item in menuStrip.Items) {
+                if (item is ToolStripMenuItem menuitem) {
+                    ApplyMenuColors(menuitem);
+                }
+            }
+            contextMenuStrip1.BackColor = theme.menuBack;
+            contextMenuStrip1.ForeColor = theme.menuFore;
+            foreach (ToolStripItem item in contextMenuStrip1.Items) {
+                if(item is ToolStripMenuItem menuitem) {
+                    ApplyMenuColors(menuitem);
+                }
+            }
+            contextMenuStrip2.BackColor = theme.menuBack;
+            contextMenuStrip2.ForeColor = theme.menuFore;
+            foreach (ToolStripItem item in contextMenuStrip2.Items) {
+                if (item is ToolStripMenuItem menuitem) {
+                    ApplyMenuColors(menuitem);
+                }
+            }
+            contextMenuStrip3.BackColor = theme.menuBack;
+            contextMenuStrip3.ForeColor = theme.menuFore;
+            foreach (ToolStripItem item in contextMenuStrip3.Items) {
+                if (item is ToolStripMenuItem menuitem) {
+                    ApplyMenuColors(menuitem);
+                }
+            }
+            foreach (ToolStripItem item in tsTool.Items) {
+                if (item is ToolStripButton menuitem) {
+                    menuitem.Image = theme.paintBitmap(menuitem.Image, theme.icons);
+                }
+                if (item is ToolStripSplitButton menuitem2) {
+                    menuitem2.Image = theme.paintBitmap(menuitem2.Image, theme.icons);
+                    menuitem2.DropDown.BackColor = theme.menuBack;
+                    menuitem2.DropDown.ForeColor = theme.menuFore;
+                }
+            }
+            foreach (ToolStripItem item in tsFormat.Items) {
+                if (item is ToolStripButton menuitem) {
+                    menuitem.Image = theme.paintBitmap(menuitem.Image, theme.icons);
+                }
+                if (item is ToolStripSplitButton menuitem2) {
+                    menuitem2.Image = theme.paintBitmap(menuitem2.Image, theme.icons);
+                    menuitem2.DropDown.BackColor = theme.menuBack;
+                    menuitem2.DropDown.ForeColor = theme.menuFore;
+                }
+            }
+            foreach(ToolStripStatusLabel item in statusStrip.Items) {
+                if (item.Image != null) {
+                    item.Image = theme.paintBitmap(item.Image, theme.icons);
+                }
+            }
 
             menuStrip.Renderer = new MenuRenderer();
             tsTool.Renderer = new MenuRenderer();
@@ -42,9 +127,27 @@ namespace OwOrdPad {
             contextMenuStrip1.Renderer = new MenuRenderer();
             contextMenuStrip2.Renderer = new MenuRenderer();
             contextMenuStrip3.Renderer = new MenuRenderer();
+
+            themeToolStripMenuItem.ShortcutKeyDisplayString = theme.themeName;
         }
+
+        private void ApplyMenuColors(ToolStripMenuItem menuItem) {
+            menuItem.DropDown.BackColor = theme.menuBack;
+            menuItem.DropDown.ForeColor = theme.menuFore;
+
+            if (menuItem.Image != null) {
+                menuItem.Image = theme.paintBitmap(menuItem.Image, theme.icons);
+            }
+
+            foreach (ToolStripItem subItem in menuItem.DropDown.Items) {
+                if (subItem is ToolStripMenuItem subMenuItem) {
+                    ApplyMenuColors(subMenuItem);
+                }
+            }
+        }
+
         private class MenuRenderer : ToolStripProfessionalRenderer {
-            public MenuRenderer() : base(new CustomColors()) { }
+            public MenuRenderer() : base(new CustomColors(theme)) { }
         }
         private void openFolderToolStripMenuItem_Click(object sender, EventArgs e) {
             FolderBrowserDialog fbd = new();
@@ -55,10 +158,10 @@ namespace OwOrdPad {
                 updateHistoryMenu();
             }
         }
-        public void LoadDirectory(string path) {
+        public async void LoadDirectory(string path) {
             treeExplorer.Nodes.Clear();
             var rootDirectoryInfo = new DirectoryInfo(path);
-            treeExplorer.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
+            treeExplorer.Nodes.Add(await Task.Run(() => CreateDirectoryNode(rootDirectoryInfo)));
             treeExplorer.Nodes[0].Expand();
         }
 
@@ -102,11 +205,14 @@ namespace OwOrdPad {
 
             var directoryNode = new TreeNode(directoryInfo.Name, imageIndex, imageIndex) { Tag = directoryInfo.FullName };
 
-            foreach (var directory in directoryInfo.GetDirectories()) {
-                if ((directory.Attributes & FileAttributes.Hidden) == 0) {
-                    directoryNode.Nodes.Add(CreateDirectoryNode(directory));
+            try {
+                foreach (var directory in directoryInfo.GetDirectories()) {
+                    if ((directory.Attributes & FileAttributes.Hidden) == 0) {
+                        directoryNode.Nodes.Add(CreateDirectoryNode(directory));
+                    }
                 }
             }
+            catch { return new TreeNode(); }
 
             foreach (var file in directoryInfo.GetFiles()) {
                 if ((file.Attributes & FileAttributes.Hidden) == 0) {
@@ -233,6 +339,8 @@ namespace OwOrdPad {
                 rtb.WordWrap = bool.Parse(Settings.GetSetting("wordWrap"));
                 rtb.ShowSelectionMargin = bool.Parse(Settings.GetSetting("selectionMargin"));
                 rtb.Font = new Font(Settings.GetSetting("defaultFont"), 12);
+                defaultFont = Settings.GetSetting("defaultFont");
+                theme.setTheme(Settings.GetSetting("theme"));
 
                 UpdateToolTipsForMenuItems(menuStrip.Items, bool.Parse(Settings.GetSetting("showToolTips")));
 
@@ -379,35 +487,16 @@ namespace OwOrdPad {
             lblSaveState.Text = "Saved";
             isDocumentModified = false;
         }
+
+        int autoSaveCooldown = 0;
         private void rtb_TextChanged(object sender, EventArgs e) {
             // word count
             lblCharAndWord.Text = rtb.Text.Length + " Characters, " +
                 rtb.Text.Split(new char[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length + " Words";
 
-            // estimated file size
-            int fileSize = rtb.Rtf.Length;
-
-            switch (fileSize) {
-                case var _ when fileSize < 1024:
-                    lblFileSize.Text = fileSize + "B";
-                    break;
-                case var _ when fileSize < Math.Pow(1024, 2):
-                    double sizeInKB = fileSize / 1024.0;
-                    lblFileSize.Text = sizeInKB.ToString("0.00") + "KB";
-                    break;
-                case var _ when fileSize < Math.Pow(1024, 3):
-                    double sizeInMB = fileSize / Math.Pow(1024, 2);
-                    lblFileSize.Text = sizeInMB.ToString("0.00") + "MB";
-                    break;
-                default:
-                    double sizeInGB = fileSize / Math.Pow(1024, 3);
-                    lblFileSize.Text = sizeInGB.ToString("0.00") + "GB";
-                    break;
-            }
-
             // auto save
             autoSaveCooldown = 0;
-            tmrAutoSave.Start();
+            tmrTypeStop.Start();
             if (rtb.Text != string.Empty) {
                 isDocumentModified = true;
                 lblSaveState.Text = "Not saved";
@@ -415,6 +504,37 @@ namespace OwOrdPad {
             else {
                 isDocumentModified = false;
                 lblSaveState.Text = "-";
+            }
+        }
+        private void tmrTypeStop_Tick(object sender, EventArgs e) {
+            autoSaveCooldown++;
+            if (autoSaveCooldown >= 100) {
+                tmrTypeStop.Stop();
+                autoSaveCooldown = 0;
+
+                // auto save
+                rtb.SaveFile(defaultDirectory + "\\Autosave\\save.rtf");
+
+                // calculate estimated file size
+                int fileSize = rtb.Rtf.Length;
+
+                switch (fileSize) {
+                    case var _ when fileSize < 1024:
+                        lblFileSize.Text = fileSize + "B";
+                        break;
+                    case var _ when fileSize < Math.Pow(1024, 2):
+                        double sizeInKB = fileSize / 1024.0;
+                        lblFileSize.Text = sizeInKB.ToString("0.00") + "KB";
+                        break;
+                    case var _ when fileSize < Math.Pow(1024, 3):
+                        double sizeInMB = fileSize / Math.Pow(1024, 2);
+                        lblFileSize.Text = sizeInMB.ToString("0.00") + "MB";
+                        break;
+                    default:
+                        double sizeInGB = fileSize / Math.Pow(1024, 3);
+                        lblFileSize.Text = sizeInGB.ToString("0.00") + "GB";
+                        break;
+                }
             }
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -672,13 +792,13 @@ namespace OwOrdPad {
         }
 
         private void clearFormattingToolStripMenuItem_Click(object sender, EventArgs e) {
-            rtb.SelectionFont = new Font("Calibri", 12f);
+            rtb.SelectionFont = new Font(defaultFont, 12f);
             rtb.SelectionBackColor = rtb.BackColor;
             rtb.SelectionColor = rtb.ForeColor;
             rtb.SelectionIndent = 0;
             rtb.SelectionCharOffset = 1;
 
-            cbFonts.Text = "Calibri";
+            cbFonts.Text = defaultFont;
             cbFontSize.Text = "12";
 
             btnBold.Checked = rtb.SelectionFont.Bold;
@@ -834,7 +954,6 @@ namespace OwOrdPad {
             }
         }
 
-        int autoSaveCooldown = 0;
         private bool hasPreset = false;
         private void rtb_KeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
@@ -927,18 +1046,13 @@ namespace OwOrdPad {
                     zoomToolStripMenuItem.ShowDropDown();
                     zoomToolStripMenuItem.DropDownItems[0].Select();
                     break;
+                case Keys.OemPeriod when e.Modifiers == Keys.Alt:
+                    specialCharacterToolStripMenuItem.ShowDropDown();
+                    specialCharacterToolStripMenuItem.DropDownItems[0].Select();
+                    break;
             }
             lblZoomFactor.Text = (rtb.ZoomFactor * 100).ToString("0") + "%";
         }
-        private void tmrAutoSave_Tick(object sender, EventArgs e) {
-            autoSaveCooldown++;
-            if (autoSaveCooldown > 100) {
-                tmrAutoSave.Stop();
-                autoSaveCooldown = 0;
-                rtb.SaveFile(defaultDirectory + "\\Autosave\\save.rtf");
-            }
-        }
-
         private void titleToolStripMenuItem_Click(object sender, EventArgs e) {
             rtb.SelectionFont = new Font(cbFonts.Text, 24f, FontStyle.Regular);
             rtb.SelectionColor = Color.Black;
@@ -955,19 +1069,19 @@ namespace OwOrdPad {
 
         private void title1ToolStripMenuItem_Click(object sender, EventArgs e) {
             rtb.SelectionFont = new Font(cbFonts.Text, 24f, FontStyle.Regular);
-            rtb.SelectionColor = Color.FromArgb(37, 163, 147);
+            rtb.SelectionColor = theme.documentTitle;
             hasPreset = true;
         }
 
         private void title2ToolStripMenuItem_Click(object sender, EventArgs e) {
             rtb.SelectionFont = new Font(cbFonts.Text, 18f, FontStyle.Regular);
-            rtb.SelectionColor = Color.FromArgb(37, 163, 147);
+            rtb.SelectionColor = theme.documentTitle;
             hasPreset = true;
         }
 
         private void title3ToolStripMenuItem_Click(object sender, EventArgs e) {
             rtb.SelectionFont = new Font(cbFonts.Text, 14f, FontStyle.Regular);
-            rtb.SelectionColor = Color.FromArgb(37, 163, 147);
+            rtb.SelectionColor = theme.documentTitle;
             hasPreset = true;
         }
         #endregion
@@ -1185,6 +1299,9 @@ namespace OwOrdPad {
             frmSpecialCharacter sc = new();
             rtb.SelectedText = sc.getChars();
         }
+        private void insertSelectedToolStripMenuItem_Click(object sender, EventArgs e) {
+            rtb.SelectedText = toolStripComboBox1.Text;
+        }
         private void linkToolStripMenuItem_Click(object sender, EventArgs e) {
             string name = inputbox.GetInput("Insert the website name", "Insert link - OwOrdPad", [], Resources.ok, Clipboard.GetText());
             if (name != "") {
@@ -1214,16 +1331,19 @@ namespace OwOrdPad {
         private async void sendNotification(string message, string type = "") {
             switch (type) {
                 case "succes":
-                    lblNotification.ForeColor = Color.FromArgb(37, 163, 147);
+                    lblNotification.ForeColor = theme.sucess;
                     lblNotification.Image = Resources.succes;
+                    lblNotification.Image = theme.paintBitmap(lblNotification.Image, theme.sucess);
                     break;
                 case "warning":
-                    lblNotification.ForeColor = Color.FromArgb(205, 127, 0);
+                    lblNotification.ForeColor = theme.warning;
                     lblNotification.Image = Resources.warning;
+                    lblNotification.Image = theme.paintBitmap(lblNotification.Image, theme.warning);
                     break;
                 case "error":
-                    lblNotification.ForeColor = Color.FromArgb(215, 0, 31);
+                    lblNotification.ForeColor = theme.error;
                     lblNotification.Image = Resources.error;
+                    lblNotification.Image = theme.paintBitmap(lblNotification.Image, theme.error);
                     break;
                 default:
                     lblNotification.ForeColor = Color.Black;
@@ -1463,14 +1583,21 @@ namespace OwOrdPad {
 
             foreach (var filePath in history) {
                 try {
-                    ToolStripMenuItem recentFileItem = new(Path.GetFileName(filePath)) {
+                    string fileName = Path.GetFileName(filePath);
+                    if (fileName == string.Empty) {
+                        fileName = filePath;
+                    }
+                    ToolStripMenuItem recentFileItem = new(fileName) {
                         Tag = filePath,
                         ToolTipText = filePath,
                         ShortcutKeyDisplayString = File.GetLastWriteTime(filePath).ToString("dd/MM/yyyy HH:mm"),
 
                     };
                     if (File.Exists(filePath)) {
-                        recentFileItem.Image = Icon.ExtractAssociatedIcon(filePath).ToBitmap();
+                        recentFileItem.Image = Resources.document;
+                    }
+                    else if (Directory.GetDirectoryRoot(filePath) == filePath) {
+                        recentFileItem.Image = Resources.diskSpace;
                     }
                     else if (Directory.Exists(filePath)) {
                         recentFileItem.Image = Resources.folder;
@@ -1615,6 +1742,25 @@ namespace OwOrdPad {
             }
             defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
         }
+        private void themeToolStripMenuItem_Click(object sender, EventArgs e) {
+            string themesPath = defaultDirectory + "\\Themes\\";
+            string[] installedThemesPaths = Directory.GetFiles(themesPath);
+
+            string[] installedThemes = installedThemesPaths.Select(Path.GetFileName).ToArray();
+
+            string selectedTheme = inputbox.GetInput("Select a theme to OwOrdPad:", "Theme - OwOrdPad", installedThemes, Resources.ok, theme.themeName);
+
+            if (selectedTheme == string.Empty) return;
+
+            if (File.Exists(themesPath + selectedTheme)) {
+                Settings.SaveSetting("theme", selectedTheme);
+                theme.setTheme(selectedTheme);
+                loadVisuals();
+            }
+            else {
+                sendNotification("Unknown theme", "warning");
+            }
+        }
 
         private void increaseToolStripMenuItem_Click(object sender, EventArgs e) {
             if (rtb.SelectionFont.Size < 96) {
@@ -1624,6 +1770,7 @@ namespace OwOrdPad {
                 sendNotification("Font cannot be greater than 96", "warning");
             }
             cbFontSize.Text = rtb.SelectionFont.Size.ToString();
+            fontSizeToolStripMenuItem.ShowDropDown();
         }
 
         private void decreaseToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1635,6 +1782,7 @@ namespace OwOrdPad {
                 sendNotification("Font cannot be smaller than 8", "warning");
             }
             cbFontSize.Text = rtb.SelectionFont.Size.ToString();
+            fontSizeToolStripMenuItem.ShowDropDown();
         }
         private void ShowHome(object sender, EventArgs e) {
             if (Settings.GetSetting("showHomeScreen") == "True") {
@@ -1704,6 +1852,7 @@ namespace OwOrdPad {
                     }
 
                     File.Create(newFilePath).Close();
+                    filePath = newFilePath;
 
                     var newNode = new TreeNode(newFileName, 1, 1) { Tag = newFilePath };
                     treeExplorer.SelectedNode.Nodes.Add(newNode);
@@ -1866,7 +2015,7 @@ namespace OwOrdPad {
             if (treeExplorer.SelectedNode != null) {
                 string path = treeExplorer.SelectedNode.Tag as string;
                 if (!string.IsNullOrEmpty(path)) {
-                    if (MessageBox.Show("Are you sure you want to move this file into the recycle bin?", "Delete file", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
+                    if (MessageBox.Show("Are you sure you want to move '" + treeExplorer.SelectedNode.Tag + "' into the recycle bin?", "Delete file", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
                         return;
                     }
                     try {
@@ -2015,10 +2164,10 @@ namespace OwOrdPad {
         #endregion order lines
         private void treeFiles_DrawNode(object sender, DrawTreeNodeEventArgs e) {
             if (e.Node.IsSelected && treeExplorer.Focused) {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(49, 215, 193)), e.Bounds);
+                e.Graphics.FillRectangle(new SolidBrush(theme.selectionHigh), e.Bounds);
 
                 Rectangle borderRect = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width - 1, e.Bounds.Height - 1);
-                using (Pen borderPen = new Pen(Color.FromArgb(37, 163, 147), 1)) {
+                using (Pen borderPen = new Pen(theme.selectionBorder, 1)) {
                     e.Graphics.DrawRectangle(borderPen, borderRect);
                 }
             }
@@ -2026,7 +2175,7 @@ namespace OwOrdPad {
                 e.Graphics.FillRectangle(new SolidBrush(e.Node.TreeView.BackColor), e.Bounds);
             }
 
-            TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? e.Node.TreeView.Font, e.Bounds, Color.Black);
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? e.Node.TreeView.Font, e.Bounds, treeExplorer.ForeColor);
 
             e.DrawDefault = false;
         }
