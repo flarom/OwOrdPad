@@ -64,6 +64,14 @@
             copyToolStripMenuItem1 = new ToolStripMenuItem();
             pasteToolStripMenuItem1 = new ToolStripMenuItem();
             pasteWithoutFormattingToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator51 = new ToolStripSeparator();
+            spellcheck1 = new ToolStripMenuItem();
+            spellCheckToolStripMenuItem1 = new ToolStripMenuItem();
+            spellcheck2 = new ToolStripMenuItem();
+            spellcheck3 = new ToolStripMenuItem();
+            spellcheck4 = new ToolStripMenuItem();
+            toolStripSeparator54 = new ToolStripSeparator();
+            addWordToDictionaryToolStripMenuItem = new ToolStripMenuItem();
             selectAllToolStripMenuItem1 = new ToolStripMenuItem();
             clearFormattingToolStripMenuItem1 = new ToolStripMenuItem();
             toolStripMenuItem10 = new ToolStripMenuItem();
@@ -75,9 +83,12 @@
             newToolStripMenuItem = new ToolStripMenuItem();
             newWindowToolStripMenuItem = new ToolStripMenuItem();
             openToolStripMenuItem = new ToolStripMenuItem();
-            openFolderToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
+            openFolderToolStripMenuItem = new ToolStripMenuItem();
+            manageWorkspacesToolStripMenuItem = new ToolStripMenuItem();
+            clearFoldersToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator50 = new ToolStripSeparator();
             cloneDocumentToolStripMenuItem = new ToolStripMenuItem();
             documentHistoryToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator46 = new ToolStripSeparator();
@@ -98,6 +109,12 @@
             selectAllToolStripMenuItem = new ToolStripMenuItem();
             selectLineToolStripMenuItem = new ToolStripMenuItem();
             selectWordToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator52 = new ToolStripSeparator();
+            spellCheckToolStripMenuItem = new ToolStripMenuItem();
+            spellCheckerToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator53 = new ToolStripSeparator();
+            addWordToPersonalDictionaryToolStripMenuItem = new ToolStripMenuItem();
+            manageDictionaryToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator45 = new ToolStripSeparator();
             moveUpToolStripMenuItem = new ToolStripMenuItem();
             moveDownToolStripMenuItem = new ToolStripMenuItem();
@@ -111,18 +128,20 @@
             appearanceToolStripMenuItem = new ToolStripMenuItem();
             themeToolStripMenuItem = new ToolStripMenuItem();
             defaultFontToolStripMenuItem = new ToolStripMenuItem();
-            wordWrapToolStripMenuItem = new ToolStripMenuItem();
-            selectionMarginToolStripMenuItem = new ToolStripMenuItem();
-            statusBarToolStripMenuItem = new ToolStripMenuItem();
-            toolBarToolStripMenuItem = new ToolStripMenuItem();
-            formatBarToolStripMenuItem = new ToolStripMenuItem();
-            toolTipsToolStripMenuItem = new ToolStripMenuItem();
-            homeScreenToolStripMenuItem = new ToolStripMenuItem();
-            explorerToolStripMenuItem = new ToolStripMenuItem();
             marginToolStripMenuItem = new ToolStripMenuItem();
             a4ToolStripMenuItem = new ToolStripMenuItem();
             cardPaperToolStripMenuItem = new ToolStripMenuItem();
             noneToolStripMenuItem = new ToolStripMenuItem();
+            wordWrapToolStripMenuItem = new ToolStripMenuItem();
+            selectionMarginToolStripMenuItem = new ToolStripMenuItem();
+            toolBarToolStripMenuItem = new ToolStripMenuItem();
+            formatBarToolStripMenuItem = new ToolStripMenuItem();
+            statusBarToolStripMenuItem = new ToolStripMenuItem();
+            explorerToolStripMenuItem = new ToolStripMenuItem();
+            toolTipsToolStripMenuItem = new ToolStripMenuItem();
+            closeBracketsToolStripMenuItem = new ToolStripMenuItem();
+            homeScreenToolStripMenuItem = new ToolStripMenuItem();
+            stickyNoteToolStripMenuItem = new ToolStripMenuItem();
             insertToolStripMenuItem = new ToolStripMenuItem();
             imageToolStripMenuItem = new ToolStripMenuItem();
             fromMyComputerToolStripMenuItem = new ToolStripMenuItem();
@@ -287,6 +306,7 @@
             imageList1 = new ImageList(components);
             pnlExplorer = new Panel();
             splitter1 = new Splitter();
+            manageDictionaryToolStripMenuItem1 = new ToolStripMenuItem();
             toolStripSeparator34 = new ToolStripSeparator();
             toolStripSeparator30 = new ToolStripSeparator();
             toolStripSeparator1 = new ToolStripSeparator();
@@ -394,22 +414,22 @@
             // toolStripSeparator32
             // 
             toolStripSeparator32.Name = "toolStripSeparator32";
-            toolStripSeparator32.Size = new Size(177, 6);
+            toolStripSeparator32.Size = new Size(160, 6);
             // 
             // toolStripSeparator33
             // 
             toolStripSeparator33.Name = "toolStripSeparator33";
-            toolStripSeparator33.Size = new Size(177, 6);
+            toolStripSeparator33.Size = new Size(160, 6);
             // 
             // toolStripSeparator25
             // 
             toolStripSeparator25.Name = "toolStripSeparator25";
-            toolStripSeparator25.Size = new Size(177, 6);
+            toolStripSeparator25.Size = new Size(160, 6);
             // 
             // toolStripSeparator31
             // 
             toolStripSeparator31.Name = "toolStripSeparator31";
-            toolStripSeparator31.Size = new Size(177, 6);
+            toolStripSeparator31.Size = new Size(160, 6);
             // 
             // toolStripSeparator14
             // 
@@ -508,13 +528,14 @@
             rtb.SelectionChanged += rtb_SelectionChanged;
             rtb.TextChanged += rtb_TextChanged;
             rtb.KeyDown += rtb_KeyDown;
+            rtb.KeyPress += rtb_KeyPress;
             // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.BackColor = Color.White;
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { undoToolStripMenuItem1, toolStripSeparator41, cutToolStripMenuItem1, copyToolStripMenuItem1, pasteToolStripMenuItem1, pasteWithoutFormattingToolStripMenuItem, toolStripSeparator34, selectAllToolStripMenuItem1, toolStripSeparator30, clearFormattingToolStripMenuItem1, toolStripMenuItem10, toolStripMenuItem24, toolStripSeparator39, deleteToolStripMenuItem1 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { undoToolStripMenuItem1, toolStripSeparator41, cutToolStripMenuItem1, copyToolStripMenuItem1, pasteToolStripMenuItem1, pasteWithoutFormattingToolStripMenuItem, toolStripSeparator51, spellcheck1, spellCheckToolStripMenuItem1, toolStripSeparator34, selectAllToolStripMenuItem1, toolStripSeparator30, clearFormattingToolStripMenuItem1, toolStripMenuItem10, toolStripMenuItem24, toolStripSeparator39, deleteToolStripMenuItem1 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(173, 248);
+            contextMenuStrip1.Size = new Size(173, 298);
             contextMenuStrip1.Opening += contextMenuStrip1_Opening;
             // 
             // undoToolStripMenuItem1
@@ -562,6 +583,60 @@
             pasteWithoutFormattingToolStripMenuItem.Size = new Size(172, 22);
             pasteWithoutFormattingToolStripMenuItem.Text = "Paste unformatted";
             pasteWithoutFormattingToolStripMenuItem.Click += pasteWithoutFormattingToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator51
+            // 
+            toolStripSeparator51.Name = "toolStripSeparator51";
+            toolStripSeparator51.Size = new Size(169, 6);
+            // 
+            // spellcheck1
+            // 
+            spellcheck1.Name = "spellcheck1";
+            spellcheck1.Size = new Size(172, 22);
+            spellcheck1.Text = "spellcheck1";
+            spellcheck1.Click += completeWord;
+            // 
+            // spellCheckToolStripMenuItem1
+            // 
+            spellCheckToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { spellcheck2, spellcheck3, spellcheck4, toolStripSeparator54, addWordToDictionaryToolStripMenuItem, manageDictionaryToolStripMenuItem1 });
+            spellCheckToolStripMenuItem1.Image = Properties.Resources.spellCheck;
+            spellCheckToolStripMenuItem1.Name = "spellCheckToolStripMenuItem1";
+            spellCheckToolStripMenuItem1.Size = new Size(172, 22);
+            spellCheckToolStripMenuItem1.Text = "Spell check";
+            // 
+            // spellcheck2
+            // 
+            spellcheck2.Name = "spellcheck2";
+            spellcheck2.Size = new Size(196, 22);
+            spellcheck2.Text = "spellcheck2";
+            spellcheck2.Click += completeWord;
+            // 
+            // spellcheck3
+            // 
+            spellcheck3.Name = "spellcheck3";
+            spellcheck3.Size = new Size(196, 22);
+            spellcheck3.Text = "spellcheck3";
+            spellcheck3.Click += completeWord;
+            // 
+            // spellcheck4
+            // 
+            spellcheck4.Name = "spellcheck4";
+            spellcheck4.Size = new Size(196, 22);
+            spellcheck4.Text = "spellcheck4";
+            spellcheck4.Click += completeWord;
+            // 
+            // toolStripSeparator54
+            // 
+            toolStripSeparator54.Name = "toolStripSeparator54";
+            toolStripSeparator54.Size = new Size(193, 6);
+            // 
+            // addWordToDictionaryToolStripMenuItem
+            // 
+            addWordToDictionaryToolStripMenuItem.Image = Properties.Resources.add;
+            addWordToDictionaryToolStripMenuItem.Name = "addWordToDictionaryToolStripMenuItem";
+            addWordToDictionaryToolStripMenuItem.Size = new Size(196, 22);
+            addWordToDictionaryToolStripMenuItem.Text = "Add word to dictionary";
+            addWordToDictionaryToolStripMenuItem.Click += addWordToPersonalDictionaryToolStripMenuItem_Click;
             // 
             // selectAllToolStripMenuItem1
             // 
@@ -621,7 +696,7 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, newWindowToolStripMenuItem, toolStripSeparator1, openToolStripMenuItem, openFolderToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator2, cloneDocumentToolStripMenuItem, documentHistoryToolStripMenuItem, openAutoSaveToolStripMenuItem, viewInFileExplorerToolStripMenuItem, toolStripSeparator36, printDocumentToolStripMenuItem, toolStripSeparator3, aboutOwOrdPadToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, newWindowToolStripMenuItem, toolStripSeparator1, openToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator2, openFolderToolStripMenuItem, manageWorkspacesToolStripMenuItem, clearFoldersToolStripMenuItem, toolStripSeparator50, cloneDocumentToolStripMenuItem, documentHistoryToolStripMenuItem, openAutoSaveToolStripMenuItem, viewInFileExplorerToolStripMenuItem, toolStripSeparator36, printDocumentToolStripMenuItem, toolStripSeparator3, aboutOwOrdPadToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "&File";
@@ -656,16 +731,6 @@
             openToolStripMenuItem.ToolTipText = "Open an existing document";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
-            // openFolderToolStripMenuItem
-            // 
-            openFolderToolStripMenuItem.Image = Properties.Resources.openFolder;
-            openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            openFolderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
-            openFolderToolStripMenuItem.Size = new Size(264, 22);
-            openFolderToolStripMenuItem.Text = "Open folder";
-            openFolderToolStripMenuItem.ToolTipText = "Open a folder on the explorer";
-            openFolderToolStripMenuItem.Click += openFolderToolStripMenuItem_Click;
-            // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Image = Properties.Resources.save;
@@ -685,6 +750,39 @@
             saveAsToolStripMenuItem.Text = "Save as";
             saveAsToolStripMenuItem.ToolTipText = "Save this document with a new name or format";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
+            // 
+            // openFolderToolStripMenuItem
+            // 
+            openFolderToolStripMenuItem.Image = Properties.Resources.openFolder;
+            openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
+            openFolderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
+            openFolderToolStripMenuItem.Size = new Size(264, 22);
+            openFolderToolStripMenuItem.Text = "Add workspace";
+            openFolderToolStripMenuItem.ToolTipText = "Open a folder on the explorer";
+            openFolderToolStripMenuItem.Click += openFolderToolStripMenuItem_Click;
+            // 
+            // manageWorkspacesToolStripMenuItem
+            // 
+            manageWorkspacesToolStripMenuItem.Image = Properties.Resources.pencil;
+            manageWorkspacesToolStripMenuItem.Name = "manageWorkspacesToolStripMenuItem";
+            manageWorkspacesToolStripMenuItem.Size = new Size(264, 22);
+            manageWorkspacesToolStripMenuItem.Text = "Manage workspaces";
+            manageWorkspacesToolStripMenuItem.ToolTipText = "Manage opened folders";
+            manageWorkspacesToolStripMenuItem.Click += manageWorkspacesToolStripMenuItem_Click;
+            // 
+            // clearFoldersToolStripMenuItem
+            // 
+            clearFoldersToolStripMenuItem.Image = Properties.Resources.delete;
+            clearFoldersToolStripMenuItem.Name = "clearFoldersToolStripMenuItem";
+            clearFoldersToolStripMenuItem.Size = new Size(264, 22);
+            clearFoldersToolStripMenuItem.Text = "Clear workspaces";
+            clearFoldersToolStripMenuItem.ToolTipText = "Remove all folders from the explorer";
+            clearFoldersToolStripMenuItem.Click += clearFoldersToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator50
+            // 
+            toolStripSeparator50.Name = "toolStripSeparator50";
+            toolStripSeparator50.Size = new Size(261, 6);
             // 
             // cloneDocumentToolStripMenuItem
             // 
@@ -757,7 +855,7 @@
             // 
             // editToolStripMenuItem
             // 
-            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator4, findToolStripMenuItem, goToToolStripMenuItem, toolStripSeparator5, cutToolStripMenuItem, copyToolStripMenuItem, pasteToolStripMenuItem, toolStripSeparator19, pasteWithoutFormattingToolStripMenuItem1, toolStripSeparator6, selectAllToolStripMenuItem, selectLineToolStripMenuItem, selectWordToolStripMenuItem, toolStripSeparator45, moveUpToolStripMenuItem, moveDownToolStripMenuItem, toolStripSeparator40, deleteToolStripMenuItem });
+            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator4, findToolStripMenuItem, goToToolStripMenuItem, toolStripSeparator5, cutToolStripMenuItem, copyToolStripMenuItem, pasteToolStripMenuItem, toolStripSeparator19, pasteWithoutFormattingToolStripMenuItem1, toolStripSeparator6, selectAllToolStripMenuItem, selectLineToolStripMenuItem, selectWordToolStripMenuItem, toolStripSeparator52, spellCheckToolStripMenuItem, toolStripSeparator45, moveUpToolStripMenuItem, moveDownToolStripMenuItem, toolStripSeparator40, deleteToolStripMenuItem });
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             editToolStripMenuItem.Size = new Size(39, 20);
             editToolStripMenuItem.Text = "&Edit";
@@ -872,6 +970,50 @@
             selectWordToolStripMenuItem.ToolTipText = "Select the word with the carret on";
             selectWordToolStripMenuItem.Click += selectWordToolStripMenuItem_Click;
             // 
+            // toolStripSeparator52
+            // 
+            toolStripSeparator52.Name = "toolStripSeparator52";
+            toolStripSeparator52.Size = new Size(242, 6);
+            // 
+            // spellCheckToolStripMenuItem
+            // 
+            spellCheckToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { spellCheckerToolStripMenuItem, toolStripSeparator53, addWordToPersonalDictionaryToolStripMenuItem, manageDictionaryToolStripMenuItem });
+            spellCheckToolStripMenuItem.Image = Properties.Resources.spellCheck;
+            spellCheckToolStripMenuItem.Name = "spellCheckToolStripMenuItem";
+            spellCheckToolStripMenuItem.Size = new Size(245, 22);
+            spellCheckToolStripMenuItem.Text = "Spell check";
+            // 
+            // spellCheckerToolStripMenuItem
+            // 
+            spellCheckerToolStripMenuItem.Checked = true;
+            spellCheckerToolStripMenuItem.CheckOnClick = true;
+            spellCheckerToolStripMenuItem.CheckState = CheckState.Checked;
+            spellCheckerToolStripMenuItem.Name = "spellCheckerToolStripMenuItem";
+            spellCheckerToolStripMenuItem.Size = new Size(196, 22);
+            spellCheckerToolStripMenuItem.Text = "Spell Checker";
+            spellCheckerToolStripMenuItem.Click += spellCheckerToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator53
+            // 
+            toolStripSeparator53.Name = "toolStripSeparator53";
+            toolStripSeparator53.Size = new Size(193, 6);
+            // 
+            // addWordToPersonalDictionaryToolStripMenuItem
+            // 
+            addWordToPersonalDictionaryToolStripMenuItem.Image = Properties.Resources.add;
+            addWordToPersonalDictionaryToolStripMenuItem.Name = "addWordToPersonalDictionaryToolStripMenuItem";
+            addWordToPersonalDictionaryToolStripMenuItem.Size = new Size(196, 22);
+            addWordToPersonalDictionaryToolStripMenuItem.Text = "Add word to dictionary";
+            addWordToPersonalDictionaryToolStripMenuItem.Click += addWordToPersonalDictionaryToolStripMenuItem_Click;
+            // 
+            // manageDictionaryToolStripMenuItem
+            // 
+            manageDictionaryToolStripMenuItem.Image = Properties.Resources.pencil;
+            manageDictionaryToolStripMenuItem.Name = "manageDictionaryToolStripMenuItem";
+            manageDictionaryToolStripMenuItem.Size = new Size(196, 22);
+            manageDictionaryToolStripMenuItem.Text = "Manage dictionary";
+            manageDictionaryToolStripMenuItem.Click += manageDictionaryToolStripMenuItem_Click;
+            // 
             // toolStripSeparator45
             // 
             toolStripSeparator45.Name = "toolStripSeparator45";
@@ -909,7 +1051,7 @@
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { zoomToolStripMenuItem, appearanceToolStripMenuItem, toolStripSeparator35, wordWrapToolStripMenuItem, selectionMarginToolStripMenuItem, statusBarToolStripMenuItem, toolBarToolStripMenuItem, formatBarToolStripMenuItem, toolTipsToolStripMenuItem, homeScreenToolStripMenuItem, explorerToolStripMenuItem, toolStripSeparator21, marginToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { zoomToolStripMenuItem, appearanceToolStripMenuItem, marginToolStripMenuItem, toolStripSeparator35, wordWrapToolStripMenuItem, selectionMarginToolStripMenuItem, toolBarToolStripMenuItem, formatBarToolStripMenuItem, statusBarToolStripMenuItem, explorerToolStripMenuItem, toolTipsToolStripMenuItem, closeBracketsToolStripMenuItem, homeScreenToolStripMenuItem, toolStripSeparator21, stickyNoteToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             viewToolStripMenuItem.Size = new Size(44, 20);
             viewToolStripMenuItem.Text = "&View";
@@ -982,89 +1124,6 @@
             defaultFontToolStripMenuItem.ToolTipText = "The font chosen by default by the editor";
             defaultFontToolStripMenuItem.Click += defaultFontToolStripMenuItem_Click;
             // 
-            // wordWrapToolStripMenuItem
-            // 
-            wordWrapToolStripMenuItem.Checked = true;
-            wordWrapToolStripMenuItem.CheckOnClick = true;
-            wordWrapToolStripMenuItem.CheckState = CheckState.Checked;
-            wordWrapToolStripMenuItem.Name = "wordWrapToolStripMenuItem";
-            wordWrapToolStripMenuItem.ShortcutKeyDisplayString = "";
-            wordWrapToolStripMenuItem.Size = new Size(180, 22);
-            wordWrapToolStripMenuItem.Text = "Word wrap";
-            wordWrapToolStripMenuItem.Click += wordWrapToolStripMenuItem_Click;
-            // 
-            // selectionMarginToolStripMenuItem
-            // 
-            selectionMarginToolStripMenuItem.Checked = true;
-            selectionMarginToolStripMenuItem.CheckOnClick = true;
-            selectionMarginToolStripMenuItem.CheckState = CheckState.Checked;
-            selectionMarginToolStripMenuItem.Name = "selectionMarginToolStripMenuItem";
-            selectionMarginToolStripMenuItem.Size = new Size(180, 22);
-            selectionMarginToolStripMenuItem.Text = "Selection margin";
-            selectionMarginToolStripMenuItem.Click += selectionMarginToolStripMenuItem_Click;
-            // 
-            // statusBarToolStripMenuItem
-            // 
-            statusBarToolStripMenuItem.Checked = true;
-            statusBarToolStripMenuItem.CheckOnClick = true;
-            statusBarToolStripMenuItem.CheckState = CheckState.Checked;
-            statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
-            statusBarToolStripMenuItem.Size = new Size(180, 22);
-            statusBarToolStripMenuItem.Text = "Status bar";
-            statusBarToolStripMenuItem.Click += statusBarToolStripMenuItem_Click;
-            // 
-            // toolBarToolStripMenuItem
-            // 
-            toolBarToolStripMenuItem.Checked = true;
-            toolBarToolStripMenuItem.CheckOnClick = true;
-            toolBarToolStripMenuItem.CheckState = CheckState.Checked;
-            toolBarToolStripMenuItem.Name = "toolBarToolStripMenuItem";
-            toolBarToolStripMenuItem.Size = new Size(180, 22);
-            toolBarToolStripMenuItem.Text = "Tool bar";
-            toolBarToolStripMenuItem.Click += toolBarToolStripMenuItem_Click;
-            // 
-            // formatBarToolStripMenuItem
-            // 
-            formatBarToolStripMenuItem.Checked = true;
-            formatBarToolStripMenuItem.CheckOnClick = true;
-            formatBarToolStripMenuItem.CheckState = CheckState.Checked;
-            formatBarToolStripMenuItem.Name = "formatBarToolStripMenuItem";
-            formatBarToolStripMenuItem.Size = new Size(180, 22);
-            formatBarToolStripMenuItem.Text = "Format bar";
-            formatBarToolStripMenuItem.Click += formatBarToolStripMenuItem_Click;
-            // 
-            // toolTipsToolStripMenuItem
-            // 
-            toolTipsToolStripMenuItem.Checked = true;
-            toolTipsToolStripMenuItem.CheckOnClick = true;
-            toolTipsToolStripMenuItem.CheckState = CheckState.Checked;
-            toolTipsToolStripMenuItem.Name = "toolTipsToolStripMenuItem";
-            toolTipsToolStripMenuItem.ShortcutKeyDisplayString = "";
-            toolTipsToolStripMenuItem.Size = new Size(180, 22);
-            toolTipsToolStripMenuItem.Text = "Tool tips";
-            toolTipsToolStripMenuItem.Click += toolTipsToolStripMenuItem_Click;
-            // 
-            // homeScreenToolStripMenuItem
-            // 
-            homeScreenToolStripMenuItem.Checked = true;
-            homeScreenToolStripMenuItem.CheckOnClick = true;
-            homeScreenToolStripMenuItem.CheckState = CheckState.Checked;
-            homeScreenToolStripMenuItem.Name = "homeScreenToolStripMenuItem";
-            homeScreenToolStripMenuItem.Size = new Size(180, 22);
-            homeScreenToolStripMenuItem.Text = "Home screen";
-            homeScreenToolStripMenuItem.Click += homeScreenToolStripMenuItem_Click;
-            // 
-            // explorerToolStripMenuItem
-            // 
-            explorerToolStripMenuItem.Checked = true;
-            explorerToolStripMenuItem.CheckOnClick = true;
-            explorerToolStripMenuItem.CheckState = CheckState.Checked;
-            explorerToolStripMenuItem.Name = "explorerToolStripMenuItem";
-            explorerToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.E;
-            explorerToolStripMenuItem.Size = new Size(180, 22);
-            explorerToolStripMenuItem.Text = "Explorer";
-            explorerToolStripMenuItem.Click += explorerToolStripMenuItem_Click;
-            // 
             // marginToolStripMenuItem
             // 
             marginToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { a4ToolStripMenuItem, cardPaperToolStripMenuItem, noneToolStripMenuItem });
@@ -1101,6 +1160,116 @@
             noneToolStripMenuItem.Text = "None";
             noneToolStripMenuItem.Click += noneToolStripMenuItem_Click;
             // 
+            // wordWrapToolStripMenuItem
+            // 
+            wordWrapToolStripMenuItem.Checked = true;
+            wordWrapToolStripMenuItem.CheckOnClick = true;
+            wordWrapToolStripMenuItem.CheckState = CheckState.Checked;
+            wordWrapToolStripMenuItem.Name = "wordWrapToolStripMenuItem";
+            wordWrapToolStripMenuItem.ShortcutKeyDisplayString = "";
+            wordWrapToolStripMenuItem.Size = new Size(180, 22);
+            wordWrapToolStripMenuItem.Text = "Word wrap";
+            wordWrapToolStripMenuItem.ToolTipText = "Automatically wrap lines at the end of the page";
+            wordWrapToolStripMenuItem.Click += wordWrapToolStripMenuItem_Click;
+            // 
+            // selectionMarginToolStripMenuItem
+            // 
+            selectionMarginToolStripMenuItem.Checked = true;
+            selectionMarginToolStripMenuItem.CheckOnClick = true;
+            selectionMarginToolStripMenuItem.CheckState = CheckState.Checked;
+            selectionMarginToolStripMenuItem.Name = "selectionMarginToolStripMenuItem";
+            selectionMarginToolStripMenuItem.Size = new Size(180, 22);
+            selectionMarginToolStripMenuItem.Text = "Selection margin";
+            selectionMarginToolStripMenuItem.ToolTipText = "Show a margin on the left side of the page, to select lines";
+            selectionMarginToolStripMenuItem.Click += selectionMarginToolStripMenuItem_Click;
+            // 
+            // toolBarToolStripMenuItem
+            // 
+            toolBarToolStripMenuItem.Checked = true;
+            toolBarToolStripMenuItem.CheckOnClick = true;
+            toolBarToolStripMenuItem.CheckState = CheckState.Checked;
+            toolBarToolStripMenuItem.Name = "toolBarToolStripMenuItem";
+            toolBarToolStripMenuItem.Size = new Size(180, 22);
+            toolBarToolStripMenuItem.Text = "Tool bar";
+            toolBarToolStripMenuItem.ToolTipText = "Show tools";
+            toolBarToolStripMenuItem.Click += toolBarToolStripMenuItem_Click;
+            // 
+            // formatBarToolStripMenuItem
+            // 
+            formatBarToolStripMenuItem.Checked = true;
+            formatBarToolStripMenuItem.CheckOnClick = true;
+            formatBarToolStripMenuItem.CheckState = CheckState.Checked;
+            formatBarToolStripMenuItem.Name = "formatBarToolStripMenuItem";
+            formatBarToolStripMenuItem.Size = new Size(180, 22);
+            formatBarToolStripMenuItem.Text = "Format bar";
+            formatBarToolStripMenuItem.ToolTipText = "Show formatting options";
+            formatBarToolStripMenuItem.Click += formatBarToolStripMenuItem_Click;
+            // 
+            // statusBarToolStripMenuItem
+            // 
+            statusBarToolStripMenuItem.Checked = true;
+            statusBarToolStripMenuItem.CheckOnClick = true;
+            statusBarToolStripMenuItem.CheckState = CheckState.Checked;
+            statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
+            statusBarToolStripMenuItem.Size = new Size(180, 22);
+            statusBarToolStripMenuItem.Text = "Status bar";
+            statusBarToolStripMenuItem.ToolTipText = "Show document information";
+            statusBarToolStripMenuItem.Click += statusBarToolStripMenuItem_Click;
+            // 
+            // explorerToolStripMenuItem
+            // 
+            explorerToolStripMenuItem.Checked = true;
+            explorerToolStripMenuItem.CheckOnClick = true;
+            explorerToolStripMenuItem.CheckState = CheckState.Checked;
+            explorerToolStripMenuItem.Name = "explorerToolStripMenuItem";
+            explorerToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.E;
+            explorerToolStripMenuItem.Size = new Size(180, 22);
+            explorerToolStripMenuItem.Text = "Explorer";
+            explorerToolStripMenuItem.ToolTipText = "Show a file manager on the left side of the window";
+            explorerToolStripMenuItem.Click += explorerToolStripMenuItem_Click;
+            // 
+            // toolTipsToolStripMenuItem
+            // 
+            toolTipsToolStripMenuItem.Checked = true;
+            toolTipsToolStripMenuItem.CheckOnClick = true;
+            toolTipsToolStripMenuItem.CheckState = CheckState.Checked;
+            toolTipsToolStripMenuItem.Name = "toolTipsToolStripMenuItem";
+            toolTipsToolStripMenuItem.ShortcutKeyDisplayString = "";
+            toolTipsToolStripMenuItem.Size = new Size(180, 22);
+            toolTipsToolStripMenuItem.Text = "Tool tips";
+            toolTipsToolStripMenuItem.ToolTipText = "Show tool tips when hovering controls";
+            toolTipsToolStripMenuItem.Click += toolTipsToolStripMenuItem_Click;
+            // 
+            // closeBracketsToolStripMenuItem
+            // 
+            closeBracketsToolStripMenuItem.Checked = true;
+            closeBracketsToolStripMenuItem.CheckOnClick = true;
+            closeBracketsToolStripMenuItem.CheckState = CheckState.Checked;
+            closeBracketsToolStripMenuItem.Name = "closeBracketsToolStripMenuItem";
+            closeBracketsToolStripMenuItem.Size = new Size(180, 22);
+            closeBracketsToolStripMenuItem.Text = "Close brackets";
+            closeBracketsToolStripMenuItem.ToolTipText = "Automatically close parentheses, brackets, quotes, etc.";
+            closeBracketsToolStripMenuItem.Click += closeBracketsToolStripMenuItem_Click;
+            // 
+            // homeScreenToolStripMenuItem
+            // 
+            homeScreenToolStripMenuItem.Checked = true;
+            homeScreenToolStripMenuItem.CheckOnClick = true;
+            homeScreenToolStripMenuItem.CheckState = CheckState.Checked;
+            homeScreenToolStripMenuItem.Name = "homeScreenToolStripMenuItem";
+            homeScreenToolStripMenuItem.Size = new Size(180, 22);
+            homeScreenToolStripMenuItem.Text = "Home screen";
+            homeScreenToolStripMenuItem.ToolTipText = "Show a homepage when opening OwOrdPad";
+            homeScreenToolStripMenuItem.Click += homeScreenToolStripMenuItem_Click;
+            // 
+            // stickyNoteToolStripMenuItem
+            // 
+            stickyNoteToolStripMenuItem.Image = Properties.Resources.snippet;
+            stickyNoteToolStripMenuItem.Name = "stickyNoteToolStripMenuItem";
+            stickyNoteToolStripMenuItem.Size = new Size(180, 22);
+            stickyNoteToolStripMenuItem.Text = "Sticky Note";
+            stickyNoteToolStripMenuItem.Click += stickyNoteToolStripMenuItem_Click;
+            // 
             // insertToolStripMenuItem
             // 
             insertToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { imageToolStripMenuItem, timeAndDateToolStripMenuItem, toolStripSeparator32, listToolStripMenuItem, toolStripSeparator33, chartToolStripMenuItem, equationToolStripMenuItem, spreadsheetToolStripMenuItem, drawingToolStripMenuItem, toolStripSeparator25, specialCharacterToolStripMenuItem, linkToolStripMenuItem, toolStripSeparator31, rTFDocumentToolStripMenuItem });
@@ -1113,7 +1282,7 @@
             imageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fromMyComputerToolStripMenuItem, fromURLToolStripMenuItem });
             imageToolStripMenuItem.Image = Properties.Resources.image;
             imageToolStripMenuItem.Name = "imageToolStripMenuItem";
-            imageToolStripMenuItem.Size = new Size(180, 22);
+            imageToolStripMenuItem.Size = new Size(163, 22);
             imageToolStripMenuItem.Text = "Image";
             imageToolStripMenuItem.ToolTipText = "Insert an image from a file or URL";
             // 
@@ -1139,7 +1308,7 @@
             // 
             timeAndDateToolStripMenuItem.Image = Properties.Resources.calendar;
             timeAndDateToolStripMenuItem.Name = "timeAndDateToolStripMenuItem";
-            timeAndDateToolStripMenuItem.Size = new Size(180, 22);
+            timeAndDateToolStripMenuItem.Size = new Size(163, 22);
             timeAndDateToolStripMenuItem.Text = "Time and date";
             timeAndDateToolStripMenuItem.ToolTipText = "Insert the current date and time";
             timeAndDateToolStripMenuItem.Click += timeAndDateToolStripMenuItem_Click;
@@ -1149,7 +1318,7 @@
             listToolStripMenuItem.Image = Properties.Resources.list;
             listToolStripMenuItem.Name = "listToolStripMenuItem";
             listToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.L;
-            listToolStripMenuItem.Size = new Size(180, 22);
+            listToolStripMenuItem.Size = new Size(163, 22);
             listToolStripMenuItem.Text = "List";
             listToolStripMenuItem.ToolTipText = "Start a bullet list";
             listToolStripMenuItem.Click += listToolStripMenuItem_Click;
@@ -1158,7 +1327,7 @@
             // 
             chartToolStripMenuItem.Image = Properties.Resources.graph;
             chartToolStripMenuItem.Name = "chartToolStripMenuItem";
-            chartToolStripMenuItem.Size = new Size(180, 22);
+            chartToolStripMenuItem.Size = new Size(163, 22);
             chartToolStripMenuItem.Text = "Graph";
             chartToolStripMenuItem.ToolTipText = "Insert a graph from Microsoft Graph";
             chartToolStripMenuItem.Click += chartToolStripMenuItem_Click;
@@ -1167,7 +1336,7 @@
             // 
             equationToolStripMenuItem.Image = Properties.Resources.equation;
             equationToolStripMenuItem.Name = "equationToolStripMenuItem";
-            equationToolStripMenuItem.Size = new Size(180, 22);
+            equationToolStripMenuItem.Size = new Size(163, 22);
             equationToolStripMenuItem.Text = "Equation";
             equationToolStripMenuItem.ToolTipText = "Insert a equation from Microsoft Equation 3.0";
             equationToolStripMenuItem.Click += equationToolStripMenuItem_Click;
@@ -1176,7 +1345,7 @@
             // 
             spreadsheetToolStripMenuItem.Image = Properties.Resources.spreadsheet;
             spreadsheetToolStripMenuItem.Name = "spreadsheetToolStripMenuItem";
-            spreadsheetToolStripMenuItem.Size = new Size(180, 22);
+            spreadsheetToolStripMenuItem.Size = new Size(163, 22);
             spreadsheetToolStripMenuItem.Text = "Spreadsheet";
             spreadsheetToolStripMenuItem.ToolTipText = "Insert a spreadsheet";
             spreadsheetToolStripMenuItem.Click += spreadsheetToolStripMenuItem_Click;
@@ -1185,7 +1354,7 @@
             // 
             drawingToolStripMenuItem.Image = Properties.Resources.pencil;
             drawingToolStripMenuItem.Name = "drawingToolStripMenuItem";
-            drawingToolStripMenuItem.Size = new Size(180, 22);
+            drawingToolStripMenuItem.Size = new Size(163, 22);
             drawingToolStripMenuItem.Text = "Drawing";
             drawingToolStripMenuItem.ToolTipText = "Insert a bitmap image from Microsoft Paint";
             drawingToolStripMenuItem.Click += drawingToolStripMenuItem_Click;
@@ -1196,7 +1365,7 @@
             specialCharacterToolStripMenuItem.Image = Properties.Resources.specChar;
             specialCharacterToolStripMenuItem.Name = "specialCharacterToolStripMenuItem";
             specialCharacterToolStripMenuItem.ShortcutKeyDisplayString = "";
-            specialCharacterToolStripMenuItem.Size = new Size(180, 22);
+            specialCharacterToolStripMenuItem.Size = new Size(163, 22);
             specialCharacterToolStripMenuItem.Text = "Special character";
             specialCharacterToolStripMenuItem.ToolTipText = "Insert an Unicode character";
             // 
@@ -1238,7 +1407,7 @@
             linkToolStripMenuItem.Image = Properties.Resources.link;
             linkToolStripMenuItem.Name = "linkToolStripMenuItem";
             linkToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.K;
-            linkToolStripMenuItem.Size = new Size(180, 22);
+            linkToolStripMenuItem.Size = new Size(163, 22);
             linkToolStripMenuItem.Text = "Link";
             linkToolStripMenuItem.ToolTipText = "Insert a link from an URL or file";
             linkToolStripMenuItem.Click += linkToolStripMenuItem_Click;
@@ -1247,7 +1416,7 @@
             // 
             rTFDocumentToolStripMenuItem.Image = Properties.Resources.document;
             rTFDocumentToolStripMenuItem.Name = "rTFDocumentToolStripMenuItem";
-            rTFDocumentToolStripMenuItem.Size = new Size(180, 22);
+            rTFDocumentToolStripMenuItem.Size = new Size(163, 22);
             rTFDocumentToolStripMenuItem.Text = "RTF document";
             rTFDocumentToolStripMenuItem.ToolTipText = "Insert the contents of a rich text document";
             rTFDocumentToolStripMenuItem.Click += rTFDocumentToolStripMenuItem_Click;
@@ -2645,6 +2814,14 @@
             splitter1.TabIndex = 7;
             splitter1.TabStop = false;
             // 
+            // manageDictionaryToolStripMenuItem1
+            // 
+            manageDictionaryToolStripMenuItem1.Image = Properties.Resources.pencil;
+            manageDictionaryToolStripMenuItem1.Name = "manageDictionaryToolStripMenuItem1";
+            manageDictionaryToolStripMenuItem1.Size = new Size(196, 22);
+            manageDictionaryToolStripMenuItem1.Text = "Manage dictionary";
+            manageDictionaryToolStripMenuItem1.Click += manageDictionaryToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2661,7 +2838,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
             Margin = new Padding(4, 3, 4, 3);
-            MinimumSize = new Size(250, 250);
+            MinimumSize = new Size(326, 326);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "New document - OwOrdPad";
@@ -2948,5 +3125,25 @@
         private ToolStripComboBox toolStripComboBox1;
         private ToolStripMenuItem insertSelectedToolStripMenuItem;
         private ToolStripMenuItem themeToolStripMenuItem;
+        private ToolStripMenuItem clearFoldersToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator50;
+        private ToolStripMenuItem closeBracketsToolStripMenuItem;
+        private ToolStripMenuItem stickyNoteToolStripMenuItem;
+        private ToolStripMenuItem manageWorkspacesToolStripMenuItem;
+        private ToolStripMenuItem spellcheck1;
+        private ToolStripSeparator toolStripSeparator51;
+        private ToolStripSeparator toolStripSeparator52;
+        private ToolStripMenuItem spellCheckToolStripMenuItem;
+        private ToolStripMenuItem spellCheckerToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator53;
+        private ToolStripMenuItem addWordToPersonalDictionaryToolStripMenuItem;
+        private ToolStripMenuItem spellCheckToolStripMenuItem1;
+        private ToolStripMenuItem spellcheck2;
+        private ToolStripMenuItem spellcheck3;
+        private ToolStripMenuItem spellcheck4;
+        private ToolStripSeparator toolStripSeparator54;
+        private ToolStripMenuItem addWordToDictionaryToolStripMenuItem;
+        private ToolStripMenuItem manageDictionaryToolStripMenuItem;
+        private ToolStripMenuItem manageDictionaryToolStripMenuItem1;
     }
 }

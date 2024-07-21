@@ -53,7 +53,7 @@ namespace OwOrdPad {
 
             foreach (string line in lines) {
                 var splitLine = line.Split(':');
-                if (splitLine.Length == 2) {
+                if (splitLine.Length >= 2) {
                     string key = splitLine[0].Trim();
                     string value = splitLine[1].Trim();
                     if (colorMappings.ContainsKey(key)) {

@@ -132,36 +132,42 @@ namespace OwOrdPad {
         }
         private void MoveListBoxItems(int direction) {
             // move selection up/down
-            int selectedIndex = listItems.SelectedIndex;
-            if (selectedIndex != -1) {
-                int newIndex = selectedIndex + direction;
-                if (newIndex >= 0 && newIndex < listItems.Items.Count) {
-                    object selectedItem = listItems.SelectedItem;
-                    listItems.Items.RemoveAt(selectedIndex);
-                    listItems.Items.Insert(newIndex, selectedItem);
-                    listItems.SelectedIndex = newIndex;
+            if (_allowMove) {
+                int selectedIndex = listItems.SelectedIndex;
+                if (selectedIndex != -1) {
+                    int newIndex = selectedIndex + direction;
+                    if (newIndex >= 0 && newIndex < listItems.Items.Count) {
+                        object selectedItem = listItems.SelectedItem;
+                        listItems.Items.RemoveAt(selectedIndex);
+                        listItems.Items.Insert(newIndex, selectedItem);
+                        listItems.SelectedIndex = newIndex;
+                    }
                 }
             }
         }
         private void MoveListBoxItemToTop() {
             // move selection to the top
-            int selectedIndex = listItems.SelectedIndex;
-            if (selectedIndex > 0) {
-                object selectedItem = listItems.SelectedItem;
-                listItems.Items.RemoveAt(selectedIndex);
-                listItems.Items.Insert(0, selectedItem);
-                listItems.SelectedIndex = 0;
+            if (_allowMove) {
+                int selectedIndex = listItems.SelectedIndex;
+                if (selectedIndex > 0) {
+                    object selectedItem = listItems.SelectedItem;
+                    listItems.Items.RemoveAt(selectedIndex);
+                    listItems.Items.Insert(0, selectedItem);
+                    listItems.SelectedIndex = 0;
+                }
             }
         }
 
         private void MoveListBoxItemToBottom() {
             // move selection to the bottom
-            int selectedIndex = listItems.SelectedIndex;
-            if (selectedIndex < listItems.Items.Count - 1) {
-                object selectedItem = listItems.SelectedItem;
-                listItems.Items.RemoveAt(selectedIndex);
-                listItems.Items.Add(selectedItem);
-                listItems.SelectedIndex = listItems.Items.Count - 1;
+            if (_allowMove) {
+                int selectedIndex = listItems.SelectedIndex;
+                if (selectedIndex < listItems.Items.Count - 1) {
+                    object selectedItem = listItems.SelectedItem;
+                    listItems.Items.RemoveAt(selectedIndex);
+                    listItems.Items.Add(selectedItem);
+                    listItems.SelectedIndex = listItems.Items.Count - 1;
+                }
             }
         }
 

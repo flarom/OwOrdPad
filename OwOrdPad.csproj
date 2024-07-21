@@ -44,4 +44,8 @@ Note: OwOrdPad is not affiliated with Microsoft Corporation. Microsoft WordPad i
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="dialogs\" />
+  </ItemGroup>
+
 </Project>

@@ -673,6 +673,16 @@ namespace OwOrdPad.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap spellCheck {
+            get {
+                object obj = ResourceManager.GetObject("spellCheck", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap spreadsheet {
             get {
                 object obj = ResourceManager.GetObject("spreadsheet", resourceCulture);

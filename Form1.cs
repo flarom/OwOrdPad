@@ -4,6 +4,7 @@ using OwOrdPad.Properties;
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.Globalization;
+using System.IO;
 using System.Media;
 using System.Net;
 using System.Text;
@@ -19,6 +20,7 @@ namespace OwOrdPad {
         public bool isDocumentModified = false; // checks if the document was modified by the user
         frmInputBox inputbox = new();
         frmListManager listManager = new();
+        frmOptionBox optionBox = new();
 
         public Form1() {
             // load program and settings
@@ -44,6 +46,7 @@ namespace OwOrdPad {
             this.BackColor = theme.documentBack;
             inputbox.Themes = theme;
             listManager.Themes = theme;
+            optionBox.Themes = theme;
 
             // document
             rtb.BackColor = theme.documentBack;
@@ -77,7 +80,7 @@ namespace OwOrdPad {
             contextMenuStrip1.BackColor = theme.menuBack;
             contextMenuStrip1.ForeColor = theme.menuFore;
             foreach (ToolStripItem item in contextMenuStrip1.Items) {
-                if(item is ToolStripMenuItem menuitem) {
+                if (item is ToolStripMenuItem menuitem) {
                     ApplyMenuColors(menuitem);
                 }
             }
@@ -115,7 +118,7 @@ namespace OwOrdPad {
                     menuitem2.DropDown.ForeColor = theme.menuFore;
                 }
             }
-            foreach(ToolStripStatusLabel item in statusStrip.Items) {
+            foreach (ToolStripStatusLabel item in statusStrip.Items) {
                 if (item.Image != null) {
                     item.Image = theme.paintBitmap(item.Image, theme.icons);
                 }
@@ -158,8 +161,27 @@ namespace OwOrdPad {
                 updateHistoryMenu();
             }
         }
-        public async void LoadDirectory(string path) {
+        private void manageWorkspacesToolStripMenuItem_Click(object sender, EventArgs e) {
+            string[] nodesPath = new string[treeExplorer.Nodes.Count];
+
+            for (int i = 0; i < treeExplorer.Nodes.Count; i++) {
+                nodesPath[i] = treeExplorer.Nodes[i].Tag.ToString();
+            }
+
+            string[] newNodesPath = listManager.getList("Manage workspaces - OwOrdPad", nodesPath, null, frmListManager.addType.FromFolder);
+
             treeExplorer.Nodes.Clear();
+
+            foreach (string node in newNodesPath) {
+                LoadDirectory(node);
+            }
+        }
+        private void clearFoldersToolStripMenuItem_Click(object sender, EventArgs e) {
+            treeExplorer.Nodes.Clear();
+        }
+        public async Task LoadDirectory(string path) {
+            if (!Directory.Exists(path)) throw new DirectoryNotFoundException();
+
             var rootDirectoryInfo = new DirectoryInfo(path);
             treeExplorer.Nodes.Add(await Task.Run(() => CreateDirectoryNode(rootDirectoryInfo)));
             treeExplorer.Nodes[0].Expand();
@@ -173,29 +195,15 @@ namespace OwOrdPad {
                 try {
                     string color = File.ReadAllText(colorFilePath).Trim().ToLower();
 
-                    switch (color) {
-                        case "red":
-                            imageIndex = 4;
-                            break;
-                        case "org":
-                            imageIndex = 5;
-                            break;
-                        case "ylw":
-                            imageIndex = 6;
-                            break;
-                        case "grn":
-                            imageIndex = 7;
-                            break;
-                        case "blu":
-                            imageIndex = 8;
-                            break;
-                        case "prp":
-                            imageIndex = 9;
-                            break;
-                        default:
-                            imageIndex = 0; // Default image for unknown or no color specified
-                            break;
-                    }
+                    imageIndex = color switch {
+                        "red" => 4,
+                        "org" => 5,
+                        "ylw" => 6,
+                        "grn" => 7,
+                        "blu" => 8,
+                        "prp" => 9,
+                        _ => 0,// Default image for unknown or no color specified
+                    };
                 }
                 catch {
                     sendNotification("Failed to read folder color config", "error");
@@ -354,9 +362,11 @@ namespace OwOrdPad {
                 statusBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showStatusBar"));
                 toolBarToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showToolBar"));
                 explorerToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showExplorer"));
+                closeBracketsToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("closeBrackets"));
                 wordWrapToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("wordWrap"));
                 selectionMarginToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("selectionMargin"));
                 toolTipsToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("showToolTips"));
+                spellCheckerToolStripMenuItem.Checked = bool.Parse(Settings.GetSetting("spellCheck"));
                 defaultFontToolStripMenuItem.ShortcutKeyDisplayString = Settings.GetSetting("defaultFont");
             }
             catch {
@@ -678,8 +688,37 @@ namespace OwOrdPad {
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e) {
-            rtb.Copy(); // copy, ctrl+c
+            // Copy, ctrl+c
+            if (rtb.SelectionType == RichTextBoxSelectionTypes.Text) {
+                rtb.Copy();
+                return;
+            }
+
+            var selectedRtf = rtb.SelectedRtf;
+
+            DataObject dataObject = new DataObject();
+            dataObject.SetData(DataFormats.Rtf, selectedRtf);
+
+            var selectedText = rtb.SelectedText;
+            if (!string.IsNullOrEmpty(selectedText)) {
+                dataObject.SetData(DataFormats.Text, selectedText);
+            }
+
+            if (rtb.SelectionType.HasFlag(RichTextBoxSelectionTypes.Object)) {
+                try {
+                    var clipboardImage = Clipboard.GetImage();
+                    if (clipboardImage != null) {
+                        dataObject.SetData(DataFormats.Bitmap, clipboardImage);
+                    }
+                }
+                catch {
+
+                }
+            }
+
+            Clipboard.SetDataObject(dataObject, true);
         }
+
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e) {
             rtb.Paste(); //paste, ctrl+v
@@ -741,6 +780,9 @@ namespace OwOrdPad {
             tsFormat.Visible = formatBarToolStripMenuItem.Checked;
             Settings.SaveSetting("showFormatBar", formatBarToolStripMenuItem.Checked.ToString());
         }
+        private void spellCheckerToolStripMenuItem_Click(object sender, EventArgs e) {
+            Settings.SaveSetting("spellCheck", spellCheckerToolStripMenuItem.Checked.ToString());
+        }
         private void homeScreenToolStripMenuItem_Click(object sender, EventArgs e) {
             Settings.SaveSetting("showHomeScreen", homeScreenToolStripMenuItem.Checked.ToString());
         }
@@ -753,6 +795,9 @@ namespace OwOrdPad {
             }
 
             Settings.SaveSetting("showExplorer", explorerToolStripMenuItem.Checked.ToString());
+        }
+        private void closeBracketsToolStripMenuItem_Click(object sender, EventArgs e) {
+            Settings.SaveSetting("closeBrackets", closeBracketsToolStripMenuItem.Checked.ToString());
         }
         #endregion
         #region formatting
@@ -796,7 +841,8 @@ namespace OwOrdPad {
             rtb.SelectionBackColor = rtb.BackColor;
             rtb.SelectionColor = rtb.ForeColor;
             rtb.SelectionIndent = 0;
-            rtb.SelectionCharOffset = 1;
+            rtb.SelectionCharOffset = int.Parse(lnSpace1.Tag.ToString()); // lnSpace1 = 1px
+            //rtb.SelectionCharOffset = 1; // i could make it just set the char offset to 1, but somehow it is becoming 0px :/
 
             cbFonts.Text = defaultFont;
             cbFontSize.Text = "12";
@@ -886,6 +932,7 @@ namespace OwOrdPad {
                 }
             }
             catch { }
+            showSimilarStrings(rtb.SelectedText);
         }
 
         private void cbFonts_SelectedIndexChanged(object sender, EventArgs e) {
@@ -1053,6 +1100,41 @@ namespace OwOrdPad {
             }
             lblZoomFactor.Text = (rtb.ZoomFactor * 100).ToString("0") + "%";
         }
+        private void rtb_KeyPress(object sender, KeyPressEventArgs e) {
+            if (Settings.GetSetting("closeBrackets") == "True") {
+                switch (e.KeyChar) {
+                    case '(':
+                        closeBracket("(", ")");   // (
+                        e.Handled = true;
+                        break;
+                    case '[':
+                        closeBracket("[", "]");   // [
+                        e.Handled = true;
+                        break;
+                    case '{':
+                        closeBracket("{", "}");   // {
+                        e.Handled = true;
+                        break;
+                    case '\'':
+                        closeBracket("'", "'");   // '
+                        e.Handled = true;
+                        break;
+                    case '\"':
+                        closeBracket("\"", "\""); // "
+                        e.Handled = true;
+                        break;
+                    case '<':
+                        closeBracket("<", ">");   // <
+                        e.Handled = true;
+                        break;
+                }
+            }
+        }
+        private void closeBracket(string opening, string closing) {
+            int selectionIndex = rtb.SelectionStart;
+            rtb.Text = rtb.Text.Insert(selectionIndex, opening + closing);
+            rtb.SelectionStart = selectionIndex + 1;
+        }
         private void titleToolStripMenuItem_Click(object sender, EventArgs e) {
             rtb.SelectionFont = new Font(cbFonts.Text, 24f, FontStyle.Regular);
             rtb.SelectionColor = Color.Black;
@@ -1132,6 +1214,10 @@ namespace OwOrdPad {
             if (splitter1.SplitPosition >= this.Size.Width) {
                 splitter1.SplitPosition = splitter1.SplitPosition;
             }
+        }
+        private void stickyNoteToolStripMenuItem_Click(object sender, EventArgs e) {
+            this.WindowState = FormWindowState.Normal;
+            this.Size = new Size(326, this.Size.Height);
         }
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
             if (rtb.SelectedText != "") {
@@ -1587,11 +1673,30 @@ namespace OwOrdPad {
                     if (fileName == string.Empty) {
                         fileName = filePath;
                     }
+
+                    DateTime lastWriteTime = File.GetLastWriteTime(filePath);
+                    TimeSpan timeAgo = DateTime.Now - lastWriteTime;
+                    string timeAgoString;
+
+                    if (timeAgo.TotalDays >= 1) {
+                        timeAgoString = $"{(int)timeAgo.TotalDays} days ago";
+                    }
+                    else if (timeAgo.TotalHours >= 1) {
+                        timeAgoString = $"{(int)timeAgo.TotalHours} hours ago";
+                    }
+                    else if (timeAgo.TotalMinutes >= 1) {
+                        timeAgoString = $"{(int)timeAgo.TotalMinutes} minutes ago";
+                    }
+                    else {
+                        timeAgoString = "Just now";
+                    }
+
                     ToolStripMenuItem recentFileItem = new(fileName) {
                         Tag = filePath,
-                        ToolTipText = filePath,
-                        ShortcutKeyDisplayString = File.GetLastWriteTime(filePath).ToString("dd/MM/yyyy HH:mm"),
-
+                        ToolTipText = ("Full path: " + filePath +
+                            "\nDate modified: " + File.GetLastWriteTime(filePath).ToString("dd/MM/yyyy HH:mm") +
+                            "\nDate created: " + File.GetCreationTime(filePath).ToString("dd/MM/yyyy HH:mm")),
+                        ShortcutKeyDisplayString = timeAgoString,
                     };
                     if (File.Exists(filePath)) {
                         recentFileItem.Image = Resources.document;
@@ -1627,7 +1732,7 @@ namespace OwOrdPad {
             loadHistoryList();
             updateHistoryMenu();
         }
-        private void historyItemClick(object sender, EventArgs e) {
+        private async void historyItemClick(object sender, EventArgs e) {
             if (isDocumentModified && MessageBox.Show("Are you sure you want to open a document?\nYou will lose any unsaved changes on your current file.",
                 "Open document", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
                 return;
@@ -1641,7 +1746,7 @@ namespace OwOrdPad {
                 treeExplorer.Nodes.Clear();
             }
             catch {
-                try { LoadDirectory(path); }
+                try { await LoadDirectory(path); }
                 catch {
                     if (MessageBox.Show("This document doesn't exists\nDo you want to remove this item from the list?", "Document not found",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
@@ -1656,17 +1761,10 @@ namespace OwOrdPad {
 
         private void indentationSizeToolStripMenuItem_Click(object sender, EventArgs e) {
             try {
-                int[] i = [int.Parse(inputbox.GetInput("Insert an indentation size number (1 - 8):", "Tab spacing - OwOrdPad", [], Resources.tabSpace, "4")) * 10];
-                if (i[0] <= 80) {
-                    rtb.SelectionTabs = i;
-                }
-                else {
-                    sendNotification("Invalid size", "warning");
-                }
+                int[] i = [int.Parse(optionBox.getOption("Tab spacing - OwOrdPad", "Select the tab character's size:", ["10", "20", "30", "40", "50", "60", "70", "80"]))];
+                rtb.SelectionTabs = i;
             }
-            catch {
-                sendNotification("Invalid size", "warning");
-            }
+            catch { }
         }
 
         private void copyFormattingToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -1748,7 +1846,7 @@ namespace OwOrdPad {
 
             string[] installedThemes = installedThemesPaths.Select(Path.GetFileName).ToArray();
 
-            string selectedTheme = inputbox.GetInput("Select a theme to OwOrdPad:", "Theme - OwOrdPad", installedThemes, Resources.ok, theme.themeName);
+            string selectedTheme = optionBox.getOption("Theme - OwOrdPad", "Select a theme to OwOrdPad:", installedThemes);
 
             if (selectedTheme == string.Empty) return;
 
@@ -2039,12 +2137,33 @@ namespace OwOrdPad {
 
         private void updateExplorer() {
             if (treeExplorer.SelectedNode != null) {
-                string rootPath = treeExplorer.Nodes[0].Tag as string;
-                if (Directory.Exists(rootPath)) {
-                    LoadDirectory(rootPath);
-                    treeExplorer.Nodes[0].Expand();
+                List<string> rootPaths = new List<string>();
+                foreach (TreeNode node in treeExplorer.Nodes) {
+                    string path = node.Tag as string;
+                    if (!string.IsNullOrEmpty(path)) {
+                        rootPaths.Add(path);
+                    }
                 }
-                else {
+
+                bool allPathsExist = true;
+                treeExplorer.Nodes.Clear();
+
+                foreach (string rootPath in rootPaths) {
+                    if (Directory.Exists(rootPath)) {
+                        LoadDirectory(rootPath);
+                        foreach (TreeNode node in treeExplorer.Nodes) {
+                            if ((node.Tag as string) == rootPath) {
+                                node.Expand();
+                            }
+                        }
+                    }
+                    else {
+                        allPathsExist = false;
+                        break;
+                    }
+                }
+
+                if (!allPathsExist) {
                     treeExplorer.Nodes.Clear();
                     sendNotification("Failed to relocate directory", "error");
                 }
@@ -2178,6 +2297,115 @@ namespace OwOrdPad {
             TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? e.Node.TreeView.Font, e.Bounds, treeExplorer.ForeColor);
 
             e.DrawDefault = false;
+        }
+
+        #region spell check
+        private static int LevenshteinDistance(string s, string t) {
+            int n = s.Length;
+            int m = t.Length;
+            var d = new int[n + 1, m + 1];
+
+            if (n == 0) return m;
+            if (m == 0) return n;
+
+            for (int i = 0; i <= n; i++) d[i, 0] = i;
+            for (int j = 0; j <= m; j++) d[0, j] = j;
+
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= m; j++) {
+                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+                    d[i, j] = Math.Min(
+                        Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+                        d[i - 1, j - 1] + cost);
+                }
+            }
+
+            return d[n, m];
+        }
+        public static List<string> GetMostSimilarStrings(string input, List<string> filePaths) {
+            var lines = new List<string>();
+
+            foreach (var filePath in filePaths) {
+                if (File.Exists(filePath)) {
+                    lines.AddRange(File.ReadAllLines(filePath));
+                }
+            }
+
+            var similarities = new List<Tuple<string, int>>();
+
+            foreach (var line in lines) {
+                int distance = LevenshteinDistance(input, line);
+                similarities.Add(new Tuple<string, int>(line, distance));
+            }
+
+            var sortedSimilarities = similarities.OrderBy(t => t.Item2).Take(4);
+            return sortedSimilarities.Select(t => t.Item1).ToList();
+        }
+        private void showSimilarStrings(string input) {
+            addWordToPersonalDictionaryToolStripMenuItem.Text = "Add '" + input + "' to dictionary";
+            addWordToPersonalDictionaryToolStripMenuItem.Tag = input;
+            addWordToDictionaryToolStripMenuItem.Text = "Add '" + input + "' to dictionary";
+            addWordToDictionaryToolStripMenuItem.Tag = input;
+
+            if (input.Length < 2 || bool.Parse(Settings.GetSetting("spellCheck")) == false) {
+                spellcheck1.Visible = false;
+                spellcheck2.Visible = false;
+                spellcheck3.Visible = false;
+                spellcheck4.Visible = false;
+                toolStripSeparator51.Visible = false;
+                spellCheckToolStripMenuItem1.Visible = false;
+                return;
+            }
+
+            List<string> dictionaries = Directory.GetFiles(defaultDirectory + "\\Dictionaries\\").ToList();//[defaultDirectory + "\\Dictionaries\\default.txt", defaultDirectory + "\\Dictionaries\\personal.txt"];
+            List<string> strings = GetMostSimilarStrings(input, dictionaries);
+
+            spellcheck1.Text = strings[0];
+            spellcheck2.Text = strings[1];
+            spellcheck3.Text = strings[2];
+            spellcheck4.Text = strings[3];
+            spellcheck1.Visible = true;
+            spellcheck2.Visible = true;
+            spellcheck3.Visible = true;
+            spellcheck4.Visible = true;
+            toolStripSeparator51.Visible = true;
+            spellCheckToolStripMenuItem1.Visible = true;
+        }
+
+        private void completeWord(object sender, EventArgs e) {
+            ToolStripMenuItem itm = sender as ToolStripMenuItem;
+            rtb.SelectedText = itm.Text;
+        }
+
+        private void addWordToPersonalDictionaryToolStripMenuItem_Click(object sender, EventArgs e) {
+            ToolStripMenuItem itm = sender as ToolStripMenuItem;
+            if (itm.Tag.ToString().Length > 2) {
+                List<string> per = File.ReadAllLines(defaultDirectory + "\\Dictionaries\\personal.txt").ToList();
+
+                foreach(string s in per) {
+                    if (s.Equals(itm.Tag.ToString())) {
+                        sendNotification("This word is already in the dictionary", "warning");
+                        return;
+                    }
+                }
+
+                per.Add(itm.Tag.ToString());
+
+                File.WriteAllLines(defaultDirectory + "\\Dictionaries\\personal.txt", per);
+                sendNotification(itm.Tag.ToString() + " was added to the dictionary", "succes");
+            }
+            else {
+                sendNotification("Needs to be at least 2 characters long", "warning");
+            }
+        }
+        #endregion
+
+        private void manageDictionaryToolStripMenuItem_Click(object sender, EventArgs e) {
+            string[] per = File.ReadAllLines(defaultDirectory + "\\Dictionaries\\personal.txt");
+
+            string[] newPer = listManager.getList("Personal dictionary - OwOrdPad", per, [], frmListManager.addType.FromString);
+
+            File.WriteAllLines(defaultDirectory + "\\Dictionaries\\personal.txt", newPer);
         }
     }
 }
